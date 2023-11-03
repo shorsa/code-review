@@ -1,0 +1,33 @@
+<div class="terms-wrapper">
+  <nz-header>
+    <div class="logo" routerLink="/">Horizon</div>
+
+    <div class="header-right-content">
+      <nz-avatar [nzSize]="48" nzIcon="user"></nz-avatar>
+
+      <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+        {{ userName }}
+        <span nz-icon nzType="down"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item nzDanger (click)="logOut()">Log out</li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </nz-header>
+
+  <nz-spin nzSize="large" *ngIf="isLoading$ | async"> </nz-spin>
+  <ng-container *ngIf="isNotClientSuperUser">
+    <div class="terms-content">
+      <h2>Dear user.</h2>
+      <p>
+        We regret to inform you that currently, you are unable to access the system. The
+        terms and conditions required for your company's usage have not yet been approved
+        by the super user. We appreciate your understanding and patience. Once these terms
+        are accepted, you will regain full access to the system.
+      </p>
+      <span> Thank you for your cooperation. </span>
+    </div>
+  </ng-container>
+</div>

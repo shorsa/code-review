@@ -1,0 +1,67 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+form {
+  padding-bottom: 24px !important;
+}
+.preview-wrapper {
+  width: 100%;
+  padding-bottom: 16px;
+  @include flex-container(row, center, flex-end);
+  .preview {
+    position: relative;
+    right: 0;
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+.referral-details-wrapper {
+  padding-bottom: 26px;
+
+  .referral-details-list {
+    background: #fff;
+    .title {
+      background: linear-gradient(0deg, #f8fdff, #f8fdff), linear-gradient(0deg, #d9e5eb, #d9e5eb);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      text-align: left;
+    }
+
+    li {
+      padding: 16px;
+      border-bottom: 1px solid #d9e5eb;
+
+      &:not(.title) {
+        padding: 0 0 0 16px;
+        height: 49px;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 16px;
+        letter-spacing: 0em;
+        text-align: left;
+
+        & > :first-child {
+          border-right: 1px solid #d9e5eb;
+          display: block;
+          height: 100%;
+          @include flex-container(row, center);
+        }
+
+        & > span {
+          width: 50%;
+        }
+
+        .ant-form-item-control {
+          & > input {
+            border: none;
+          }
+        }
+      }
+    }
+  }
+
+  .ant-radio-group.horizontal {
+    @include flex-container;
+  }
+}

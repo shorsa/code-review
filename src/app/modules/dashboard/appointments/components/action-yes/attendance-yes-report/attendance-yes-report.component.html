@@ -1,0 +1,90 @@
+<div class="report-wrapper">
+  <nz-card class="appointment-report-card" [nzBordered]="false" nzTitle="Report">
+    <form nz-form [formGroup]="formGroup">
+      <div class="record-btn-wrapper">
+        <button nz-button nzType="primary" (click)="isShowRecord = !isShowRecord">
+          <span nz-icon nzType="audio" *ngIf="!isShowRecord" nzTheme="outline"></span>
+          <span
+            nz-icon
+            *ngIf="isShowRecord"
+            nzType="audio-muted"
+            nzTheme="outline"
+          ></span>
+        </button>
+      </div>
+      <div class="editor">
+        <label>Report</label>
+        <ngx-editor-menu class="editor-menu" [editor]="editor!" [toolbar]="toolbar">
+        </ngx-editor-menu>
+        <ngx-editor
+          outputFormat="html"
+          [ariaRowCount]="2"
+          placeholder="Input text"
+          [editor]="editor!"
+          formControlName="report"
+        >
+        </ngx-editor>
+      </div>
+    </form>
+  </nz-card>
+
+  <nz-card
+    *ngIf="clientTemplateHeading"
+    class="client-template"
+    [nzBordered]="false"
+    nzTitle="Client template Headings"
+  >
+    <div [innerHTML]="clientTemplateHeading"></div>
+  </nz-card>
+  <nz-card
+    *ngIf="isShowRecord"
+    class="appointment-record"
+    [nzBordered]="false"
+    nzTitle="Dictation for {{ userName }} ({{ userDob | customDate }})"
+  >
+    <app-record-audio
+      [isRedFlag]="formGroup.get('isRedFlag')?.value"
+      (isRedFlagChange)="onChangeRedFlag($event)"
+      (isUrgentChange)="onChangeIsUrgent($event)"
+      [isUrgent]="formGroup.get('isUrgent')?.value"
+      (audioListChange)="onChangeVoiceFiles($event)"
+    >
+      <ul>
+        <li>You may add multiple recordings bt pressing stop and then Record again</li>
+        <li>Each recording will result in ` letter</li>
+        <li>You <span> do not need</span> to record a dictation for each CC</li>
+      </ul>
+      <p class="records-message">{{appointmentDetails?.voiceTranscryptionMessage}}</p>
+    </app-record-audio>
+  </nz-card>
+</div>
+
+<div class="page-bottom-buttons">
+  <button
+    nz-button
+    nzType="default"
+    (click)="navigateToAppointmentsTable()"
+    class="default"
+    nzSize="large"
+  >
+    Previous
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleSubmitForm()"
+    class="draft"
+    nzSize="large"
+  >
+    Save As Draft
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleSubmitForm(true)"
+    nzType="primary"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

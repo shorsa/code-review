@@ -1,0 +1,32 @@
+<div class="patient-details-wrapper">
+  <nz-card
+    [nzBordered]="false"
+    [nzTitle]="patientDetails?.name"
+    class="patient-details-card"
+  >
+    <ul class="list">
+      <li>
+        <span>DOB:</span><span>{{ patientDetails?.dateOfBirth | customDate }}</span>
+      </li>
+      <li>
+        <span>Phone:</span><span>{{ patientDetails?.phoneNumber }}</span>
+      </li>
+      <li *ngIf="patientDetails?.email && !getIsClientRole">
+        <span>Email:</span><span>{{ patientDetails?.email }}</span>
+      </li>
+      <li>
+        <span>Address:</span><span>{{ patientDetails?.address }}</span>
+      </li>
+    </ul>
+  </nz-card>
+
+  <button
+    (click)="handleCreateMriRequest()"
+    *ngIf="getIsCanCreateMri && !isMriRequestCreated"
+    nzSize="large"
+    nzType="primary"
+    nz-button
+  >
+    MRI Request
+  </button>
+</div>

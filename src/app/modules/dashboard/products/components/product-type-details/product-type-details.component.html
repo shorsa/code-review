@@ -1,0 +1,27 @@
+<nz-card class="product-type-details" nzTitle="Product type details">
+  <app-product-form
+    [productId]="productId"
+    [wasAttemptToSubmitForm]="wasAttemptToSubmitForm"
+    (formIsValidChange)="handleChangeFormValidation($event)"
+    (valueChange)="handleChangeValue($event)"
+  />
+</nz-card>
+
+<div class="page-bottom-buttons">
+  <button nz-button nzType="default" (click)="cancel()" class="default" nzSize="large">
+    Cancel
+  </button>
+  <nz-form-item>
+    <nz-form-control>
+      <button
+        nz-button
+        [nzLoading]="isLoading$ | async"
+        (click)="submitForm()"
+        nzType="primary"
+        nzSize="large"
+      >
+        Save
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</div>

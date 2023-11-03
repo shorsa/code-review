@@ -1,0 +1,87 @@
+@import "src/assets/scss/utils/mixins";
+@import "src/assets/scss/utils/variables";
+
+.ant-layout {
+  height: 100%;
+
+  &.sidebar {
+    @include flex-container;
+  }
+
+  .ant-layout-content {
+    background-color: #d7effa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    // overflow-y: auto;
+
+    // router-outlet + * {
+    //   height: 100%;
+    // }
+
+    @include media-sm {
+      overflow-y: hidden;
+    }
+  }
+
+  .ant-layout-sider {
+    width: 224px;
+
+    @include media-sm {
+      position: absolute;
+      z-index: 999;
+      height: calc(100% - 64px);
+    }
+
+    &:not(.ant-layout-sider-collapsed) {
+      min-width: 224px !important;
+    }
+
+    @include media-sm {
+      padding-bottom: 0;
+    }
+
+    .sider-menu {
+      height: calc(100vh - #{$layout-header-height});
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      @include media-sm {
+        height: inherit;
+        padding-bottom: 70px;
+      }
+
+      .ant-menu-item {
+        margin: 4px 0;
+      }
+    }
+
+    .menu-trigger {
+      @include media-sm {
+        display: none;
+      }
+    }
+  }
+
+  .inner-layout {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .inner-layout-content {
+    height: 100%;
+    // overflow-y: auto;
+  }
+
+  .menu-trigger {
+    @include flex-container(row, center, flex-end);
+
+    padding: 10px 24px;
+    position: absolute;
+    right: 0;
+    bottom: 20px;
+
+    .anticon {
+      font-size: 22px;
+    }
+  }
+}

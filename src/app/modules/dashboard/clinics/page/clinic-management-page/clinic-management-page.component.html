@@ -1,0 +1,298 @@
+<nz-page-header class="with-actions">
+  <nz-page-header-title *ngIf="!clinicId && !viewMode"
+    >Clinic - Create new</nz-page-header-title
+  >
+  <nz-page-header-title *ngIf="clinicId && !viewMode">Clinic - Edit</nz-page-header-title>
+  <nz-page-header-title *ngIf="viewMode">Clinic - Details</nz-page-header-title>
+
+  <nz-page-header-content>
+    <form
+      nz-form
+      class="clinic-details-wrapper"
+      [formGroup]="formGroup"
+      nzLayout="vertical"
+    >
+      <nz-card class="client-details" [nzBordered]="false" nzTitle="General details">
+        <nz-form-item>
+          <nz-form-label>Select Clinician*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="clinicianErrorTmpl">
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzSize="large"
+              formControlName="clinicianId"
+              nzPlaceHolder="Select Clinician"
+              [nzOptions]="clinicianListOptions"
+              (nzOnSearch)="searchClinicianOptions($event)"
+            >
+              <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+                <span nz-icon nzType="loading" class="loading-icon"></span>
+                Loading Data...
+              </nz-option>
+            </nz-select>
+            <ng-template #clinicianErrorTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please select clinician</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Select Clinic Type*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="clinicTypeErrorTmpl">
+            <nz-select
+              nzAllowClear
+              nzSize="large"
+              formControlName="clinicType"
+              [nzOptions]="clinicTypeListOptions"
+              nzPlaceHolder="Select Clinic Type"
+            >
+              <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+                <span nz-icon nzType="loading" class="loading-icon"></span>
+                Loading Data...
+              </nz-option>
+            </nz-select>
+            <ng-template #clinicTypeErrorTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please Select Clinic Type</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Select Location*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="locationErrorTpl">
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzSize="large"
+              formControlName="locationId"
+              nzPlaceHolder="Select Location"
+              [nzOptions]="locationListOptions"
+              (nzOnSearch)="searchLocationOptions($event)"
+            >
+              <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+                <span nz-icon nzType="loading" class="loading-icon"></span>
+                Loading Data...
+              </nz-option>
+            </nz-select>
+            <ng-template #locationErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please Select Location</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Select Site*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="siteErrorTpl">
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzSize="large"
+              formControlName="siteId"
+              nzPlaceHolder="Select Site"
+              [nzOptions]="siteListOptions"
+              (nzOnSearch)="searchSiteOptions($event)"
+            >
+              <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+                <span nz-icon nzType="loading" class="loading-icon"></span>
+                Loading Data...
+              </nz-option>
+            </nz-select>
+            <ng-template #siteErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please Select Site</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Select Room*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="roomErrorTpl">
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzSize="large"
+              formControlName="roomId"
+              nzPlaceHolder="Select Room"
+              [nzOptions]="roomListOptions"
+              (nzOnSearch)="searchRoomOptions($event)"
+            >
+              <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+                <span nz-icon nzType="loading" class="loading-icon"></span>
+                Loading Data...
+              </nz-option>
+            </nz-select>
+            <ng-template #roomErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please Select Room</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-card>
+
+      <nz-card class="client-details" [nzBordered]="false" nzTitle="Date details">
+        <nz-form-item>
+          <nz-form-label>Select Default appointment length*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="departmentErrorTpl">
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzSize="large"
+              formControlName="appointmentLengthInMinutes"
+              nzPlaceHolder="Select Default appointment length"
+              [nzOptions]="defaultAppointmentLengthListOptions"
+            >
+            </nz-select>
+            <ng-template #departmentErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please Select Default appointment length</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Start Time*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="startTimeErrorTpl">
+            <nz-time-picker
+              formControlName="startTime"
+              nzSize="large"
+              nzFormat="HH:mm"
+            ></nz-time-picker>
+            <ng-template #startTimeErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please Start Time</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>End Time*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="endTimeErrorTpl">
+            <nz-time-picker
+              formControlName="endTime"
+              nzSize="large"
+              nzFormat="HH:mm"
+              [nzDisabledHours]="getDisabledHours.bind(this)"
+              [nzDisabledMinutes]="onCalculateDisabledMinutes.bind(this)"
+            ></nz-time-picker>
+            <ng-template #endTimeErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please End Time</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-card>
+
+      <nz-card class="client-details" [nzBordered]="false">
+        <nz-form-item @fadeDownInput class="mt-16 animated">
+          <nz-form-control nzHasFeedback [nzErrorTip]="recurrenceErrorTpl">
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzSize="large"
+              formControlName="recurenceType"
+              nzPlaceHolder="Select Recurrence Type"
+              [nzOptions]="recurrenceListOptions"
+            >
+            </nz-select>
+            <ng-template #recurrenceErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please Select</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <div [ngSwitch]="getRecurrenceType">
+          <div *ngSwitchCase="recurrenceTypeDaily">
+            <app-recurrence-end
+              [viewMode]="viewMode"
+              [defaultValue]="{
+                endsAfterCount:clinicDetails?.endsAfterCount,
+                endsOnDate:clinicDetails?.endsOnDate,
+              }"
+              (changeValue)="changeEnds($event)"
+              [wasAttemptToSubmitForm]="wasAttemptToSubmitForm"
+            />
+          </div>
+          <div *ngSwitchCase="recurrenceTypeWeekly">
+            <app-recurrence-days
+              [viewMode]="viewMode"
+              [defaultValue]="formGroup.get('customDaysOfWeek')?.value"
+              (changeDays)="changeRepeatDays($event)"
+            />
+            <p></p>
+            <nz-form-item>
+              <nz-form-label class="vertical-label">Start Date*</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="dateTmpl">
+                <nz-date-picker
+                  formControlName="startDate"
+                  [nzDisabledDate]="disabledDate.bind(this)"
+                  nzSize="large"
+                  nzFormat="d MMM YYYY"
+                ></nz-date-picker>
+                <ng-template #dateTmpl let-control>
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                    >Please input Date</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+            <app-recurrence-end
+              [viewMode]="viewMode"
+              [startDate]="formGroup.get('startDate')?.value"
+              [defaultValue]="{
+                endsAfterCount:clinicDetails?.endsAfterCount,
+                endsOnDate:clinicDetails?.endsOnDate,
+              }"
+              (changeValue)="changeEnds($event)"
+              [wasAttemptToSubmitForm]="wasAttemptToSubmitForm"
+            />
+          </div>
+          <div *ngSwitchCase="recurrenceTypeCustom">
+            <app-custom-recurrence
+              [viewMode]="viewMode"
+              [customDates]="formGroup.get('customDates')?.value"
+              (changeDates)="changeCustomDays($event)"
+              [wasAttemptToSubmitForm]="wasAttemptToSubmitForm"
+            />
+          </div>
+          <div *ngSwitchDefault></div>
+        </div>
+      </nz-card>
+    </form>
+    <div class="page-bottom-buttons">
+      <button
+        nz-button
+        nzType="default"
+        (click)="cancel()"
+        class="default"
+        nzSize="large"
+      >
+        Cancel
+      </button>
+
+      <button
+        nz-button
+        *ngIf="!viewMode"
+        [nzLoading]="isLoading$ | async"
+        (click)="submitForm()"
+        nzType="primary"
+        nzSize="large"
+      >
+        {{ clinicId ? 'Save' : 'Create' }}
+      </button>
+    </div>
+  </nz-page-header-content>
+</nz-page-header>

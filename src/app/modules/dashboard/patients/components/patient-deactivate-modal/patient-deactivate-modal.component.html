@@ -1,0 +1,44 @@
+<nz-form-item>
+  <nz-form-label class="vertical-label">Leaving date*</nz-form-label>
+  <nz-form-control nzHasFeedback [nzErrorTip]="dobTpl">
+    <nz-date-picker
+      [formControl]="leavingDate"
+      nzFormat="d MMM YYYY"
+      nzSize="large"
+    ></nz-date-picker>
+    <ng-template #dobTpl let-control>
+      <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+        >Please input Leaving date</ng-container
+      >
+    </ng-template>
+  </nz-form-control>
+</nz-form-item>
+
+<nz-form-item nz-row class="checkbox">
+  <nz-form-control>
+    <label nz-checkbox [formControl]="didNotStart">
+      <span>Didn't Start </span>
+    </label>
+  </nz-form-control>
+</nz-form-item>
+
+<div class="btn-wrapper">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handleCancel()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    nz-button
+    nzType="primary"
+    [nzLoading]="isLoading$ | async"
+    (click)="handleSubmitForm()"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

@@ -1,0 +1,84 @@
+@import "../utils/variables";
+
+.ant-picker {
+  border-radius: $input-border-radius;
+  width: 100%;
+
+  &.ant-picker-focused {
+    border-color: $blue-color;
+  }
+
+  .anticon-calendar {
+    color: $text-color;
+  }
+  &.transparent {
+    height: 100%;
+  }
+
+  // .ant-picker-header-month-btn {
+
+  // }
+}
+
+.ant-picker-date-range-wrapper {
+  .ant-picker-cell-in-view.ant-picker-cell-in-range {
+    &::before {
+      background-color: $blue-color;
+    }
+  }
+}
+
+.ant-picker-panel-container {
+  .remove-event {
+    pointer-events: none !important;
+  }
+}
+.custom-date-picker-wrapper {
+  .ant-form-item {
+    .ant-input-disabled {
+      background-color: #f5f5f5 !important;
+    }
+
+    .ant-input-group-addon {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    & + .ant-picker {
+      margin-top: -20px;
+      width: 100%;
+    }
+  }
+
+  .custom-date-picker-input {
+    width: fit-content;
+    height: 0;
+    padding: 0;
+    border: none;
+
+    .ant-picker-input {
+      height: 0;
+      opacity: 0;
+    }
+
+    .anticon-calendar {
+      cursor: pointer;
+    }
+  }
+
+  .custom-date-picker {
+    .ant-picker-header-year-btn,
+    .ant-picker-header-month-btn {
+      pointer-events: none;
+      color: rgba(0, 0, 0, 0.25); // Если хотите, чтобы текст также выглядел как неактивный
+    }
+
+    .ant-picker-header-year-btn:hover,
+    .ant-picker-header-month-btn:hover {
+      cursor: default;
+    }
+
+    &.loading {
+    }
+  }
+}

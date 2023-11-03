@@ -1,0 +1,27 @@
+.editor {
+  .NgxEditor {
+    border-color: $input-border-color;
+    .NgxEditor__Content {
+      min-height: 122px;
+    }
+  }
+  .NgxEditor__MenuBar {
+    color: #c0c0c0c0;
+  }
+
+  &.border-outside {
+    .NgxEditor {
+      border-top: none;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    .NgxEditor__MenuBar {
+      border: 1px solid;
+      border-color: $input-border-color;
+      border-bottom: none;
+      border-top-left-radius: $input-border-radius;
+      border-top-right-radius: $input-border-radius;
+    }
+  }
+}

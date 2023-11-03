@@ -1,0 +1,48 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.schedule-page {
+  .schedule-content {
+    @include flex-container;
+    gap: 16px;
+    .ant-picker-inline {
+      width: fit-content;
+      height: fit-content;
+    }
+    .ant-picker-panel-container {
+      width: 350px;
+      max-width: 350px;
+    }
+    .selected {
+      background-color: $gray-color;
+      border-radius: 50%;
+      color: #fff;
+    }
+
+    .ant-card {
+      width: 100%;
+      max-width: 600px;
+
+      .ant-list {
+        max-height: 50vh;
+        overflow: auto;
+      }
+
+      .delete-icon {
+        color: $error-color;
+        cursor: pointer;
+      }
+    }
+    .disable-mouse-events {
+      pointer-events: none;
+    }
+
+    .ant-picker-date-panel {
+      .ant-picker-cell-selected {
+        .ant-picker-cell-inner {
+          background: transparent;
+        }
+      }
+    }
+  }
+}

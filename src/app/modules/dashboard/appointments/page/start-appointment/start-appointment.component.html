@@ -1,0 +1,32 @@
+<div class="page-header white">
+  <h1>Appointment</h1>
+  <nz-tabset class="white-tabs">
+    <nz-tab nzTitle="General Details">
+      <div class="tab-content">
+        <app-patient-details-view [appointmentId]="appointmentId" />
+      </div>
+    </nz-tab>
+    <nz-tab nzTitle="Documents">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-appointment-upload-documents [appointmentId]="appointmentId" />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Appointment History">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-appointments-history-table [appointmentId]="appointmentId" />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <!-- *ngxPermissionsOnly="appointmentClinicNotesUpdatePermission" -->
+    <nz-tab nzTitle="Clinic Notes">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-clinic-notes [isViewMode]="isViewMode" [appointmentId]="appointmentId" />
+        </div>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</div>

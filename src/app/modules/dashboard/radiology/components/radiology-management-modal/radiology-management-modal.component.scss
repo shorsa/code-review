@@ -1,0 +1,104 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.radiology-details-wrapper {
+  .scan-item {
+    height: 20px;
+    .ant-input {
+      padding: 0;
+      height: 30px;
+    }
+  }
+  .checkbox-wrapper {
+    @include flex-container(column);
+
+    & > label {
+      font-weight: 500;
+      max-width: 260px;
+      margin-bottom: 4px;
+    }
+
+    & > span {
+      display: block;
+      margin: 8px 0;
+      font-weight: 500;
+    }
+    .second-wrapper {
+      @include flex-container(row, flex-start, space-between);
+      flex-wrap: wrap;
+      max-width: 370px;
+      gap: 6px;
+
+      & > * {
+        width: calc(50% - 8px);
+      }
+    }
+  }
+
+  .ant-checkbox-wrapper {
+    margin-left: 0;
+  }
+
+  .ant-form-item {
+    .ant-form-item-label {
+      & + p {
+        font-size: 12px;
+        color: $gray-color;
+      }
+    }
+  }
+
+  .inputs-wrapper {
+    margin-top: 16px;
+    @include flex-container;
+    gap: 16px;
+
+    & > * {
+      width: calc(100% / 3 - 16px);
+    }
+  }
+
+  .bottom-inputs {
+    margin-top: 16px;
+    @include flex-container;
+    gap: 16px;
+
+    & > * {
+      width: calc(50% - 16px);
+    }
+  }
+
+  .contra-indicators {
+    margin-top: 8px;
+    padding: 20px 40px 20px 20px;
+    background-color: $green-color;
+    box-shadow: 4px 4px 4px 0px #0000001f;
+    border-radius: 0 $input-border-radius $input-border-radius $input-border-radius;
+
+    h6 {
+      font-size: 14px;
+
+      .anticon {
+        margin-right: 8px;
+        color: $blue-color;
+        font-size: 18px;
+        position: relative;
+        bottom: -1px;
+      }
+    }
+
+    p {
+      font-size: 12px;
+    }
+  }
+}
+.page-bottom-buttons {
+  width: 100%;
+  margin-top: 16px;
+  @include flex-container(row, center, flex-end);
+  gap: 16px;
+
+  button {
+    width: 120px;
+  }
+}

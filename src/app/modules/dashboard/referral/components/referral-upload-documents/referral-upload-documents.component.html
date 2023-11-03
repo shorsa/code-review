@@ -1,0 +1,83 @@
+<nz-card class="upload-documents" [nzTitle]="cartTitleTmpl">
+  <nz-empty *ngIf="!fileList.length"></nz-empty>
+
+  <ul class="files-list" *ngIf="fileList.length">
+    <nz-spin
+      nzSimple
+      class="global-loader"
+      *ngIf="(isLoading$ | async) && !isLoadingDocument"
+    ></nz-spin>
+    <li *ngFor="let file of fileList">
+      <span>{{ file.name }}</span>
+      <ng-container *ngIf="!file.id">
+        <ng-template #indicatorTemplate
+          ><span nz-icon nzType="loading"></span
+        ></ng-template>
+        <nz-spin nzSimple [nzIndicator]="indicatorTemplate"></nz-spin>
+      </ng-container>
+      <span>
+        <ng-container
+          [ngTemplateOutlet]="menu"
+          [ngTemplateOutletContext]="{ file: file }"
+        ></ng-container>
+      </span>
+    </li>
+  </ul>
+</nz-card>
+<ng-template #cartTitleTmpl>
+  <div class="row-title">
+    <h3>Documents</h3>
+    <div class="row-title-controls">
+      <input
+        type="text"
+        nzSize="large"
+        (keyup)="handleSearchByText($event)"
+        nz-input
+        placeholder="Search text"
+      />
+      <button nz-button nzSize="large" nzType="primary" class="upload-btn">
+        <label for="file-label">
+          <input
+            #fileInput
+            type="file"
+            [accept]="getFilesTypesForInputAccept"
+            id="file-label"
+            (change)="handleUpload($event)"
+          />
+          <span nz-icon nzType="upload" class="upload-btn-icon"></span>
+          <span class="upload-btn-text">Upload</span>
+        </label>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #menu let-file="file">
+  <a nz-dropdown class="table-menu" nzTrigger="click" [nzDropdownMenu]="menu">
+    <span nz-icon nzType="more" nzTheme="outline"></span>
+  </a>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <li nz-menu-item (click)="handleDownloadDocument(file)">Download</li>
+      <a
+        *ngIf="!getIsClinicianRole"
+        nz-popconfirm
+        nzPopconfirmTitle="Are you sure to delete this document?"
+        (nzOnConfirm)="handleDeleteDocument(file.id)"
+      >
+        <li nz-menu-item nzDanger>Delete</li>
+      </a>
+    </ul>
+  </nz-dropdown-menu>
+</ng-template>
+
+<nz-pagination
+  class="paginator"
+  (nzPageIndexChange)="onPaginationChange($event - 1, 'pageIndex')"
+  (nzPageSizeChange)="onPaginationChange($event, 'pageSize')"
+  [nzTotal]="documentsTotal"
+  nzShowSizeChanger
+  [nzPageSizeOptions]="pageSizeOptions"
+  [nzPageSize]="searchParams.pageSize"
+></nz-pagination>
+<!-- [nzPageIndex]="searchParams.pageIndex + 1" -->

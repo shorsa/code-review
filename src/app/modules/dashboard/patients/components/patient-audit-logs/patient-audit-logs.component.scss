@@ -1,0 +1,6 @@
+@import "src/assets/scss/utils/mixins.scss";
+
+.audit-logs-wrapper {
+  @include flex-container(column);
+  gap: 16px;
+}

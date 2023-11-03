@@ -1,0 +1,37 @@
+<div [innerHTML]="termsContent" *ngIf="!geTermsIsEmpty"></div>
+
+<ng-container *ngIf="geTermsIsEmpty">
+  <p>Dear User,</p>
+  <p>
+    We regret to inform you that your access to the Horizon system has been temporarily
+    restricted until the necessary terms and conditions are added to your company's
+    profile.
+  </p>
+  <p>
+    Ensuring compliance with the terms and conditions is essential for maintaining a
+    secure and responsible user environment. It also safeguards both you and your company
+    from potential legal or regulatory issues.
+  </p>
+  <p>
+    To regain access to the system, we kindly request you to contact your company's
+    representative to make a request to OHRD for adding the required terms and conditions
+    to your company's profile within the Horizon system.
+  </p>
+  <p>Thank you.</p>
+</ng-container>
+
+<div class="btn-wrapper">
+  <button nz-button nzType="default" class="default" (click)="cancel()" nzSize="large">
+    Cancel
+  </button>
+  <button
+    [disabled]="geTermsIsEmpty"
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="accept()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Accept
+  </button>
+</div>

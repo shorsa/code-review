@@ -1,0 +1,27 @@
+<p>Please, select the date of delaying</p>
+<nz-form-item>
+  <nz-form-label class="vertical-label">Leaving date*</nz-form-label>
+  <nz-form-control nzHasFeedback [nzErrorTip]="dobTpl">
+    <nz-date-picker [formControl]="date" nzFormat="d MMM YYYY" nzSize="large"></nz-date-picker>
+    <ng-template #dobTpl let-control>
+      <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+        >Please input Leaving date</ng-container
+      >
+    </ng-template>
+  </nz-form-control>
+</nz-form-item>
+
+<div class="btn-wrapper">
+  <button nz-button nzType="default" (click)="cancel()" class="default" nzSize="large">
+    Cancel
+  </button>
+  <button
+    nz-button
+    nzType="primary"
+    [nzLoading]="isLoading$ | async"
+    (click)="handleSubmit()"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

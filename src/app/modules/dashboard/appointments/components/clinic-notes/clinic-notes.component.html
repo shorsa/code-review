@@ -1,0 +1,313 @@
+<div class="clinic-notes-wrapper">
+  <form nz-form class="clinic-notes-form" [formGroup]="formGroup" nzLayout="vertical">
+    <div class="row">
+      <nz-card [nzBordered]="false">
+        <ul class="list">
+          <li>
+            <span>Name:</span><span>{{ patientDetails?.name }}</span>
+          </li>
+          <li>
+            <span>Employer:</span><span>{{ patientDetails?.employer }}</span>
+          </li>
+        </ul>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Time in Post*:</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="timeInPostTmpl">
+            <textarea
+              formControlName="timeInPost"
+              nz-input
+              rows="3"
+              placeholder="Input text"
+            ></textarea>
+            <ng-template #timeInPostTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input Time in Post</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Time with Employer*:</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="timeWithEmployerTmpl">
+            <textarea
+              formControlName="timeWithEmployer"
+              nz-input
+              rows="3"
+              placeholder="Input text"
+            ></textarea>
+            <ng-template #timeWithEmployerTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input Time with Employer</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-card>
+
+      <nz-card class="second-card" [nzBordered]="false">
+        <ul class="list">
+          <li>
+            <span>Date of Birth:</span
+            ><span
+              >{{ patientDetails?.dateOfBirth | customDate }} ({{
+                patientYearsOld
+              }})</span
+            >
+          </li>
+          <li>
+            <span>Job Title:</span><span>{{ patientDetails?.jobTitle }}</span>
+          </li>
+        </ul>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label nzFor="hoursPerWeek">Hours Per Week*:</nz-form-label>
+          <nz-form-control [nzErrorTip]="hoursPerWeekTmpl">
+            <nz-input-group class="phone-number" nzSize="large">
+              <nz-input-number
+                [nzMin]="0"
+                nzSize="large"
+                id="hoursPerWeek"
+                formControlName="hoursPerWeek"
+                nzPlaceHolder="Input Hours"
+              />
+            </nz-input-group>
+            <ng-template #hoursPerWeekTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input your Date Absence Commenced</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <div class="row-checkboxes">
+          <div class="checkbox-wrapper">
+            <span>Shifts:</span>
+            <span>
+              <nz-form-control>
+                <nz-radio-group
+                  nzSize="large"
+                  class="horizontal"
+                  formControlName="shifts"
+                >
+                  <label nz-radio [nzValue]="addictionTimeDay">Day</label>
+                  <label nz-radio [nzValue]="addictionTimeNight">Night</label>
+                  <label nz-radio [nzValue]="addictionTimeBoth">Both</label>
+                </nz-radio-group>
+              </nz-form-control>
+            </span>
+          </div>
+          <div class="at-work checkbox-wrapper">
+            <span>At Work:</span>
+            <span>
+              <nz-form-control>
+                <nz-radio-group
+                  nzSize="large"
+                  class="horizontal"
+                  formControlName="isAtWork"
+                >
+                  <label nz-radio [nzValue]="true">Yes</label>
+                  <label nz-radio [nzValue]="false">No</label>
+                </nz-radio-group>
+              </nz-form-control>
+            </span>
+          </div>
+        </div>
+
+        <nz-form-item
+          @fadeDownInput
+          class="mt-16 animated"
+          *ngIf="!formGroup.get('isAtWork')?.value"
+        >
+          <nz-form-label>Date Absence Commenced*:</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="dateAbsenceCommencedTmpl">
+            <nz-date-picker
+              formControlName="dateAbsenceCommenced"
+              nzFormat="d MMM YYYY"
+              nzSize="large"
+            ></nz-date-picker>
+            <ng-template #dateAbsenceCommencedTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input your Date Absence Commenced</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-card>
+    </div>
+
+    <nz-card [nzBordered]="false" class="big-card">
+      <div class="row">
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Relevant Medical History*:</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="relevantMedicalHistoryTmpl">
+            <input
+              formControlName="relevantMedicalHistory"
+              nzSize="large"
+              nz-input
+              placeholder="Input text"
+            />
+            <ng-template #relevantMedicalHistoryTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input Relevant Medical History</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Past Medical Health*:</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="pastMedicalHealthTmpl">
+            <input
+              formControlName="pastMedicalHealth"
+              nzSize="large"
+              nz-input
+              placeholder="Input text"
+            />
+            <ng-template #pastMedicalHealthTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input Past Medical Health</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="row">
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Medication*:</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="medicationTmpl">
+            <input
+              formControlName="medication"
+              nzSize="large"
+              nz-input
+              placeholder="Input text"
+            />
+            <ng-template #medicationTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input Medication</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Social/Welfare*:</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="socialWelfareTmpl">
+            <input
+              formControlName="socialWelfare"
+              nzSize="large"
+              nz-input
+              placeholder="Input text"
+            />
+            <ng-template #socialWelfareTmpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input Social/Welfare</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="row-checkboxes">
+        <div class="checkbox-wrapper">
+          <span>Smoker:</span>
+          <span>
+            <nz-form-control>
+              <nz-radio-group nzSize="large" class="horizontal" formControlName="smoker">
+                <label nz-radio [nzValue]="addictionTimeNone">None</label>
+                <label nz-radio [nzValue]="addictionTimeDay">Day</label>
+                <label nz-radio [nzValue]="addictionTimeNight">Night</label>
+                <label nz-radio [nzValue]="addictionTimeBoth">Both</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </span>
+        </div>
+        <div class="checkbox-wrapper">
+          <span>Alcohol:</span>
+          <span>
+            <nz-form-control>
+              <nz-radio-group nzSize="large" class="horizontal" formControlName="alcohol">
+                <label nz-radio [nzValue]="addictionTimeNone">None</label>
+                <label nz-radio [nzValue]="addictionTimeDay">Day</label>
+                <label nz-radio [nzValue]="addictionTimeNight">Night</label>
+                <label nz-radio [nzValue]="addictionTimeBoth">Both</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </span>
+        </div>
+        <div class="checkbox-wrapper">
+          <span>Drugs:</span>
+          <span>
+            <nz-form-control>
+              <nz-radio-group nzSize="large" class="horizontal" formControlName="drugs">
+                <label nz-radio [nzValue]="addictionTimeNone">None</label>
+                <label nz-radio [nzValue]="addictionTimeDay">Day</label>
+                <label nz-radio [nzValue]="addictionTimeNight">Night</label>
+                <label nz-radio [nzValue]="addictionTimeBoth">Both</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </span>
+        </div>
+      </div>
+    </nz-card>
+    <div class="notes-wrapper">
+      <nz-card [nzBordered]="false" *ngIf="previousNotes.length">
+        <div class="label">Previous Note:</div>
+        <ul>
+          <li *ngFor="let item of previousNotes">
+            {{ item.details }}
+          </li>
+        </ul>
+      </nz-card>
+      <nz-card [nzBordered]="false">
+        <!-- form-item -->
+        <nz-form-item>
+          <div class="label">
+            <nz-form-label>Add Note: </nz-form-label>
+            <div class="icons">
+              <div (click)="handleAddNewNote()" class="add-btn">+Add</div>
+            </div>
+          </div>
+          <nz-form-control nzHasFeedback>
+            <textarea
+              #addNote
+              class="disable-mode"
+              nzSize="large"
+              nz-input
+              [nzAutosize]="{ maxRows: 6, minRows: 4 }"
+              placeholder="Input Text"
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-card>
+    </div>
+  </form>
+  <div class="page-bottom-buttons">
+    <button
+      nz-button
+      nzType="default"
+      (click)="navigateToAppointmentsTable()"
+      class="default"
+      nzSize="large"
+    >
+      Cancel
+    </button>
+    <button
+      nz-button
+      [nzLoading]="isLoading$ | async"
+      (click)="handleSubmitForm()"
+      nzType="primary"
+      nzSize="large"
+    >
+      Save
+    </button>
+  </div>
+</div>

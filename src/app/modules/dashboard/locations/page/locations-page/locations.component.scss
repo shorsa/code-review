@@ -1,0 +1,5 @@
+tr.ant-table-row {
+  & > :first-child {
+    cursor: pointer;
+  }
+}

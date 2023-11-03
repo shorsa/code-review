@@ -1,0 +1,31 @@
+<nz-table
+  nzShowSizeChanger
+  [nzLoading]="isLoading$ | async"
+  [nzData]="nzModalData.list"
+  [nzShowPagination]="false"
+  zTableLayout="fixed"
+  [nzScroll]="{ x: '700px' }"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="Identifier" [nzSortFn]="true">Appointment time</th>
+      <th nzColumnKey="Identifier">Referral #</th>
+      <th nzColumnKey="PhoneNumber" [nzSortFn]="true">PClient</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of nzModalData.list">
+      <td>{{ data?.date | customDate : 'dateTime' }}</td>
+      <td>
+        {{ data?.referralCustomId }}
+        {{ data?.clientName }}
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<div class="btn-wrapper">
+  <button (click)="close()" nz-button nzType="default" class="default" nzSize="large">
+    Close
+  </button>
+</div>

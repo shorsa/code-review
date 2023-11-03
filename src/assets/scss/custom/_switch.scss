@@ -1,0 +1,15 @@
+.ant-form-item {
+  &.switch {
+    .ant-form-item-control {
+      @include media-md {
+        flex: auto !important;
+      }
+    }
+  }
+}
+span.switch {
+  .ant-form-item-control-input-content {
+    @include flex-container(row, center, flex-start);
+    padding-left: 11px;
+  }
+}

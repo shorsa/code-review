@@ -1,0 +1,115 @@
+<nz-table
+  nzShowSizeChanger
+  [nzPageSizeOptions]="pageSizeOptions"
+  [nzLoading]="isLoading$ | async"
+  [nzData]="appointmentsData"
+  [nzFrontPagination]="false"
+  [nzTotal]="totalCount"
+  zTableLayout="fixed"
+  [nzScroll]="{ x: '700px' }"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="Identifier" nzWidth="140px" [nzSortFn]="true">Appointment Id</th>
+      <th nzColumnKey="Patient" [nzSortFn]="true">Patient</th>
+      <th nzColumnKey="ProductType" nzWidth="180px" [nzFilterFn]="true">Product Type</th>
+      <th nzColumnKey="AppointmentTime" nzWidth="160px" [nzSortFn]="true">
+        Appointment Time
+      </th>
+      <th nzColumnKey="Referral" [nzSortFn]="true">Referral #</th>
+      <th nzColumnKey="Client" [nzFilterFn]="true">Client</th>
+      <th nzColumnKey="Clinician" [nzSortFn]="true">Clinician</th>
+      <th nzColumnKey="Status" [nzSortFn]="true">Status</th>
+      <th nzColumnKey="actions" [nzWidth]="getIsClinicianRole ? '120px' : '80px'">
+        Actions
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of appointmentsData">
+      <td>{{ data.customAppointmentId }}</td>
+      <td>
+        {{ data.patientName }}
+      </td>
+      <td class="ellipsis">
+        <span nz-tooltip [nzTooltipTitle]="data.productType">
+          {{ data.productType }}
+        </span>
+      </td>
+      <td>{{ data.startTime | customDate : 'dateTime' }}</td>
+      <td>{{ data.referralCustomId }}</td>
+      <td>{{ data.clientName }}</td>
+      <td>{{ data.clinicianName }}</td>
+      <td appAppointmentStatus [status]="data.status"></td>
+      <td class="actions">
+        <div>
+          <div
+            *ngIf="
+              getIsClinicianRole &&
+              (startStatus === data.status || data.status === continueStatus)
+            "
+            class="start-btn"
+            [class.continue]="data.status === continueStatus"
+            (click)="handleNextStepAppointment(data)"
+          >
+            {{ data.status === continueStatus ? 'Continue' : 'Start' }}
+          </div>
+          <ng-container
+            [ngTemplateOutlet]="menu"
+            [ngTemplateOutletContext]="{ data: data }"
+          ></ng-container>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #menu let-data="data">
+  <a nz-dropdown class="table-menu" nzTrigger="click" [nzDropdownMenu]="menu">
+    <span nz-icon nzType="more" nzTheme="outline"></span>
+  </a>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <ng-container *ngIf="data.isActive; else inactiveTmpl">
+        <li
+          nz-menu-item
+          *ngxPermissionsOnly="appointmentViewDetailsPermission"
+          (click)="viewDetails(data.id)"
+        >
+          View
+        </li>
+        <a
+          nzDan
+          *ngxPermissionsOnly="appointmentCancelPermission"
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure to Cancel this appointment?"
+          (nzOnConfirm)="cancel(data.id)"
+        >
+          <li nz-menu-item>Cancel</li>
+        </a>
+        <a
+          nzDan
+          *ngIf="getIsOHRDRole"
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure to Deactivate this appointment?"
+          (nzOnConfirm)="deactivate(data.id)"
+        >
+          <li nz-menu-item nzDanger>Deactivate</li>
+        </a>
+      </ng-container>
+
+      <ng-template #inactiveTmpl>
+        <a
+          nzDan
+          nz-popconfirm
+          *ngIf="getIsOHRDRole"
+          nzPopconfirmTitle="Are you sure to Reactivate this appointment?"
+          (nzOnConfirm)="reactivate(data.id)"
+        >
+          <li nz-menu-item>Reactivate</li>
+        </a>
+      </ng-template>
+    </ul>
+  </nz-dropdown-menu>
+</ng-template>

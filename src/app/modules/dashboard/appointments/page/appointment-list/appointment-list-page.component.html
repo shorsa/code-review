@@ -1,0 +1,33 @@
+<nz-page-header class="with-actions">
+  <nz-page-header-title>Appointments</nz-page-header-title>
+  <nz-page-header-extra>
+    <div class="header-actions">
+      <nz-space>
+        <app-search-input (searchTextChange)="handleSearchByText($event)" />
+      </nz-space>
+      <nz-space *ngIf="getIsCanDeactivateOrReactivate">
+        <nz-segmented
+          (nzValueChange)="changeAppointmentStateFilter($event)"
+          class="state deactivate"
+          [nzOptions]="activeFilterOptions"
+        ></nz-segmented>
+      </nz-space>
+      <nz-space *ngxPermissionsOnly="permissionAppointmentCreate">
+        <button
+          (click)="navigateAddNewAppointment()"
+          class="add"
+          nzSize="large"
+          *nzSpaceItem
+          nzType="primary"
+          nz-button
+        >
+          <span nz-icon nzType="plus" nzTheme="outline"></span>
+          Add new
+        </button>
+      </nz-space>
+    </div>
+  </nz-page-header-extra>
+  <nz-page-header-content>
+    <app-appointments-table />
+  </nz-page-header-content>
+</nz-page-header>

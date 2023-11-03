@@ -1,0 +1,53 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.appointment-general-details-wrapper {
+  @include flex-container(column);
+  gap: 16px;
+
+  .row {
+    width: 100%;
+    @include flex-container;
+    gap: 16px;
+
+    & > .ant-card,
+    & > .ant-form-item {
+      width: 50%;
+      width: 50%;
+    }
+  }
+
+  .appointments-general-details {
+    .card-content {
+      @include flex-container;
+      flex-wrap: wrap;
+
+      gap: 16px;
+      & > * {
+        width: calc(50% - 8px);
+        min-width: 180px;
+      }
+    }
+  }
+
+  .error-message {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .clinician-item {
+    position: relative;
+
+    .error-message {
+      position: absolute;
+      bottom: -22px;
+      left: 16px;
+    }
+  }
+}
+
+.page-bottom-buttons {
+  margin-top: 16px;
+  @include flex-container(row, center, flex-end);
+  gap: 8px;
+}

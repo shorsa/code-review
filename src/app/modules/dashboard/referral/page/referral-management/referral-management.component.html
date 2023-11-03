@@ -1,0 +1,60 @@
+<div class="page-header white">
+  <h1>Referral - {{ referralId ? 'Details' : 'Add new' }}</h1>
+  <nz-tabset
+    class="white-tabs"
+    [(nzSelectedIndex)]="currentTabIndex"
+    (nzSelectedIndexChange)="handleChangeTabIndex($event)"
+  >
+    <nz-tab nzTitle="General Details">
+      <div class="tab-content">
+        <app-referral-general-details
+          (changeProductItem)="handleChangeProduct($event)"
+          [referralId]="referralId"
+        />
+      </div>
+    </nz-tab>
+    <nz-tab nzTitle="Referral Details" [nzDisabled]="!referralId">
+      <ng-template nz-tab>
+        <div class="tab-content" *ngIf="referralFormType !== undefined">
+          <ng-container *ngIf="isShowManagementForm; else occupationalHealth">
+            <app-management-referral-details
+              [referralStatus]="referralDetails!.status"
+              [productId]="productId!"
+              *ngIf="referralId"
+              [referralId]="referralId"
+            />
+          </ng-container>
+          <ng-template #occupationalHealth>
+            <app-occupational-health-general
+              [referralStatus]="referralDetails!.status"
+              [productId]="productId!"
+              *ngIf="referralId"
+              [referralId]="referralId"
+            />
+          </ng-template>
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Appointments" [nzDisabled]="!referralId">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-referral-appointments [referralId]="referralId!" />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Documents" [nzDisabled]="!referralId">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-referral-upload-documents [referralId]="referralId!" />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Audit Log" [nzDisabled]="!referralId">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-referral-audit-logs [referralId]="referralId!" />
+        </div>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</div>

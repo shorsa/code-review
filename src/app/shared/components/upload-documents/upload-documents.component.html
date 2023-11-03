@@ -1,0 +1,37 @@
+<nz-card class="upload-documents" [nzTitle]="title" [nzExtra]="uploadButtonTpl">
+  <nz-empty *ngIf="!fileList.length"></nz-empty>
+
+  <ul class="files-list" *ngIf="fileList.length">
+    <li *ngFor="let file of fileList">
+      <span>{{ file.name }}</span>
+      <span>
+        <ng-container
+          [ngTemplateOutlet]="menu"
+          [ngTemplateOutletContext]="{ file: file }"
+        ></ng-container>
+      </span>
+    </li>
+  </ul>
+</nz-card>
+<ng-template #uploadButtonTpl>
+  <nz-upload [nzShowUploadList]="false" nzListType="text" [(nzFileList)]="fileList">
+    <button nz-button nzType="primary">
+      <span nz-icon nzType="upload"></span>
+      Upload
+    </button>
+  </nz-upload>
+</ng-template>
+
+<ng-template #menu let-file>
+  <a nz-dropdown class="table-menu" nzTrigger="click" [nzDropdownMenu]="menu">
+    <span nz-icon nzType="more" nzTheme="outline"></span>
+  </a>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <li nz-menu-item>1st menu item</li>
+      <li nz-menu-item>2nd menu item</li>
+      <li nz-menu-item>3rd menu item</li>
+      <li nz-menu-item nzDanger>4th danger item</li>
+    </ul>
+  </nz-dropdown-menu>
+</ng-template>

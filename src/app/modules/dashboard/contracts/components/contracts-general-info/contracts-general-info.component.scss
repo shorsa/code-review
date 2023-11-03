@@ -1,0 +1,35 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+:host {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10fr 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.contract-details-form {
+  @include flex-container;
+  padding-bottom: 0 !important;
+  flex-wrap: wrap;
+  gap: 0 16px;
+
+  @include media-md {
+    flex-direction: column;
+  }
+
+  & > * {
+    width: calc(50% - 8px);
+
+    @include media-md {
+      width: 100%;
+    }
+  }
+}
+
+.contract-details {
+  max-width: 688px;
+  height: fit-content;
+}

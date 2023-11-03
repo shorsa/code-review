@@ -1,0 +1,17 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.contract-products-wrapper {
+    height: 66vh;
+  .header-actions {
+    @include flex-container;
+    gap: 16px;
+  }
+
+  .ant-input-number {
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+}

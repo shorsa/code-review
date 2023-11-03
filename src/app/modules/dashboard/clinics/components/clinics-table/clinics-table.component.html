@@ -1,0 +1,136 @@
+<div class="filters">
+  <nz-range-picker
+    nzSize="large"
+    [(ngModel)]="rangeDateValue"
+    (nzOnCalendarChange)="changeRangeDateFilter($event)"
+    nzFormat="d MMM YYYY"
+  ></nz-range-picker>
+</div>
+<nz-table
+  nzShowSizeChanger
+  [nzData]="clinicsData"
+  [nzLoading]="isLoading$ | async"
+  [nzFrontPagination]="false"
+  [nzPageSizeOptions]="pageSizeOptions"
+  [nzPageSize]="searchParams.pageSize"
+  [nzTotal]="totalCount ?? 0"
+  [nzScroll]="{ x: '1200px' }"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="Date" nzWidth="100px" [nzSortFn]="true">Date</th>
+      <th nzColumnKey="StartTime" nzWidth="110px" [nzSortFn]="true">Start Time</th>
+      <th nzColumnKey="EndTime" nzWidth="110px" [nzSortFn]="true">End Time</th>
+      <th nzColumnKey="Clinician" nzWidth="150px" [nzSortFn]="true">Clinician</th>
+      <th nzColumnKey="Location" nzWidth="169px" [nzSortFn]="true">Location #</th>
+      <th
+        nzColumnKey="clinicTypes"
+        [nzFilterMultiple]="true"
+        [nzFilters]="clinicTypesFilterList"
+        [nzFilterFn]="true"
+      >
+        Clinic Type
+      </th>
+      <th nzColumnKey="Length" nzWidth="100px" [nzSortFn]="true">Length</th>
+      <th nzColumnKey="BookedAppointments" nzWidth="140px" [nzSortFn]="true">
+        Booked Appointments
+      </th>
+      <th nzColumnKey="MinutesRemaining" nzWidth="100px" [nzSortFn]="true">
+        Minutes Remaining
+      </th>
+      <th nzColumnKey="actions" nzWidth="75px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of clinicsData" class="cursor-pointer">
+      <td (click)="$event.stopPropagation()">
+        <app-date-picker
+          [availableDates]="availableAppointmentDates"
+          [iconOnly]="true"
+          (periodChange)="
+            searchAvailableAppointmentByClinicId(data.id, $event.month, $event.year)
+          "
+          (dateChange)="goToAppointmentsByClinic(data, $event)"
+        />
+      </td>
+      <td>{{ data.startTime }}</td>
+      <td>{{ data.endTime }}</td>
+      <td>{{ data.clinicianName }}</td>
+      <td class="ellipsis">
+        <span nz-tooltip [nzTooltipTitle]="data.location">
+          {{ data.location }}
+        </span>
+      </td>
+      <td>{{ data.clinicType | clinicType }}</td>
+      <td>
+        {{
+          data.appointmentLengthInMinutes ? data.appointmentLengthInMinutes + ' mins' : ''
+        }}
+      </td>
+      <td>{{ data.bookedAppointments }}</td>
+      <td>{{ data.minutesRemaining ? data.minutesRemaining + ' mins' : '' }}</td>
+      <td>
+        <div class="action">
+          <ng-container
+            [ngTemplateOutlet]="menu"
+            [ngTemplateOutletContext]="{ data: data }"
+          ></ng-container>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #menu let-data="data">
+  <a
+    (click)="$event.stopPropagation()"
+    nz-dropdown
+    class="table-menu"
+    nzTrigger="click"
+    [nzClickHide]="true"
+    [nzDropdownMenu]="menu"
+  >
+    <span nz-icon nzType="more" nzTheme="outline"></span>
+  </a>
+
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <ng-container *ngIf="data.isActive; else reactivateTmpl">
+        <ng-container *ngxPermissionsOnly="permissionToUpdate">
+          <li nz-menu-item (click)="edit(data.id)">Edit</li>
+        </ng-container>
+
+        <ng-container *ngxPermissionsExcept="permissionToUpdate">
+          <li
+            *ngxPermissionsOnly="[permissionViewDetails, permissionCanBookOnline]"
+            nz-menu-item
+            (click)="edit(data.id)"
+          >
+            View
+          </li>
+        </ng-container>
+        <a
+        *ngIf="getIsCanDeactivateOrReactivate"
+          nzDan
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure to Deactivate this client?"
+          (nzOnConfirm)="deactivate(data.id)"
+        >
+          <li nz-menu-item nzDanger>Deactivate</li>
+        </a>
+      </ng-container>
+
+      <ng-template #reactivateTmpl>
+        <a
+        *ngIf="getIsCanDeactivateOrReactivate"
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure to Reactivate this client?"
+          (nzOnConfirm)="reactivate(data.id)"
+        >
+          <li nz-menu-item>Reactivate</li>
+        </a>
+      </ng-template>
+    </ul>
+  </nz-dropdown-menu>
+</ng-template>

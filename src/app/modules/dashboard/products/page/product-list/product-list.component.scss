@@ -1,0 +1,9 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.products-page {
+  .ant-page-header {
+    max-height: calc(100vh - #{$layout-header-height});
+    overflow-y: auto;
+  }
+}

@@ -1,0 +1,25 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.clients-page {
+  .ant-page-header-heading-extra {
+    @include flex-container;
+    gap: 12px;
+
+    .ant-segmented {
+      margin-left: 0;
+    }
+
+    @include media-sm {
+      flex-wrap: wrap;
+
+      .ant-space:nth-child(1) {
+        width: 100%;
+      }
+    }
+  }
+  .ant-page-header {
+    max-height: calc(100vh - #{$layout-header-height});
+    overflow-y: auto;
+  }
+}

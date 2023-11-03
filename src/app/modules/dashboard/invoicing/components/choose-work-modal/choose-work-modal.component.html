@@ -1,0 +1,87 @@
+<div class="products-page">
+  <nz-page-header class="with-actions">
+    <nz-page-header-title
+      ><app-search-input (searchTextChange)="handleSearchByText($event)"
+    /></nz-page-header-title>
+    <nz-page-header-content>
+      <nz-table
+        nzShowSizeChanger
+        [nzLoading]="isLoading$ | async"
+        [nzData]="appointmentsData"
+        [nzFrontPagination]="false"
+        [nzTotal]="totalCount"
+        zTableLayout="fixed"
+        [nzScroll]="{ x: '700px' }"
+        (nzQueryParams)="onQueryParamsChange($event)"
+      >
+        <thead>
+          <tr>
+            <th
+              [width]="50"
+              [nzChecked]="checked"
+              [nzIndeterminate]="indeterminateCheckbox"
+              (nzCheckedChange)="onAllChecked($event)"
+            ></th>
+            <th nzColumnKey="Id">Referral Id</th>
+            <th nzColumnKey="Id">Appointment Id</th>
+            <th nzColumnKey="FirstName">Appointment Type</th>
+            <th nzColumnKey="LastName">Patient Id</th>
+            <th nzColumnKey="LastName">Late Cancellation</th>
+            <th nzColumnKey="LastName">DNAs</th>
+            <th nzColumnKey="LastName">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of appointmentsData">
+            <td
+              [nzChecked]="hasAppointment(data)"
+              (nzCheckedChange)="onItemCheckedChange(data, $event)"
+            ></td>
+            <td>
+              {{ data?.referralCustomId }}
+            </td>
+            <td>
+              {{ data?.customId }}
+            </td>
+            <td>
+              {{ data?.appointmentType }}
+            </td>
+            <td>
+              {{ data?.patientCustomId }}
+            </td>
+            <td>
+              {{ data?.lateCancellation }}
+            </td>
+            <td>
+              {{ data?.dna }}
+            </td>
+            <td>
+              {{ data?.price }}
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>
+
+<div class="btn-wrapper">
+  <button
+    (click)="handleCancel()"
+    nz-button
+    nzType="default"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    (click)="addAppointments()"
+    [nzLoading]="isLoading$ | async"
+    nz-button
+    nzType="primary"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

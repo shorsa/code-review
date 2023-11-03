@@ -1,0 +1,215 @@
+<div class="invoicing-management">
+  <form
+    nz-form
+    [formGroup]="formGroup"
+    class="personal-details-wrapper"
+    nzLayout="vertical"
+  >
+    <nz-card class="personal-details" [nzBordered]="false" nzTitle="Generate new invoice">
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Select Client*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="clientErrorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            formControlName="clientId"
+            nzPlaceHolder="Select Client"
+            (nzOnSearch)="handleSearchClient($event)"
+          >
+            <ng-container *ngIf="!(isLoading$ | async)">
+              <nz-option
+                *ngFor="let item of clientListOptions"
+                [nzLabel]="item.name"
+                [nzValue]="item.id"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+          </nz-select>
+          <ng-template #clientErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please Select Patient</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Select Contract*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="contractsErrorTmpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            formControlName="contractId"
+            nzPlaceHolder="Select Contract"
+            (nzOnSearch)="handleSearchClient($event)"
+          >
+            <ng-container *ngIf="!(isLoading$ | async)">
+              <nz-option
+                *ngFor="let item of contractListOptions"
+                [nzLabel]="item.customId"
+                [nzValue]="item.id"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+          </nz-select>
+          <ng-template #contractsErrorTmpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please Select Contract</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <div class="card-footer-wrapper">
+        <button
+          nz-button
+          [nzLoading]="isLoading$ | async"
+          (click)="handleAddWork()"
+          nzType="primary"
+          nzSize="large"
+        >
+          Add work
+        </button>
+      </div>
+    </nz-card>
+
+    <nz-card class="personal-details" [nzBordered]="false">
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label nzFor="defaultPrice">Total amount £</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="priceTmpl">
+          <nz-input-number
+            [nzMin]="0"
+            nzSize="large"
+            id="defaultPrice"
+            formControlName="totalAmount"
+            [nzFormatter]="parserPoundSterling"
+            nzPlaceHolder="Total amount"
+          />
+          <ng-template #priceTmpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please add works</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-card>
+  </form>
+
+  <nz-card ng class="personal-details" [nzBordered]="false" nzTitle="Referrals">
+    <nz-table
+      #table
+      nzShowSizeChanger
+      [nzLoading]="isLoading$ | async"
+      [nzData]="appointmentsData"
+      [nzFrontPagination]="true"
+      zTableLayout="fixed"
+      [nzScroll]="{ x: '700px' }"
+    >
+      <thead>
+        <tr>
+          <th nzColumnKey="Id">Referral Id</th>
+          <th nzColumnKey="Id">Appointment Id</th>
+          <th nzColumnKey="FirstName">Appointment Type</th>
+          <th nzColumnKey="PatientId">Patient Id</th>
+          <th nzColumnKey="LateCancellation">Late Cancellation</th>
+          <th nzColumnKey="DNAs">DNAs</th>
+          <th nzColumnKey="Price">Price</th>
+          <th nzColumnKey="none">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of table.data">
+          <td>
+            {{ data?.referralCustomId }}
+          </td>
+          <td>
+            {{ data?.customId }}
+          </td>
+          <td>
+            {{ data?.appointmentType }}
+          </td>
+          <td>
+            {{ data?.patientCustomId }}
+          </td>
+          <td>
+            <ng-container *ngIf="data?.lateCancellation; else inactiveTmpl">
+              <nz-tag nzColor="#a6e0c4">Yes</nz-tag>
+            </ng-container>
+            <ng-template #inactiveTmpl>
+              <nz-tag nzColor="#df000066">No</nz-tag>
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="data?.dna; else inactiveTmpl">
+              <nz-tag nzColor="#a6e0c4">Yes</nz-tag>
+            </ng-container>
+            <ng-template #inactiveTmpl>
+              <nz-tag nzColor="#df000066">No</nz-tag>
+            </ng-template>
+          </td>
+          <td>
+            {{ data?.price }}
+          </td>
+          <td>
+            <div class="action">
+              <ng-container
+                [ngTemplateOutlet]="menu"
+                [ngTemplateOutletContext]="{ data: data }"
+              ></ng-container>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+    <ng-template #menu let-data="data">
+      <a
+        nz-dropdown
+        class="table-menu"
+        nzTrigger="click"
+        [nzClickHide]="true"
+        [nzDropdownMenu]="menu"
+      >
+        <span nz-icon nzType="more" nzTheme="outline"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item (click)="deleteAppointment(data.id)">Delete</li>
+        </ul>
+      </nz-dropdown-menu>
+    </ng-template>
+  </nz-card>
+
+  <div class="page-bottom-buttons">
+    <button
+      nz-button
+      nzType="default"
+      (click)="navigateToInvoiceList()"
+      class="default"
+      nzSize="large"
+    >
+      Cancel
+    </button>
+    <button
+      (click)="onSubmit()"
+      nz-button
+      [nzLoading]="isLoading$ | async"
+      nzType="primary"
+      nzSize="large"
+    >
+      Confirm
+    </button>
+  </div>
+</div>

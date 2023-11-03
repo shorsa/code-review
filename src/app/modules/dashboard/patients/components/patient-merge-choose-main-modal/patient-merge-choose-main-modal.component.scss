@@ -1,0 +1,14 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+p {
+  width: 100%;
+  text-align: center;
+  color: $gray-color;
+}
+
+p.secondary {
+  margin-top: 16px;
+  font-size: 12px;
+  text-align: left;
+}

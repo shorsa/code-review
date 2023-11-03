@@ -1,0 +1,47 @@
+.ant-page-header {
+  overflow: auto;
+  height: 100%;
+
+  &.with-actions {
+    .ant-page-header-heading {
+      .ant-page-header-heading-extra {
+        width: fit-content;
+        @include flex-container(row, center);
+        gap: 12px;
+
+        .ant-space {
+          width: fit-content;
+
+          button.add {
+            width: 100%;
+            max-width: 200px;
+            min-width: 200px;
+          }
+        }
+      }
+    }
+
+    &.p0 {
+      padding: 0;
+    }
+  }
+
+  .ant-page-header-heading {
+    .ant-page-header-heading-title {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 32px;
+      line-height: 40px;
+      letter-spacing: -0.02em;
+    }
+  }
+}
+.anticon.back {
+  font-size: 24px;
+  margin-right: 8px;
+  cursor: pointer;
+
+  &:hover {
+    color: $gray-color;
+  }
+}

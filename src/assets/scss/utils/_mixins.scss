@@ -1,0 +1,110 @@
+@mixin is-landscape {
+  @media screen and (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin media-desktop-2K {
+  @media screen and (min-width: 2040px) {
+    @content;
+  }
+}
+
+@mixin media-elgx-m {
+  @media screen and (min-width: 1600px) {
+    @content;
+  }
+}
+
+@mixin media-elgx {
+  @media screen and (max-width: 1600px) {
+    @content;
+  }
+}
+
+@mixin media-elg-m {
+  @media screen and (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin media-elg {
+  @media screen and (max-width: 1199px) {
+    @content;
+  }
+}
+
+@mixin media-lt {
+  @media screen and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin media-lg-m {
+  @media screen and (min-width: 992px) {
+    @content;
+  }
+}
+
+@mixin media-lg {
+  @media screen and (max-width: 991px) {
+    @content;
+  }
+}
+
+@mixin media-md-m {
+  @media screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin media-md {
+  @media screen and (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin media-sm-m {
+  @media screen and (min-width: 576px) {
+    @content;
+  }
+}
+
+@mixin media-sm {
+  @media screen and (max-width: 575px) {
+    @content;
+  }
+}
+
+@mixin media-xs {
+  @media screen and (max-width: 375px) {
+    @content;
+  }
+}
+
+@mixin media-sm-height {
+  @media screen and (max-height: 670px) {
+    @content;
+  }
+}
+
+@mixin media($media) {
+  @media screen and ($media) {
+    @content;
+  }
+}
+
+@mixin media-ltm-landscape {
+  @media screen and (max-width: 1000px) and (max-height: 490px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin flex-container($direction: row, $align-items: normal, $justify: normal, $align-content: normal, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align-items;
+  justify-content: $justify;
+  align-content: $align-content;
+  flex-wrap: $wrap;
+}

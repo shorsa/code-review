@@ -1,0 +1,201 @@
+<form
+  nz-form
+  class="referral-general-details-wrapper"
+  [formGroup]="formGroup"
+  nzLayout="vertical"
+>
+  <nz-card class="client-details" [nzBordered]="false" nzTitle="Client details">
+    <nz-form-item>
+      <nz-form-label>Select Client*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="clientErrorTpl">
+        <nz-select
+          nzAllowClear
+          nzShowSearch
+          nzServerSearch
+          nzSize="large"
+          formControlName="clientId"
+          nzPlaceHolder="Select Client"
+          (nzOnSearch)="!referralDetails ? handleSearchClient($event) : null"
+        >
+          <ng-container *ngIf="!(isLoading$ | async)">
+            <nz-option
+              *ngFor="let item of clientListOptions"
+              [nzLabel]="item.name"
+              [nzValue]="item.id"
+            ></nz-option>
+          </ng-container>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+        </nz-select>
+        <ng-template #clientErrorTpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please select client</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Select Department</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="departmentErrorTpl">
+        <nz-select
+          nzAllowClear
+          nzShowSearch
+          nzSize="large"
+          nzMode="multiple"
+          formControlName="departmentIds"
+          nzPlaceHolder="Select Department"
+          (nzOnSearch)="!referralDetails ? handleSearchDepartments($event) : null"
+        >
+          <ng-container *ngIf="!(isLoading$ | async)">
+            <nz-option
+              *ngFor="let item of departmentListOptions"
+              [nzLabel]="item.label"
+              [nzValue]="item.value"
+            ></nz-option>
+          </ng-container>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+        </nz-select>
+        <ng-template #departmentErrorTpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input Department or Occupational History</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </nz-card>
+  <nz-card class="patient-details" [nzBordered]="false" nzTitle="Patient details">
+    <nz-form-item>
+      <nz-form-label>Select Patient*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="clientErrorTpl">
+        <nz-select
+          nzAllowClear
+          nzShowSearch
+          nzServerSearch
+          nzSize="large"
+          formControlName="patientId"
+          nzPlaceHolder="Select Patient"
+          (nzOnSearch)="!referralDetails ? handleSearchPatient($event) : null"
+        >
+          <ng-container *ngIf="!(isLoading$ | async)">
+            <nz-option
+              *ngFor="let item of patientListOptions"
+              [nzLabel]="item.name"
+              [nzValue]="item.id"
+            ></nz-option>
+          </ng-container>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+        </nz-select>
+        <ng-template #clientErrorTpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please Select Patient</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <ul class="list" *ngIf="this.formGroup.get('patientId')?.value">
+      <li>
+        <span>Patient #</span>
+        <span>{{ getCurrentPatient?.customPatientId }}</span>
+      </li>
+      <li>
+        <span>Date of Birth</span>
+        <span>{{ getCurrentPatient?.dateOfBirth | customDate }}</span>
+      </li>
+      <li *ngIf="getCurrentPatient?.phoneNumber">
+        <span>Telephone #</span>
+        <span>{{ getCurrentPatient?.phoneNumber }}</span>
+      </li>
+      <li *ngIf="showFieldsByUserRoles && getCurrentPatient?.email">
+        <span>Email Address</span>
+        <span>{{ getCurrentPatient?.email }}</span>
+      </li>
+    </ul>
+  </nz-card>
+
+  <nz-card
+    class="referral-details"
+    *ngIf="referralDetails"
+    nzTitle="Referral details"
+    [nzBordered]="false"
+  >
+    <ul class="list">
+      <li>
+        <span>Referral #</span>
+        <span>{{ referralDetails.customReferralId }}</span>
+      </li>
+      <li>
+        <span>Referral Date</span>
+        <span>{{ referralDetails.created | customDate }}</span>
+      </li>
+      <li>
+        <span>Created By</span>
+        <span>{{ referralDetails.createdBy }}</span>
+      </li>
+    </ul>
+  </nz-card>
+
+  <nz-card class="product-details" [nzBordered]="false">
+    <nz-form-item>
+      <nz-form-label>Product Type</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="productErrorTpl">
+        <nz-select
+          nzAllowClear
+          nzShowSearch
+          nzServerSearch
+          nzSize="large"
+          formControlName="productTypeId"
+          nzPlaceHolder="Product Type"
+          (nzOnSearch)="handleSearchProduct($event)"
+        >
+          <ng-container *ngIf="!(isLoading$ | async)">
+            <nz-option
+              *ngFor="let item of productListOptions"
+              [nzLabel]="item.name"
+              [nzValue]="item.id"
+            ></nz-option>
+          </ng-container>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+        </nz-select>
+        <ng-template #productErrorTpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please Select Product Type</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </nz-card>
+</form>
+
+<ng-container *ngIf="!referralId">
+  <div class="page-bottom-buttons" *ngxPermissionsOnly="permissionToEditReferral">
+    <button nz-button nzType="default" (click)="cancel()" class="default" nzSize="large">
+      Cancel
+    </button>
+    <nz-form-item>
+      <nz-form-control>
+        <button
+          nz-button
+          [nzLoading]="isLoading$ | async"
+          (click)="handleSubmitForm()"
+          nzType="primary"
+          nzSize="large"
+        >
+          Save
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</ng-container>

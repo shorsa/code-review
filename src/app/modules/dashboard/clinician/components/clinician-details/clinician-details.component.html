@@ -1,0 +1,191 @@
+<form nz-form [formGroup]="formGroup" nzLayout="vertical" (ngSubmit)="submitForm()">
+  <nz-card class="clinician-details" [nzBordered]="false" nzTitle="Clinician details">
+    <ng-container *ngIf="!(isLoading$ | async); else personalDetails">
+      <div class="row">
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>First name*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="firstNameTpl">
+            <input
+              nzSize="large"
+              type="text"
+              formControlName="firstName"
+              nz-input
+              placeholder="Input First name"
+            />
+            <ng-template #firstNameTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input your First name</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Last name*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="lastNameTpl">
+            <input
+              nzSize="large"
+              type="text"
+              formControlName="lastName"
+              nz-input
+              placeholder="Input Last name"
+            />
+            <ng-template #lastNameTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input your Last name</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="row">
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label nzFor="phoneNumber">Contact Phone number*</nz-form-label>
+          <nz-form-control
+            nzErrorTip="Please input your phone number!"
+            [nzErrorTip]="phoneNumberTpl"
+          >
+            <nz-input-group
+              class="phone-number"
+              nzSize="large"
+              [nzAddOnBefore]="addOnBeforeTemplate"
+            >
+              <ng-template #addOnBeforeTemplate>
+                <nz-select formControlName="phoneCode" class="phone-select">
+                  <nz-option
+                    *ngFor="let item of phoneCodes"
+                    [nzLabel]="item.label"
+                    [nzValue]="item.value"
+                  ></nz-option>
+                </nz-select>
+              </ng-template>
+              <nz-input-number
+                nzSize="large"
+                id="phoneNumber"
+                formControlName="phone"
+                placeholder="Input phone"
+              />
+              <ng-template #phoneNumberTpl let-control>
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                  >Please input phone number</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('min')"
+                  >The minimum length must be at least 9 numbers</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('max')"
+                  >The maximum length must be no more than 10 numbers</ng-container
+                >
+              </ng-template>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Email*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="contactEmailAddressTpl">
+            <input
+              nzSize="large"
+              type="text"
+              formControlName="email"
+              nz-input
+              placeholder="Input Email"
+            />
+            <ng-template #contactEmailAddressTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input your Email</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="row">
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Home Address*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="homeAddressTpl">
+            <input
+              nzSize="large"
+              type="text"
+              formControlName="homeAddress"
+              nz-input
+              placeholder="Input Home Address"
+            />
+            <ng-template #homeAddressTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input your Home Address</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Job Title*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="jobTitleTpl">
+            <input
+              nzSize="large"
+              formControlName="jobTitle"
+              type="text"
+              nz-input
+              placeholder="Input Job Title"
+            />
+            <ng-template #jobTitleTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input your Job Title</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="row">
+        <nz-form-item>
+          <nz-form-label>GMC*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="gmcTpl">
+            <nz-input-number
+              [nzMin]="0"
+              formControlName="gmcNumber"
+              nzPlaceHolder="Input GMC Number"
+              nzSize="large"
+            />
+            <ng-template #gmcTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input your GMC</ng-container
+              >
+              <ng-container
+                *ngIf="
+                  wasAttemptToSubmitForm &&
+                  (control.hasError('min') || control.hasError('max'))
+                "
+                >GMC must contains 9 numbers</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </ng-container>
+
+    <ng-template #personalDetails>
+      <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 4 }"></nz-skeleton>
+    </ng-template>
+  </nz-card>
+</form>
+<div class="page-bottom-buttons">
+  <button nz-button nzType="default" (click)="cancel()" class="default" nzSize="large">
+    Cancel
+  </button>
+  <button
+    nz-button
+    (click)="submitForm()"
+    [nzLoading]="isLoading$ | async"
+    nzType="primary"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

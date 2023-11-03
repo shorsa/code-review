@@ -1,0 +1,12 @@
+<div class="repeat-days">
+  <span>Repeat on</span>
+  <div class="repeat-content">
+    <!-- form-item -->
+    <nz-checkbox-group
+      class="days-of-week"
+      [disabled]="viewMode"
+      [(ngModel)]="checkDayOptionsOne"
+      (ngModelChange)="updateDaySingleChecked()"
+    ></nz-checkbox-group>
+  </div>
+</div>

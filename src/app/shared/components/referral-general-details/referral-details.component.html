@@ -1,0 +1,58 @@
+<nz-card class="referral-details" [nzBordered]="false" nzTitle="Referral details">
+  <div class="select-item-wrapper" *ngIf="!getIsLoading && selectOptionsData">
+    <span>Select Exist Referral</span>
+    <nz-select
+      nzAllowClear
+      nzShowSearch
+     
+      nzSize="large"
+      nzPlaceHolder="Select Exist Referral"
+    >
+      <nz-option
+        *ngFor="let item of selectOptionsData"
+        [nzLabel]="item.label"
+        [nzValue]="item.value"
+      ></nz-option>
+    </nz-select>
+    <nz-option *ngIf="!getIsLoading" nzDisabled nzCustomContent>
+      <span nz-icon nzType="loading" class="loading-icon"></span>
+      Loading Data...
+    </nz-option>
+  </div>
+  <ul class="list" *ngIf="!getIsLoading && referralData">
+    <li *ngFor="let item of referralData">
+      <span>{{ item.label }}</span>
+      <span>{{ item.value }}</span>
+    </li>
+  </ul>
+  <nz-space nzDirection="vertical" *ngIf="getIsLoading">
+    <nz-skeleton-element
+      *nzSpaceItem
+      nzType="input"
+      [nzBlock]="true"
+      nzSize="large"
+      [nzActive]="true"
+    ></nz-skeleton-element>
+    <nz-skeleton-element
+      *nzSpaceItem
+      nzType="input"
+      [nzBlock]="true"
+      nzSize="small"
+      [nzActive]="true"
+    ></nz-skeleton-element>
+    <nz-skeleton-element
+      *nzSpaceItem
+      nzType="input"
+      [nzBlock]="true"
+      nzSize="small"
+      [nzActive]="true"
+    ></nz-skeleton-element>
+    <nz-skeleton-element
+      *nzSpaceItem
+      nzType="input"
+      [nzBlock]="true"
+      nzSize="small"
+      [nzActive]="true"
+    ></nz-skeleton-element>
+  </nz-space>
+</nz-card>

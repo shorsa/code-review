@@ -1,0 +1,108 @@
+<div class="contract-products-wrapper">
+  <nz-page-header class="with-actions p0">
+    <nz-page-header-title>Product types</nz-page-header-title>
+    <nz-page-header-extra>
+      <div class="header-actions">
+        <nz-space>
+          <button
+            class="add"
+            nzSize="large"
+            (click)="handleAddNew()"
+            *nzSpaceItem
+            nzType="primary"
+            nz-button
+          >
+            Assign products
+          </button>
+        </nz-space>
+      </div>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <nz-table
+        #table
+        nzShowSizeChanger
+        [nzPageSizeOptions]="[10, 20, 50]"
+        [nzLoading]="isLoading$ | async"
+        [nzData]="productsData"
+        [nzFrontPagination]="true"
+        zTableLayout="fixed"
+        [nzScroll]="{ x: '700px' }"
+      >
+        <!-- [nzTotal]="productsData.length" -->
+        <thead>
+          <tr>
+            <th nzColumnKey="Id">Product Id</th>
+            <th nzColumnKey="Name">Product Name</th>
+            <th nzColumnKey="Price" nzWidth="100px">Price</th>
+            <th nzColumnKey="actions" nzWidth="76px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of table.data">
+            <td>
+              {{ data?.customId }}
+            </td>
+            <td>
+              {{ data?.name }}
+            </td>
+            <td>
+              <nz-input-number
+                nzSize="small"
+                placeholder="Input price"
+                (ngModelChange)="changeItemPrice(data.productId, $event)"
+                [nzFormatter]="parserPoundSterling"
+                [ngModel]="data.price"
+              />
+            </td>
+            <td>
+              <div class="action">
+                <ng-container
+                  [ngTemplateOutlet]="menu"
+                  [ngTemplateOutletContext]="{ data: data }"
+                ></ng-container>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+      <ng-template #menu let-data="data">
+        <a
+          nz-dropdown
+          class="table-menu"
+          nzTrigger="click"
+          [nzClickHide]="true"
+          [nzDropdownMenu]="menu"
+        >
+          <span nz-icon nzType="more" nzTheme="outline"></span>
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <li nz-menu-item (click)="removeProduct(data.productId)">Remove</li>
+          </ul>
+        </nz-dropdown-menu>
+      </ng-template>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>
+
+<div class="page-bottom-buttons">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handlePrev()"
+    class="default"
+    nzSize="large"
+  >
+    Previous
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleNext()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Next
+  </button>
+</div>

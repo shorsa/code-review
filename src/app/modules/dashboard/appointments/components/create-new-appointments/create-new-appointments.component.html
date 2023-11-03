@@ -1,0 +1,354 @@
+<form
+  nz-form
+  class="appointment-general-details-wrapper"
+  [formGroup]="formGroup"
+  nzLayout="vertical"
+>
+  <div class="row">
+    <nz-card class="patient-details" [nzBordered]="false" nzTitle="Patient details">
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Select Patient*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="clientErrorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            formControlName="patientId"
+            nzPlaceHolder="Select Patient"
+            (nzOnSearch)="handleSearchPatient($event)"
+          >
+            <ng-container *ngIf="!(isLoading$ | async)">
+              <nz-option
+                *ngFor="let item of patientListOptions"
+                [nzLabel]="item.name"
+                [nzValue]="item.id"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+          </nz-select>
+          <ng-template #clientErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please Select Patient</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-card>
+
+    <nz-card class="referral-details" [nzBordered]="false" nzTitle="Referral details">
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Select Exist Referral*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="clientErrorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            formControlName="referralId"
+            nzPlaceHolder="Select Exist Referral"
+            (nzOnSearch)="handleSearchReferral($event)"
+          >
+            <ng-container *ngIf="!(isLoading$ | async)">
+              <nz-option
+                *ngFor="let item of referralListOptions"
+                [nzLabel]="item.customId"
+                [nzValue]="item.id"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+          </nz-select>
+          <ng-template #clientErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please Select Patient</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-card>
+  </div>
+
+  <nz-card
+    class="appointments-general-details"
+    [nzBordered]="false"
+    nzTitle="General details"
+  >
+    <div class="card-content">
+      <!-- form-item-->
+      <nz-form-item class="clinician-item">
+        <nz-form-label>Clinician</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="doctorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            formControlName="clinicianId"
+            (nzOnSearch)="handleSearchClinician($event)"
+            nzSize="large"
+            nzPlaceHolder="Select Doctor"
+          >
+            <ng-container *ngIf="!(isLoading$ | async)">
+              <nz-option
+                *ngFor="let item of clinicianListOptions"
+                [nzLabel]="item.name"
+                [nzValue]="item.id"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+            <ng-template nzNotFoundContent>
+              <i nz-icon nzType="frown" theme="outline"></i>
+              Ничего не найдено
+            </ng-template>
+          </nz-select>
+          <ng-template #doctorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please select Doctor</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+        <ng-container *ngIf="nearestAvailableClinicianDate"
+          ><div class="error-message">
+            Doctor has coming days for appointments on
+            {{ nearestAvailableClinicianDate | customDate }}
+          </div>
+        </ng-container>
+      </nz-form-item>
+
+      <app-date-picker
+        [availableDates]="availableDates"
+        [control]="getDateControl"
+        [date]="getDateControl.value"
+        [disabled]="getDateControl.disabled"
+        (dateChange)="getDateControl.setValue($event)"
+        (periodChange)="handleGetAvailableDates($event.month, $event.year)"
+      />
+      <!-- (dateChange)="goToAppointmentsByClinic(data, $event)" -->
+
+      <!-- form-item-->
+      <!-- <nz-form-item>
+        <nz-form-label>Date</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker
+            #datePicker
+            (nzOnOpenChange)="handleDateOpenChange($event)"
+            nzSize="large"
+            [nzDisabledDate]="getDisabledDate.bind(this)"
+            formControlName="date"
+            nzFormat="d MMM YYYY"
+            [nzShowToday]="false"
+          ></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item> -->
+
+      <nz-form-item>
+        <nz-form-label>Select Location</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="locationErrorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzSize="large"
+            formControlName="locationId"
+            nzPlaceHolder="Select Location"
+            [nzOptions]="locationListOptions"
+            (nzOnSearch)="handleSearchLocationOptions($event)"
+          >
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+          </nz-select>
+          <ng-template #locationErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please Select Location</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Start Time</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="startTimeErrorTpl">
+          <nz-select
+            nzAllowClear
+            nzSize="large"
+            formControlName="startTime"
+            [nzNotFoundContent]="emptyContent"
+            nzPlaceHolder="Select Start Time"
+          >
+            <ng-container *ngIf="!(isLoading$ | async)">
+              <nz-option
+                *ngFor="let item of timesListOptions"
+                nzLabel="{{ item.startTime }} - {{ item.endTime }}"
+                [nzValue]="item.startTime"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+            <ng-template #emptyContent nzCustomContent>
+              <span nz-icon nzType="info-circle" nzTheme="outline"></span>
+              <div class="error-message">
+                This room does not have available time slots.
+              </div>
+            </ng-template>
+          </nz-select>
+          <ng-template #startTimeErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please Select Start Time</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Select Site</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="siteErrorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzSize="large"
+            formControlName="siteId"
+            nzPlaceHolder="Select Site"
+            [nzOptions]="siteListOptions"
+            (nzOnSearch)="handleSearchSiteOptions($event)"
+          >
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+          </nz-select>
+          <ng-template #siteErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please Select Site</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Appointment Type</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="appointmentTypeErrorTmpl">
+          <nz-select
+            nzAllowClear
+            [nzOptions]="appointmentTypesListOptions"
+            nzSize="large"
+            formControlName="type"
+            nzPlaceHolder="Select Appointment Type"
+          >
+          </nz-select>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+          <ng-template #appointmentTypeErrorTmpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please select Face To Face</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Select Room</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="roomErrorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzSize="large"
+            formControlName="roomId"
+            nzPlaceHolder="Select Room"
+            [nzOptions]="roomListOptions"
+            (nzOnSearch)="handleSearchRoomOptions($event)"
+          >
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+          </nz-select>
+          <ng-template #roomErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please Select Room</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Notes</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="reviewRequestedTpl">
+          <nz-textarea-count [nzMaxCharacterCount]="2000">
+            <textarea
+              formControlName="notes"
+              nz-input
+              rows="3"
+              placeholder="Input notes"
+            ></textarea>
+          </nz-textarea-count>
+          <ng-template #reviewRequestedTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input Notes</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </nz-card>
+
+  <nz-card class="client-details" [nzBordered]="false" nzTitle="Product Type">
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Product Type</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="reviewRequestedTpl">
+        <input
+          formControlName="productName"
+          nzSize="large"
+          nz-input
+          placeholder="Input notes"
+        />
+        <ng-template #reviewRequestedTpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input Notes</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </nz-card>
+</form>
+
+<div class="page-bottom-buttons">
+  <button
+    nz-button
+    nzType="default"
+    (click)="navigateToAppointmentsTable()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="submitForm()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

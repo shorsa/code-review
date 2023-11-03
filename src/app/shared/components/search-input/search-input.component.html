@@ -1,0 +1,35 @@
+<div class="search-wrapper">
+  <nz-input-group nzSize="large" [nzSuffix]="inputClearTpl" [nzPrefix]="suffixIconSearch">
+    <input
+      type="text"
+      nz-input
+      [(ngModel)]="searchText"
+      (ngModelChange)="changeValue()"
+      placeholder="Input search text"
+    />
+  </nz-input-group>
+
+  <ng-template #inputClearTpl>
+    <span
+      nz-icon
+      nzType="close-circle"
+      nzTheme="fill"
+      class="clear-icon"
+      (click)="clearSearch()"
+    ></span>
+  </ng-template>
+
+  <ng-template #suffixIconSearch>
+    <span nz-icon nzType="search" class="search-icon" nzTheme="outline"></span>
+  </ng-template>
+
+  <button
+    (click)="clearSearch()"
+    *ngIf="clearButton"
+    nzSize="large"
+    nzType="primary"
+    nz-button
+  >
+    Clear Search
+  </button>
+</div>

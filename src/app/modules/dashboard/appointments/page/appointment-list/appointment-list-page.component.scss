@@ -1,0 +1,24 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+:host {
+  height: 100%;
+}
+.with-actions {
+  .header-actions {
+    @include flex-container;
+    gap: 12px;
+  }
+}
+
+.ant-page-header {
+  padding: 22px 32px 24px 48px;
+
+  @include media-sm {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .ant-page-header-heading {
+    margin-bottom: 12px;
+  }
+}

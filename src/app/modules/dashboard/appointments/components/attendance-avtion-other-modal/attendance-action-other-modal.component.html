@@ -1,0 +1,20 @@
+<nz-form-item>
+  <nz-form-control nzHasFeedback [nzErrorTip]="timeInPostTmpl">
+    <textarea
+      [formControl]="descriptionControl"
+      nz-input
+      rows="3"
+      placeholder="Input text"
+    ></textarea>
+    <ng-template #timeInPostTmpl let-control>
+      <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+        >Please input Description</ng-container
+      >
+    </ng-template>
+  </nz-form-control>
+</nz-form-item>
+
+<div class="btn-wrapper"> 
+  <button nz-button nzSize="large" class="secondary" (click)="onCancel(  )" nzType="default">Cancel</button>
+  <button nz-button nzSize="large" nzType="primary" (click)="onSubmit()">Submit</button>
+</div>

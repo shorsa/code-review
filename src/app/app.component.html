@@ -1,0 +1,18 @@
+<div class="load-app-wrapper" *ngIf="tokenIsRefreshing$ | async">
+  <nz-spin class="horizon" [nzSimple]="false" [nzIndicator]="indicatorTemplate">
+  </nz-spin>
+</div>
+
+<ng-template #indicatorTemplate>
+  <h1 class="spinner">
+    <em>H</em>
+    <em class="planet left">O</em>
+    <em>R</em>
+    <em>I</em>
+    <em>Z</em>
+    <em class="planet right">O</em>
+    <em>N</em>
+  </h1>
+</ng-template>
+
+<router-outlet></router-outlet>

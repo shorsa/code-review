@@ -1,0 +1,100 @@
+<!-- <input (change)="volumeChange($event)" type="range" min="0" max="1" step="0.1" value="0.5"/> -->
+<div class="recorder-wrapper">
+  <div class="buttons-wrapper">
+    <!-- class="record" -->
+    <button
+      (click)="startRecording()"
+      [class.record]="isRecording && !isPause"
+      nz-button
+      nzSize="large"
+      nzType="primary"
+    >
+      <span nz-icon nzType="audio" nzTheme="outline"></span>
+      {{ isRecording ? 'Recording' : 'Record' }}
+    </button>
+    <button
+      nz-button
+      nzSize="large"
+      (click)="toggleRecordingPause()"
+      [disabled]="!isRecording"
+      class="green"
+      nzType="primary"
+    >
+      {{ isPause ? 'Continue' : 'Pause' }}
+    </button>
+    <button
+      nz-button
+      nzSize="large"
+      (click)="stopRecording()"
+      [disabled]="!isRecording"
+      nzType="primary"
+      nzDanger
+    >
+      Stop
+    </button>
+    <button nz-button nzSize="large" nzType="primary">Upload</button>
+  </div>
+
+  <ng-content></ng-content>
+
+  <h3 class="voices" *ngIf="recordings.length">Voice files to be uploaded</h3>
+  <div class="audio-wrapper">
+    <div class="audio-file" *ngFor="let recording of recordings; let i = index">
+      <span
+        nz-icon
+        nzType="play-circle"
+        nzTheme="twotone"
+        (click)="playRecording(i)"
+      ></span>
+      <div class="audio" id="waveform{{ i }}"></div>
+
+      <div class="audio-buttons">
+        <span
+          nz-icon
+          nzType="delete"
+          (click)="deleteRecording(i)"
+          nzTheme="outline"
+        ></span>
+      </div>
+    </div>
+  </div>
+  <div class="checkbox-wrapper" *ngIf="recordings.length">
+    <nz-form-item nz-row class="checkbox">
+      <nz-form-control>
+        <label
+          nz-checkbox
+          [ngModel]="isRedFlag"
+          (ngModelChange)="isRedFlagChange.emit($event)"
+        >
+          <span>Red Flag </span>
+        </label>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nz-row class="checkbox">
+      <nz-form-control>
+        <label
+          nz-checkbox
+          [ngModel]="isUrgent"
+          (ngModelChange)="isUrgentChange.emit($event)"
+        >
+          <span>Urgent</span>
+        </label>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
+<!-- <div #audioWrapper class="audio-wrapper">
+  <ng-container *ngFor="let audioFile of createObjectURLs; let i = index">
+    <div class="audio-file">
+      <span
+        nz-icon
+        (click)="handlePlay(audioFile, i)"
+        nzType="play-circle"
+        nzTheme="outline"
+      ></span>
+      <div [id]="'report-' + audioFile.id" class="audio"></div>
+      <span class="time">{{ audioFile?.duration }}</span>
+      <span nz-icon nzType="sound" nzTheme="outline"></span>
+    </div>
+  </ng-container> -->
+<!-- </div> -->

@@ -1,0 +1,28 @@
+<p>What record will be the main?</p>
+
+<nz-radio-group [(ngModel)]="mainPatientId">
+  <label nz-radio *ngFor="let item of nzModalData.patientData" [nzValue]="item.id"
+    >{{ item.customPatientId }} ({{ item.clientUser.applicationUser.email }})</label
+  >
+</nz-radio-group>
+<p class="secondary">*Secondary patient record will be deleted after merging</p>
+<div class="btn-wrapper">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handleCancel()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="merge()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

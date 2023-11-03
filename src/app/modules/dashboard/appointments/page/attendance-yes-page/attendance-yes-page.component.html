@@ -1,0 +1,36 @@
+<div class="page-header white">
+  <h1>Appointment</h1>
+  <nz-tabset
+    class="white-tabs"
+    [nzSelectedIndex]="currentTabIndex"
+    (nzSelectedIndexChange)="currentTabIndex = $event"
+  >
+    <nz-tab nzTitle="Details" [nzDisabled]="currentTabIndex !== 0">
+      <div class="tab-content">
+        <app-attendance-yes-details (handleNextTab)="nexTab()" />
+      </div>
+    </nz-tab>
+    <nz-tab nzTitle="Stats" [nzDisabled]="currentTabIndex !== 1">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-attendance-yes-stats
+            (handleNextTab)="nexTab()"
+            (handlePrevTab)="prevTab()"
+            [appointmentId]="appointmentId"
+          />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Report" [nzDisabled]="currentTabIndex !== 2">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-attendance-yes-report
+            (handleNextTab)="nexTab()"
+            (handlePrevTab)="prevTab()"
+            [appointmentId]="appointmentId"
+          />
+        </div>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</div>

@@ -1,0 +1,39 @@
+@import "../utils/variables";
+@import "../utils/mixins";
+
+.ant-dropdown-menu {
+  &.notification-list {
+    width: 100%;
+    min-width: 300px;
+    max-width: 356px;
+
+    .header-list {
+      height: 32px;
+      @include flex-container(row, center, flex-end);
+      padding: 8px 16px 8px 16px;
+      box-shadow: 0px 1px 0px #0000001c;
+    }
+
+    .link {
+      cursor: pointer;
+      color: $blue-color;
+    }
+
+    .ant-dropdown-menu-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 48px;
+
+      .content {
+        & > .title {
+          color: #1d262b;
+          font-size: 14px;
+          & + span {
+            color: #606f76;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}

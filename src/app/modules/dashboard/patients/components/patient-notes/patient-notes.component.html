@@ -1,0 +1,99 @@
+<nz-page-header class="with-actions p0">
+  <nz-page-header-title>Notes</nz-page-header-title>
+  <nz-page-header-extra>
+    <nz-space>
+      <app-search-input (searchTextChange)="handleSearchByText($event)" />
+    </nz-space>
+    <nz-space>
+      <button
+        class="add"
+        nzSize="large"
+        *nzSpaceItem
+        nzType="primary"
+        nz-button
+        (click)="handleAddNew()"
+      >
+        <span nz-icon nzType="plus" nzTheme="outline"></span>
+        Add new
+      </button>
+    </nz-space>
+  </nz-page-header-extra>
+  <nz-page-header-content>
+    <nz-table
+      nzShowSizeChanger
+      [nzPageSizeOptions]="[10, 20, 50]"
+      [nzLoading]="isLoading$ | async"
+      [nzData]="nodesData"
+      [nzFrontPagination]="false"
+      [nzTotal]="totalCount"
+      zTableLayout="fixed"
+      [nzScroll]="{ x: '700px' }"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <!-- [nzPageIndex]="searchParams.pageIndex + 1" -->
+      <thead>
+        <tr>
+          <th nzColumnKey="DateTime" [nzSortFn]="true">Date & time</th>
+          <th nzColumnKey="AddedBy" [nzSortFn]="true">Added By</th>
+          <th nzColumnKey="Details" [nzSortFn]="true">Details</th>
+          <th nzColumnKey="actions" nzWidth="76px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of nodesData">
+          <td>{{ data?.created | customDate : 'dateTime' }}</td>
+          <td>{{ data.createdByName }}</td>
+          <td>{{ data?.description }}</td>
+          <td>
+            <div class="action">
+              <ng-container
+                [ngTemplateOutlet]="menu"
+                [ngTemplateOutletContext]="{ data: data }"
+              ></ng-container>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+    <ng-template #menu let-data="data">
+      <div>
+        <ng-container *ngIf="data.lockoutEnd">
+          <span
+            nz-tooltip
+            [nzTooltipOverlayClassName]="'tooltip'"
+            nzTooltipTitle="This account is locked"
+            ><span
+              nz-icon
+              nzType="exclamation"
+              class="locked-icon"
+              nzTheme="outline"
+            ></span
+          ></span>
+        </ng-container>
+      </div>
+
+      <a
+        nz-dropdown
+        class="table-menu"
+        nzTrigger="click"
+        [nzClickHide]="true"
+        [nzDropdownMenu]="menu"
+      >
+        <span nz-icon nzType="more" nzTheme="outline"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item (click)="handleEditNote(data)">Edit</li>
+          <a
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure to delete this note?"
+          (nzOnConfirm)="handleDeleteNote(data.id)"
+        >
+          <li nz-menu-item nzDanger>Delete</li>
+        </a>
+        </ul>
+      </nz-dropdown-menu>
+    </ng-template>
+  </nz-page-header-content>
+</nz-page-header>

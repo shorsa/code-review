@@ -1,0 +1,111 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.clinic-notes-wrapper {
+  .clinic-notes-form {
+    @include flex-container(row, flex-start);
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 26px;
+
+    .list {
+      margin-bottom: 16px;
+    }
+
+    .row-checkboxes {
+      @include flex-container;
+
+      & > * {
+        width: 50%;
+      }
+
+      .ant-radio-wrapper {
+        margin-right: 0;
+      }
+
+      .at-work {
+        margin-left: 36px;
+      }
+    }
+
+    .big-card {
+      width: 100%;
+
+      .row {
+        @include flex-container(row, flex-start, space-between);
+        gap: 16px;
+
+        & > * {
+          width: calc(50% - 8px);
+        }
+      }
+    }
+
+    .ant-form-item.mt-16.animated {
+      margin-bottom: 10px;
+    }
+
+    & > .row {
+      @include flex-container(row, flex-start, space-between);
+      gap: 16px;
+      width: 100%;
+
+      & > * {
+        width: calc(50% - 8px);
+      }
+    }
+    .checkbox-wrapper {
+      & > span {
+        font-size: 14px;
+      }
+
+      .horizontal {
+        @include flex-container(row, center, flex-start);
+      }
+    }
+    .second-card {
+      & > .row {
+        @include flex-container;
+        width: 100%;
+        & > * {
+          width: 50%;
+        }
+      }
+    }
+    .notes-wrapper {
+      width: 100%;
+      @include flex-container(row, flex-start, flex-start);
+      gap: 16px;
+      flex-wrap: wrap;
+
+      & > * {
+        max-width: calc(50% - 8px);
+        width: 50%;
+      }
+
+      div.label {
+        @include flex-container(row, flex-start, space-between);
+        width: 100%;
+
+        .icons {
+          @include flex-container(row, center);
+          gap: 16px;
+        }
+
+        .add-btn {
+          color: $blue-color;
+          cursor: pointer;
+        }
+        .anticon-delete {
+          color: $error-color;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+ul {
+  margin: 0;
+  padding: 10px 16px;
+}

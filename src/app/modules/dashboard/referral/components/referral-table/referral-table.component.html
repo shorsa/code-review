@@ -1,0 +1,235 @@
+<nz-page-header class="with-actions p0 patient-referral-table">
+  <nz-page-header-title>Referrals</nz-page-header-title>
+  <nz-page-header-extra>
+    <nz-space>
+      <app-search-input (searchTextChange)="handleSearchByText($event)" />
+    </nz-space>
+    <nz-space *ngIf="getIsCanDeactivateOrReactivate">
+      <nz-segmented
+      
+        (nzValueChange)="changeUsersStateFilter($event)"
+        class="state deactivate"
+        [nzOptions]="activeFilterOptions"
+      ></nz-segmented>
+    </nz-space>
+    <nz-space *ngxPermissionsOnly="referralCreatePermission">
+      <button
+        class="add"
+        nzSize="large"
+        *nzSpaceItem
+        nzType="primary"
+        nz-button
+        (click)="addNewReferral()"
+      >
+        <span nz-icon nzType="plus" nzTheme="outline"></span>
+        Add new
+      </button>
+    </nz-space>
+  </nz-page-header-extra>
+  <nz-page-header-content>
+    <nz-table
+      nzShowSizeChanger
+      [nzPageSizeOptions]="[10, 20, 50]"
+      [nzLoading]="isLoading$ | async"
+      [nzData]="referralData"
+      [nzFrontPagination]="false"
+      [nzTotal]="totalCount"
+      zTableLayout="fixed"
+      [nzScroll]="{ x: '700px' }"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <tr>
+          <th nzColumnKey="Id" [nzSortFn]="true">Referral #</th>
+          <th nzColumnKey="Patient" [nzSortFn]="true">Patient</th>
+          <th nzColumnKey="DateOfBirth" [nzSortFn]="true">DOB</th>
+          <th nzColumnKey="Location" [nzSortFn]="true">Location</th>
+          <th nzColumnKey="Product" [nzSortFn]="true">Reason for Referral</th>
+          <th nzColumnKey="Client" [nzSortFn]="true">Client</th>
+          <th nzColumnKey="CreatedBy" [nzSortFn]="true">Date Referred</th>
+          <th nzColumnKey="ClientKPI" [nzSortFn]="true">Client KPI</th>
+          <th
+            nzColumnKey="Status"
+            nzWidth="170px"
+            [nzSortFn]="true"
+            [nzFilterMultiple]="true"
+            [nzFilters]="referralStatusFilterList"
+            [nzFilterFn]="true"
+          >
+            Status
+          </th>
+          <th
+            nzColumnKey="actions"
+            nzWidth="76px"
+            *ngxPermissionsOnly="[
+              referralViewDetailsPermission,
+              referralActivatePermission,
+              referralDeactivatePermission,
+              referralCreatePermission,
+              referralUpdatePermission,
+              referralUpdateStatusPermission,
+              canTriagePermission
+            ]"
+          >
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of referralData">
+          <td>{{ data?.customReferralId }}</td>
+          <td class="ellipsis">
+            <span nz-tooltip [nzTooltipTitle]="data.patientName">
+              {{ data.patientName }}
+            </span>
+          </td>
+          <td>{{ data?.dateOfBirth | customDate }}</td>
+          <td class="ellipsis">
+            <span nz-tooltip [nzTooltipTitle]="data.location">
+              {{ data.location }}
+            </span>
+          </td>
+          <td class="ellipsis">
+            <span nz-tooltip [nzTooltipTitle]="data.productName">
+              {{ data.productName }}
+            </span>
+          </td>
+          <td>{{ data?.client }}</td>
+          <td>{{ data?.created | customDate }}</td>
+          <td>{{ data?.clientKpi }}</td>
+          <td appReferralStatus [status]="data.status"></td>
+          <td
+            *ngxPermissionsOnly="[
+              referralViewDetailsPermission,
+              referralActivatePermission,
+              referralDeactivatePermission,
+              referralCreatePermission,
+              referralUpdatePermission,
+              referralUpdateStatusPermission,
+              canTriagePermission
+            ]"
+          >
+            <div class="action">
+              <ng-container
+                [ngTemplateOutlet]="menu"
+                [ngTemplateOutletContext]="{ data: data }"
+              ></ng-container>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+    <ng-template #menu let-data="data">
+      <div>
+        <ng-container *ngIf="data.lockoutEnd">
+          <span
+            nz-tooltip
+            [nzTooltipOverlayClassName]="'tooltip'"
+            nzTooltipTitle="This account is locked"
+            ><span
+              nz-icon
+              nzType="exclamation"
+              class="locked-icon"
+              nzTheme="outline"
+            ></span
+          ></span>
+        </ng-container>
+      </div>
+
+      <a
+        nz-dropdown
+        class="table-menu"
+        nzTrigger="click"
+        [nzClickHide]="true"
+        [nzDropdownMenu]="menu"
+      >
+        <span nz-icon nzType="more" nzTheme="outline"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <ng-container *ngIf="data.isActive; else reactivateTmpl">
+            <ng-container *ngxPermissionsExcept="referralUpdatePermission">
+              <li
+                nz-menu-item
+                (click)="navigateToEdit(data.id)"
+                *ngxPermissionsOnly="referralViewDetailsPermission"
+              >
+                View
+              </li>
+            </ng-container>
+            <ng-container *ngxPermissionsOnly="referralUpdatePermission">
+              <li
+                *ngIf="isAvailableEdit(data)"
+                nz-menu-item
+                (click)="navigateToEdit(data.id)"
+              >
+                Edit
+              </li>
+            </ng-container>
+
+            <ng-container *ngxPermissionsOnly="referralUpdateStatusPermission">
+              <ng-container *ngxPermissionsOnly="canTriagePermission">
+                <a
+                  *ngIf="isAvailableAccept(data)"
+                  nz-popconfirm
+                  nzPopconfirmTitle="Are you sure to Accept this referral?"
+                  (nzOnConfirm)="handleAccept(data.id)"
+                >
+                  <li nz-menu-item>Accept</li>
+                </a>
+              </ng-container>
+              <ng-container *ngxPermissionsOnly="canTriagePermission">
+                <li
+                  nz-menu-item
+                  *ngIf="isAvailableReject(data)"
+                  (click)="handleReject(data.id)"
+                >
+                  Reject
+                </li>
+              </ng-container>
+
+              <li
+                *ngIf="isAvailableSendBack(data)"
+                (click)="handleSendBack(data.id)"
+                nz-menu-item
+              >
+                Send back
+              </li>
+              <li
+                *ngIf="isAvailableCancel(data)"
+                (click)="handleCancel(data.id)"
+                nz-menu-item
+              >
+                Cancel
+              </li>
+            </ng-container>
+            <ng-container *ngxPermissionsOnly="referralDeactivatePermission">
+              <a
+                *ngIf="isAvailableDeactivate(data)"
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure to Deactivate this referral?"
+                (nzOnConfirm)="handleDeactivate(data.id)"
+              >
+                <li nz-menu-item nzDanger>Deactivate</li>
+              </a>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #reactivateTmpl>
+            <ng-container *ngxPermissionsOnly="referralActivatePermission">
+              <a
+                *ngIf="isAvailableReactivate(data)"
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure to Reactivate this referral?"
+                (nzOnConfirm)="handleReactivate(data.id)"
+              >
+                <li nz-menu-item>Reactivate</li>
+              </a></ng-container
+            >
+          </ng-template>
+        </ul>
+      </nz-dropdown-menu>
+    </ng-template>
+  </nz-page-header-content>
+</nz-page-header>

@@ -1,0 +1,90 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.ant-layout {
+  height: 100%;
+  .ant-layout-header {
+    background: transparent;
+  }
+  .ant-layout-content {
+    @include flex-container(row, center, center);
+
+    @include media-md {
+      display: block;
+    }
+
+    .left-content,
+    .right-content {
+      width: 50%;
+      height: 100%;
+    }
+
+    .left-content {
+      position: relative;
+      background-color: #a8d2e6;
+
+      .background {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-image: url("../../../../assets/img/auth/auth-bg.png");
+        opacity: 0.2;
+        background-size: cover;
+      }
+
+      @include media-md {
+        width: 100%;
+      }
+    }
+
+    .right-content {
+      @include flex-container(column, center, center);
+      position: relative;
+
+      @include media-md-m {
+        background-color: $light-blue-color;
+      }
+
+      @include media-md {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        padding: 0 20px;
+      }
+
+      & > .logo {
+        position: absolute;
+        top: 36px;
+        transform: translateX(-50%);
+        left: calc(50% - 18px);
+        font-style: normal;
+        font-weight: 400;
+        font-size: 40px;
+        letter-spacing: 0.015em;
+
+        @include media-md {
+          left: 50%;
+          top: 16px;
+        }
+      }
+
+      & > .content {
+        max-width: 464px;
+        min-width: 320px;
+        width: 100%;
+        border-radius: $input-border-radius;
+
+        @include media-md {
+          background-color: $light-blue-color;
+          position: relative;
+          bottom: -20px;
+        }
+      }
+    }
+  }
+}

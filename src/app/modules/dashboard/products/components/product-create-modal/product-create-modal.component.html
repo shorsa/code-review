@@ -1,0 +1,26 @@
+<app-product-form
+  (valueChange)="handleChangeValue($event)"
+  [wasAttemptToSubmitForm]="wasAttemptToSubmitForm"
+  (formIsValidChange)="handleChangeFormValidation($event)"
+/>
+
+<div class="btn-wrapper">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handleCancel()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    nz-button
+    (click)="submitForm()"
+    [nzLoading]="isLoading$ | async"
+    nzType="primary"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

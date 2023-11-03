@@ -1,0 +1,156 @@
+<div class="client-department-table">
+  <nz-page-header class="with-actions p0">
+    <nz-page-header-title>Department</nz-page-header-title>
+    <nz-page-header-extra>
+      <nz-space>
+        <app-search-input (searchTextChange)="handleSearchByText($event)" />
+      </nz-space>
+      <nz-space>
+        <nz-segmented
+          (nzValueChange)="changeDepartmentStateFilter($event)"
+          class="state deactivate"
+          [nzOptions]="activeFilterOptions"
+        ></nz-segmented>
+      </nz-space>
+      <ng-container *ngxPermissionsOnly="departmentCreatePermission">
+        <nz-space>
+          <button
+            class="add"
+            nzSize="large"
+            (click)="handleAddNew()"
+            *nzSpaceItem
+            nzType="primary"
+            nz-button
+          >
+            Create new
+          </button>
+        </nz-space>
+      </ng-container>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <nz-table
+        nzShowSizeChanger
+        [nzPageSizeOptions]="pageSizeOptions"
+        [nzFrontPagination]="false"
+        [nzData]="departmentData"
+        [nzTotal]="totalCount ?? 0"
+        nzTableLayout="fixed"
+        [nzLoading]="isLoading$ | async"
+        [nzScroll]="{ x: '700px' }"
+        (nzQueryParams)="onQueryParamsChange($event)"
+        >
+        <!-- [nzPageIndex]="searchParams.pageIndex + 1" -->
+        <!-- [nzScroll]="{ x: '650px' }" -->
+        <thead>
+          <tr>
+            <th
+              nzColumnKey="Id"
+              *ngIf="!getIsClientRole"
+              nzWidth="265.5px"
+              [nzSortFn]="true"
+            >
+              Department Id
+            </th>
+            <th nzColumnKey="Name" [nzSortFn]="true">Name</th>
+            <th nzColumnKey="Email" [nzSortFn]="true">Email address for alerts</th>
+            <th nzColumnKey="actions" nzWidth="75px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of departmentData">
+            <td *ngIf="!getIsClientRole">
+              <span nz-tooltip [nzTooltipTitle]="data.customDepartmentId">
+                {{ data.customDepartmentId }}</span
+              >
+            </td>
+            <td class="ellipsis">
+              <span nz-tooltip [nzTooltipTitle]="data.name">
+                {{ data.name }}
+              </span>
+            </td>
+            <td class="ellipsis">
+              <span nz-tooltip [nzTooltipTitle]="data.alertsEmail">
+                {{ data.alertsEmail }}</span
+              >
+            </td>
+
+            <td class="action">
+              <ng-container
+                [ngTemplateOutlet]="menu"
+                [ngTemplateOutletContext]="{ data: data }"
+              ></ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+      <ng-template #menu let-data="data">
+        <a nz-dropdown class="table-menu" nzTrigger="click" [nzDropdownMenu]="menu">
+          <span nz-icon nzType="more" nzTheme="outline"></span>
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <ng-container *ngIf="data.isActive; else reactivateTmpl">
+              <ng-container *ngIf="!getIsViewOnly">
+                <li
+                  nz-menu-item
+                  (click)="editDepartment(data.id)"
+                  *ngxPermissionsOnly="departmentUpdatePermission"
+                >
+                  Edit
+                </li>
+              </ng-container>
+              <ng-container *ngIf="getIsViewOnly">
+                <li
+                  nz-menu-item
+                  (click)="viewDepartment(data.id)"
+                  *ngxPermissionsOnly="[
+                    departmentViewPermission,
+                    clientViewDetailsPermission
+                  ]"
+                >
+                  View
+                </li>
+              </ng-container>
+              <a
+                *ngxPermissionsOnly="departmentDeactivatePermission"
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure to Deactivate this department?"
+                (nzOnConfirm)="deactivate(data.id)"
+              >
+                <li nz-menu-item nzDanger>Deactivate</li>
+              </a>
+            </ng-container>
+
+            <ng-template #reactivateTmpl>
+              <a
+                *ngxPermissionsOnly="departmentActivatePermission"
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure to Reactivate this department?"
+                (nzOnConfirm)="reactivate(data.id)"
+              >
+                <li nz-menu-item>Reactivate</li>
+              </a>
+            </ng-template>
+          </ul>
+        </nz-dropdown-menu>
+      </ng-template>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>
+
+<app-add-new-department-modal
+  *ngIf="addNewModalState"
+  title="Create Department"
+  width="484px"
+  [(isVisible)]="addNewModalState"
+/>
+
+<app-edit-department-modal
+  *ngIf="updateModalState"
+  [viewOnly]="getIsViewOnly"
+  width="855px"
+  (handleClose)="handleCloseEditModal()"
+  [editDepartmentId]="editDepartmentId"
+  [(isVisible)]="updateModalState"
+/>

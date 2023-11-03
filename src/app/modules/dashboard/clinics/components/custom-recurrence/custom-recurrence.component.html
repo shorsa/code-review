@@ -1,0 +1,34 @@
+<nz-date-picker
+[disabled]="viewMode"
+  (click)="isOpen = true"
+  [nzOpen]="isOpen"
+  (ngModelChange)="viewMode ? null : addDate($event)"
+  [ngModel]="currentDate"
+  [nzDisabledDate]="disabledDate.bind(this)"
+  [nzDateRender]="tplRender"
+  [nzRenderExtraFooter]="tplFooter"
+  (nzOnOk)="onOk()"
+  nzSize="large"
+  [nzShowToday]="false"
+  [ngTemplateOutlet]="test"
+></nz-date-picker>
+
+<ng-template #test>
+  <div class="error-message" *ngIf="wasAttemptToSubmitForm && !currentDates.length">
+    Please choose date(s)
+  </div>
+  <h4 *ngIf="currentDates.length">Upcoming Clinics</h4>
+  <ul>
+    <li *ngFor="let item of currentDates">
+      <span>{{ item | customDate }}</span>
+    </li>
+  </ul>
+</ng-template>
+<ng-template #tplRender let-current>
+  <div class="ant-picker-cell-inner" [class.selected]="isCurrent(current)">
+    {{ current.getDate() }}
+  </div>
+</ng-template>
+<ng-template #tplFooter let-current>
+  <button nz-button nzType="primary" (click)="onOk()">Ok</button>
+</ng-template>

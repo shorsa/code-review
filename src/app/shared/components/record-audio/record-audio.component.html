@@ -1,0 +1,49 @@
+<!-- <input (change)="volumeChange($event)" type="range" min="0" max="1" step="0.1" value="0.5"/> -->
+<div class="recorder-wrapper">
+  <div #wavesurfer class="wavesurfer"></div>
+
+  <div class="buttons-wrapper">
+    <button
+      (click)="startRecording()"
+      class="record"
+      nz-button
+      nzSize="large"
+      nzType="primary"
+    >
+      <span
+        nz-icon
+        nzType="audio"
+        *ngIf="!isPause && isRecording"
+        nzTheme="outline"
+      ></span>
+      <span nz-icon nzType="pause" *ngIf="isPause" nzTheme="outline"></span>
+      Record
+    </button>
+    <button
+      nz-button
+      nzSize="large"
+      (click)="isPause ? continueRecording() : pauseRecording()"
+      class="green"
+      nzType="primary"
+    >
+      {{ isPause ? 'Continue' : 'Pause' }}
+    </button>
+    <button nz-button nzSize="large" (click)="stopRecording()" nzType="primary" nzDanger>
+      Stop
+    </button>
+    <button nz-button nzSize="large" nzType="primary">Upload</button>
+  </div>
+
+  <ng-content></ng-content>
+
+  <div #audioWrapper class="audio-wrapper">
+    <ng-container *ngFor="let audioFile of createObjectURLs; let i = index">
+      <div class="audio-file">
+        <span nz-icon (click)="handlePlay(audioFile,i)" nzType="play-circle" nzTheme="outline"></span>
+        <div [id]="'report-' + audioFile.id" class="audio"></div>
+        <span class="time">{{ audioFile?.duration }}</span>
+        <span nz-icon nzType="sound" nzTheme="outline"></span>
+      </div>
+    </ng-container>
+  </div>
+</div>

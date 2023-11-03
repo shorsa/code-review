@@ -1,0 +1,161 @@
+<nz-card class="contract-details" [nzBordered]="false" nzTitle="General info">
+  <!-- form-item -->
+  <form nz-form [formGroup]="formGroup" nzLayout="vertical" class="contract-details-form">
+    <nz-form-item class="with-view-mode" *ngIf="contractDetails?.id">
+      <nz-form-label>Contract #*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="contractIdTmpl">
+        <input
+          readonly
+          nz-input
+          formControlName="customId"
+          nzSize="large"
+          type="text"
+          placeholder="Input Contract #*"
+        />
+        <ng-template #contractIdTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input Contract #*</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Client name*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="clientErrorTmpl">
+        <nz-select
+          formControlName="clientId"
+          nzAllowClear
+          nzShowSearch
+          nzServerSearch
+          nzSize="large"
+          nzPlaceHolder="Select Client"
+          (nzOnSearch)="onSearchClient($event)"
+        >
+          <ng-container *ngIf="!(isLoading$ | async)">
+            <nz-option
+              *ngFor="let item of clientListOptions"
+              [nzLabel]="item.name"
+              [nzValue]="item.id"
+            ></nz-option>
+          </ng-container>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+        </nz-select>
+        <ng-template #clientErrorTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please select Client</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Client code*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="clientCodeTmpl">
+        <input
+          nzSize="large"
+          type="text"
+          nz-input
+          readonly
+          formControlName="clientCode"
+          placeholder="Input Client code"
+        />
+        <ng-template #clientCodeTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input your Client code</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Client address*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="clientAddressTmpl">
+        <input
+          nzSize="large"
+          formControlName="clientAddress"
+          type="text"
+          nz-input
+          placeholder="Input Client address"
+        />
+        <ng-template #clientAddressTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input your Client address</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Payment time frames*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="dobTpl">
+        <nz-date-picker
+          formControlName="paymentTimeFrame"
+          nzFormat="d MMM YYYY"
+          nzSize="large"
+        ></nz-date-picker>
+        <ng-template #dobTpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input your Payment time frames</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <div>
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Invoice type*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="invoiceTypeTmpl">
+          <nz-select
+            formControlName="invoiceType"
+            nzAllowClear
+            nzSize="large"
+            [nzOptions]="invoiceTypes"
+            nzPlaceHolder="Select Invoice type"
+            (nzOnSearch)="onSearchClient($event)"
+          ></nz-select>
+          <ng-template #invoiceTypeTmpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input your Invoice type</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <!-- <nz-form-item nz-row class="checkbox">
+          <nz-form-control>
+            <label nz-checkbox formControlName="groupInvoiceByClinic">
+              <span>Invoice be grouped by clinic</span>
+            </label>
+          </nz-form-control>
+        </nz-form-item> -->
+    </div>
+  </form>
+</nz-card>
+
+<div class="page-bottom-buttons">
+  <button
+    nz-button
+    nzType="default"
+    (click)="navigateToContractsTable()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleNext()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Next
+  </button>
+</div>

@@ -1,0 +1,75 @@
+<div class="clinicians-page">
+  <nz-page-header class="with-actions">
+    <nz-page-header-title
+      ><app-search-input (searchTextChange)="handleSearchByText($event)"
+    /></nz-page-header-title>
+    <nz-page-header-content>
+      <nz-table
+        nzShowSizeChanger
+        [nzLoading]="isLoading$ | async"
+        [nzData]="cliniciansData"
+        [nzFrontPagination]="false"
+        [nzTotal]="totalCount"
+        zTableLayout="fixed"
+        [nzScroll]="{ x: '700px' }"
+        (nzQueryParams)="onQueryParamsChange($event)"
+      >
+        <thead>
+          <tr>
+            <th nzColumnKey="Id">Clinician Id</th>
+            <th nzColumnKey="Name">Name</th>
+            <th nzColumnKey="Phone">Phone Number</th>
+            <th nzColumnKey="LastName">Email</th>
+            <th
+              [width]="50"
+              [nzChecked]="checked"
+              [nzIndeterminate]="indeterminateCheckbox"
+              (nzCheckedChange)="onAllChecked($event)"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of cliniciansData">
+            <td>
+              {{ data?.customId }}
+            </td>
+            <td>
+              {{ data?.name }}
+            </td>
+            <td>
+              {{ data?.phoneNumber }}
+            </td>
+            <td>
+              {{ data?.email }}
+            </td>
+            <td
+              [nzChecked]="hasClinician(data)"
+              (nzCheckedChange)="onItemCheckedChange(data, $event)"
+            ></td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>
+
+<div class="btn-wrapper">
+  <button
+    (click)="handleCancel()"
+    nz-button
+    nzType="default"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    (click)="addClinicians()"
+    [nzLoading]="isLoading$ | async"
+    nz-button
+    nzType="primary"
+    nzSize="large"
+  >
+    Add
+  </button>
+</div>

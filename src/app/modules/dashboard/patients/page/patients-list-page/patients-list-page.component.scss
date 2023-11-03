@@ -1,0 +1,21 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.patients-page {
+  .ant-page-header-heading-extra {
+    @include media-md {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+  }
+  .state {
+    @include media-md {
+      margin-left: 0;
+    }
+  }
+
+  .ant-page-header {
+    max-height: calc(100vh - #{$layout-header-height});
+    overflow-y: auto;
+  }
+}

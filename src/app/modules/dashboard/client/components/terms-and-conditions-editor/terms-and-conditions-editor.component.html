@@ -1,0 +1,45 @@
+<form [formGroup]="formGroup" (ngSubmit)="save()">
+  <nz-card
+    class="terms-and-conditions"
+    nzTitle="Terms & Conditions"
+    [nzExtra]="downloadButtonTpl"
+  >
+    <div class="editor">
+      <ngx-editor-menu [editor]="editor!" [toolbar]="toolbar"> </ngx-editor-menu>
+      <ngx-editor
+        outputFormat="html"
+        [ariaRowCount]="4"
+        placeholder="Input text"
+        [editor]="editor!"
+        formControlName="editorContent"
+      >
+      </ngx-editor>
+    </div>
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  </nz-card>
+  <div class="page-buttons">
+    <button nz-button nzType="default" class="default" (click)="cancel()" nzSize="large">
+      Cancel
+    </button>
+    <button nz-button [nzLoading]="isLoading$ | async" nzType="primary" nzSize="large">
+      Save
+    </button>
+  </div>
+</form>
+<ng-template #downloadButtonTpl>
+  <button
+    *ngIf="!hideDownloadBtn"
+    type="button"
+    nz-button
+    nzSize="large"
+    (click)="download()"
+    nzType="primary"
+    [nzLoading]="isLoading$ | async"
+    class="upload-btn"
+  >
+    <span nz-icon nzType="download"></span>
+    Download
+  </button>
+</ng-template>

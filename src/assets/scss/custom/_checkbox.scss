@@ -1,0 +1,67 @@
+@import "../utils/variables";
+
+.ant-form-item.checkbox {
+  margin: 0;
+
+  .ant-form-item-control-input {
+    min-height: 28px;
+
+    .ant-checkbox {
+      top: 0.3em !important;
+    }
+  }
+}
+
+.ant-checkbox-wrapper {
+  .ant-checkbox + span {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  &.document {
+    .ant-checkbox + span {
+      padding-left: 16px;
+      font-size: 14px;
+    }
+  }
+}
+
+.ant-checkbox-wrapper-checked {
+  .ant-checkbox-disabled {
+    .ant-checkbox-inner {
+      background-color: $primary-color !important;
+      border-color: $primary-color !important;
+
+      &::after {
+        border-color: #fff;
+      }
+    }
+  }
+}
+
+.ant-checkbox-group.days-of-week {
+  @include flex-container;
+  .ant-checkbox-wrapper {
+    .ant-checkbox {
+      display: none;
+    }
+
+    .ant-checkbox + span {
+      font-size: 14px;
+      @include flex-container(row, center, center);
+      background-color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid $input-border-color !important;
+    }
+
+    &.ant-checkbox-wrapper-checked {
+      .ant-checkbox + span {
+        background-color: $blue-color;
+        color: #fff;
+      }
+    }
+  }
+}

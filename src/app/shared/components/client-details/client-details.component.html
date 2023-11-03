@@ -1,0 +1,38 @@
+<nz-card class="client-details" [nzBordered]="false" nzTitle="Client details">
+  <div class="select-item-wrapper">
+    <span>Select Client</span>
+    <nz-select
+      nzAllowClear
+      nzShowSearch
+     
+      nzSize="large"
+      nzPlaceHolder="Select Client"
+    >
+      <nz-option *ngIf="!isLoading" nzLabel="Test 1" nzValue="test1"></nz-option>
+      <nz-option *ngIf="!isLoading" nzLabel="Test 2" nzValue="test2"></nz-option>
+      <nz-option *ngIf="!isLoading" nzLabel="Test 3" nzValue="test3"></nz-option>
+    </nz-select>
+    <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+      <span nz-icon nzType="loading" class="loading-icon"></span>
+      Loading Data...
+    </nz-option>
+  </div>
+  <div class="select-item-wrapper last">
+    <span>Select Department</span>
+    <nz-select
+      nzAllowClear
+      nzShowSearch
+     
+      nzSize="large"
+      nzPlaceHolder="Select Department"
+    >
+      <nz-option *ngIf="!isLoading" nzLabel="Test 1" nzValue="test1"></nz-option>
+      <nz-option *ngIf="!isLoading" nzLabel="Test 2" nzValue="test2"></nz-option>
+      <nz-option *ngIf="!isLoading" nzLabel="Test 3" nzValue="test3"></nz-option>
+    </nz-select>
+    <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+      <span nz-icon nzType="loading" class="loading-icon"></span>
+      Loading Data...
+    </nz-option>
+  </div>
+</nz-card>

@@ -1,0 +1,20 @@
+<nz-page-header class="with-actions">
+  <nz-page-header-title>Letters</nz-page-header-title>
+  <nz-page-header-extra>
+    <div class="header-actions">
+      <nz-space>
+        <app-search-input (searchTextChange)="handleSearchByText($event)" />
+      </nz-space>
+      <nz-space>
+        <nz-segmented
+          class="state"
+          (nzValueChange)="changeLetterStatusFilter($event)"
+          [nzOptions]="lettersFilterListOptions"
+        ></nz-segmented>
+      </nz-space>
+    </div>
+  </nz-page-header-extra>
+  <nz-page-header-content>
+    <app-letters-table />
+  </nz-page-header-content>
+</nz-page-header>

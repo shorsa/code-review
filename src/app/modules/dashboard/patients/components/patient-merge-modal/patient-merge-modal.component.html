@@ -1,0 +1,47 @@
+<nz-table
+  nzShowSizeChanger
+  [nzPageSizeOptions]="[10, 20, 50]"
+  [nzLoading]="isLoading$ | async"
+  [nzData]="patientsUsersData"
+  [nzFrontPagination]="false"
+  [nzTotal]="totalCount"
+  zTableLayout="fixed"
+  [nzScroll]="{ x: '700px' }"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="Identifier" [nzSortFn]="true">Patient ID</th>
+      <th nzColumnKey="Name">Name</th>
+      <th nzColumnKey="PhoneNumber" [nzSortFn]="true">Phone number</th>
+      <th nzColumnKey="DateOfBirth" [nzSortFn]="true">DOB</th>
+      <th nzColumnKey="ClientNameSearch">Client Name</th>
+      <th nzColumnKey="Department" [nzSortFn]="true">Department</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let data of patientsUsersData"
+      [class]="{
+        locked: !!data.clientUser.applicationUser.lockoutEnd,
+        currentHighlight: data.id === nzModalData.patientData.id
+      }"
+      (click)="data.id !== nzModalData.patientData.id ? handleSelectMerge(data) : null"
+    >
+      <td>{{ data?.customPatientId }}</td>
+      <td>
+        {{ data?.clientUser?.applicationUser?.firstName }}
+        {{ data?.clientUser?.applicationUser?.lastName }}
+      </td>
+      <td>
+        {{
+          data.clientUser.applicationUser.phoneCode
+            | phoneNumber : data.clientUser.applicationUser.phoneNumber
+        }}
+      </td>
+      <td>{{ data?.dateOfBirth | customDate }}</td>
+      <td>{{ data?.clientUser?.client?.contactPersonName }}</td>
+      <td>{{ showNameOfDepartments(data) }}</td>
+    </tr>
+  </tbody>
+</nz-table>

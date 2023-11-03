@@ -1,0 +1,37 @@
+<nz-table
+  nzShowSizeChanger
+  [nzLoading]="isLoading$ | async"
+  [nzData]="patientsData ?? []"
+  [nzFrontPagination]="false"
+  [nzTotal]="totalCount"
+  zTableLayout="fixed"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="Id" [nzSortFn]="true">Client Id</th>
+      <th nzColumnKey="Id" [nzSortFn]="true">Name</th>
+      <th nzColumnKey="FirstName" [nzSortFn]="true">Phone number</th>
+      <th nzColumnKey="LastName" [nzSortFn]="true">Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let data of patientsData"
+      [class.locked]="!!data.clientUser.applicationUser.lockoutEnd"
+    >
+      <td>{{ data?.customPatientId }}</td>
+      <td>
+        {{ data?.clientUser?.applicationUser?.firstName }}
+        {{ data?.clientUser?.applicationUser?.lastName }}
+      </td>
+      <td>
+        {{
+          data.clientUser.applicationUser.phoneCode
+            | phoneNumber : data.clientUser.applicationUser.phoneNumber
+        }}
+      </td>
+      <td>{{ data?.clientUser?.applicationUser?.email }}</td>
+    </tr>
+  </tbody>
+</nz-table>

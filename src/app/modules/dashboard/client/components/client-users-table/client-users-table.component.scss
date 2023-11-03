@@ -1,0 +1,15 @@
+@import "src/assets/scss/utils/mixins.scss";
+
+.client-users-table {
+  .ant-page-header-heading-extra {
+    @include media-sm {
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      
+      .ant-segmented {
+        margin-left: 0;
+      }
+    }
+  }
+}

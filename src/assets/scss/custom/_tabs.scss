@@ -1,0 +1,70 @@
+@import "../utils/mixins";
+@import "../utils/variables";
+$h1-tab-height: 66px;
+$tab-nav-height: 60px;
+
+.ant-tabs.white-tabs {
+  margin-top: -1px;
+  .ant-tabs-nav {
+    max-height: $tab-nav-height;
+    background-color: #ffff;
+    padding: 14px 32px 0 48px;
+    margin-bottom: 0;
+
+    @include media-lg {
+      padding: 0 16px;
+    }
+  }
+  .ant-tabs-content-holder {
+    padding: 0 0 0 48px;
+    // position: relative;
+    // overflow-x: hidden;
+
+    @include media-sm {
+      padding: 16px;
+    }
+
+    .ant-tabs-content {
+      height: 100%;
+    }
+
+    .tab-content {
+      height: calc(100vh - #{$h1-tab-height} - #{$tab-nav-height} - #{$layout-header-height});
+      overflow-y: auto;
+      padding-top: 24px;
+      padding-bottom: 20px;
+      padding-right: 32px;
+    }
+
+    // .ant-form {
+    //   padding-bottom: 66px;
+    //   position: relative;
+    // }
+  }
+}
+
+.page-header {
+  min-height: 100%;
+
+  &.white {
+    h1 {
+      background-color: #ffff;
+      padding: 26px 32px 0 48px;
+      margin: 0;
+      font-weight: 400;
+      font-size: 32px;
+      line-height: 40px;
+      letter-spacing: -0.6px;
+      height: $h1-tab-height;
+
+      @include media-lg {
+        font-size: 26px;
+        padding: 0px 24px 0 14px;
+      }
+    }
+
+    .ant-tabs-top {
+      min-height: calc(100% - #{$h1-tab-height});
+    }
+  }
+}

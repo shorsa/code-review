@@ -1,0 +1,24 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.pdf-modal-content {
+  @include flex-container(row, flex-end);
+  gap: 36px;
+
+  .bottom-buttons {
+    @include flex-container;
+    gap: 16px;
+
+    .default {
+      background-color: #fff;
+    }
+
+    button {
+      width: 106px;
+    }
+
+    button[disabled] {
+      background-color: $input-border-color;
+    }
+  }
+}

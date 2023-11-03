@@ -1,0 +1,34 @@
+<div class="clinician-page">
+  <nz-page-header class="with-actions">
+    <nz-page-header-title>Clinician</nz-page-header-title>
+    <nz-page-header-extra>
+      <nz-space>
+        <app-search-input (searchTextChange)="handleSearchByText($event)" />
+      </nz-space>
+      <nz-space *ngIf="getIsCanDeactivateOrReactivate">
+        <nz-segmented
+          (nzValueChange)="changeClinicianStateFilter($event)"
+          class="state deactivate"
+          [nzOptions]="activeFilterOptions"
+        ></nz-segmented>
+      </nz-space>
+
+      <nz-space>
+        <button
+          (click)="navigateAddNewClinician()"
+          class="add"
+          nzSize="large"
+          *nzSpaceItem
+          nzType="primary"
+          nz-button
+        >
+          <span nz-icon nzType="plus" nzTheme="outline"></span>
+          Add new
+        </button>
+      </nz-space>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <app-clinicians-table />
+    </nz-page-header-content>
+  </nz-page-header>
+</div>

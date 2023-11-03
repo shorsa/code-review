@@ -1,0 +1,65 @@
+<nz-table
+  nzShowSizeChanger
+  [nzPageSizeOptions]="pageSizeOptions"
+  [nzLoading]="isLoading$ | async"
+  [nzData]="lettersData"
+  [nzFrontPagination]="false"
+  [nzTotal]="totalCount"
+  zTableLayout="fixed"
+  [nzScroll]="{ x: '700px' }"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="AppointmentId" nzWidth="140px" [nzSortFn]="true">
+        Appointment Id
+      </th>
+      <th nzColumnKey="Patient" [nzSortFn]="true">Patient</th>
+      <th nzColumnKey="Clinician" [nzSortFn]="true">Clinician</th>
+      <th nzColumnKey="AppointmentTime" nzWidth="160px" [nzSortFn]="true">
+        Appointment Time
+      </th>
+      <th nzColumnKey="Referral" [nzSortFn]="true">Referral #</th>
+      <th nzColumnKey="Client" [nzFilterFn]="true">Client</th>
+      <th nzColumnKey="Status" nzWidth="155px" [nzFilterFn]="true">Status</th>
+      <th nzColumnKey="actions" nzWidth="90px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of lettersData">
+      <td>{{ data.customAppointmentId }}</td>
+      <td>
+        {{ data.patientName }}
+      </td>
+      <td>{{ data.clinicianName }}</td>
+      <td>{{ data.appointmentTime | customDate : 'dateTime' }}</td>
+      <td>{{ data.customReferralId }}</td>
+      <td>{{ data.clientName }}</td>
+      <td>
+        <div class="status {{ getStatusClass(data.status) }}">
+          {{ getStatusString(data.status) }}
+        </div>
+      </td>
+      <td class="actions">
+        <div>
+          <ng-container
+            [ngTemplateOutlet]="menu"
+            [ngTemplateOutletContext]="{ data: data }"
+          ></ng-container>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #menu let-data="data">
+  <a nz-dropdown class="table-menu" nzTrigger="click" [nzDropdownMenu]="menu">
+    <span nz-icon nzType="more" nzTheme="outline"></span>
+  </a>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <li nz-menu-item *ngIf="getIsAvailableDownload(data.status)">Download</li>
+      <li nz-menu-item *ngIf="getIsAvailableEdit(data.status)" (click)="navigateToEditAppointment(data.appointmentId)">Edit</li>
+    </ul>
+  </nz-dropdown-menu>
+</ng-template>

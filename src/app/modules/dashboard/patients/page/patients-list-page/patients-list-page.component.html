@@ -1,0 +1,242 @@
+<div class="patients-page">
+  <nz-page-header class="with-actions">
+    <nz-page-header-title>Patients</nz-page-header-title>
+    <nz-page-header-extra>
+      <nz-space>
+        <app-search-input
+          *ngIf="!getIsPreDeleteFilter"
+          (searchTextChange)="handleSearchByText($event)"
+        />
+      </nz-space>
+      <nz-space *ngIf="getIsCanDeactivateOrReactivate">
+        <nz-segmented
+          (nzValueChange)="handleChangePatientsStateFilter($event)"
+          class="state deactivate"
+          [nzOptions]="activeFilterOptions"
+        ></nz-segmented>
+      </nz-space>
+
+      <nz-space *ngxPermissionsOnly="patientTransferPermission">
+        <button
+          @fadeLeftButton
+          *ngIf="showTransferBtn && !getIsDeactivateFilter"
+          nz-button
+          nzType="default"
+          class="default animated"
+          nzSize="large"
+          (click)="handleTransferToDepartment()"
+        >
+          Transfer to
+        </button>
+      </nz-space>
+      <ng-container *ngxPermissionsOnly="patientCreatePermission">
+        <nz-space *ngIf="!getIsPreDeleteFilter">
+          <button
+            (click)="navigateToAddNewPatient()"
+            class="add"
+            nzSize="large"
+            *nzSpaceItem
+            nzType="primary"
+            nz-button
+          >
+            <span nz-icon nzType="plus" nzTheme="outline"></span>
+            Add new
+          </button>
+        </nz-space>
+      </ng-container>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <ng-container *ngIf="!getIsPreDeleteFilter">
+        <!-- [nzPageIndex]="searchParams.pageIndex + 1" -->
+        <nz-table
+          nzShowSizeChanger
+          [nzPageSizeOptions]="[10, 20, 50]"
+          [nzLoading]="isLoading$ | async"
+          [nzData]="patientsUsersData"
+          [nzFrontPagination]="false"
+          [nzTotal]="totalCount"
+          zTableLayout="fixed"
+          [nzScroll]="{ x: '700px' }"
+          (nzQueryParams)="onQueryParamsChange($event)"
+        >
+          <thead>
+            <tr>
+              <th
+                *ngxPermissionsOnly="patientTransferPermission"
+                [width]="50"
+                [nzChecked]="checked && !!patientsUsersData.length"
+                [nzIndeterminate]="indeterminateCheckbox"
+                (nzCheckedChange)="onAllChecked($event)"
+              ></th>
+              <th nzColumnKey="Identifier" [nzSortFn]="true">Patient ID</th>
+              <th nzColumnKey="Name" [nzSortFn]="true">Name</th>
+              <th nzColumnKey="PhoneNumber" [nzSortFn]="true">Phone number</th>
+              <th
+                nzColumnKey="Email"
+                *ngIf="!getIsClientAdminOrSuperuser"
+                [nzSortFn]="true"
+              >
+                Email
+              </th>
+              <th nzColumnKey="DateOfBirth" [nzSortFn]="true">DOB</th>
+              <th nzColumnKey="ClientNameSearch">Client Name</th>
+              <th nzColumnKey="Department" [nzSortFn]="true">Departments</th>
+              <th nzColumnKey="actions" nzWidth="76px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let data of patientsUsersData"
+              [class.locked]="!!data.clientUser.applicationUser.lockoutEnd"
+            >
+              <td
+                *ngxPermissionsOnly="patientTransferPermission"
+                [nzChecked]="setOfCheckedId.has(data.id)"
+                (nzCheckedChange)="onItemCheckedChange(data.id, $event)"
+              ></td>
+              <td>{{ data?.customPatientId }}</td>
+              <td>
+                {{ data?.clientUser?.applicationUser?.firstName }}
+                {{ data?.clientUser?.applicationUser?.lastName }}
+              </td>
+              <td class="ellipsis">
+                <span
+                  nz-tooltip
+                  [nzTooltipTitle]="
+                    data.clientUser.applicationUser.phoneCode
+                      | phoneNumber : data.clientUser.applicationUser.phoneNumber
+                  "
+                >
+                  {{
+                    data.clientUser.applicationUser.phoneCode
+                      | phoneNumber : data.clientUser.applicationUser.phoneNumber
+                  }}
+                </span>
+              </td>
+              <td class="ellipsis" *ngIf="!getIsClientAdminOrSuperuser">
+                <span
+                  nz-tooltip
+                  [nzTooltipTitle]="data?.clientUser?.applicationUser?.email"
+                >
+                  {{ data?.clientUser?.applicationUser?.email }}
+                </span>
+              </td>
+              <td>{{ data?.dateOfBirth | customDate }}</td>
+              <td>{{ data?.clientUser?.client?.fullName }}</td>
+              <td class="ellipsis">
+                <span nz-tooltip [nzTooltipTitle]="showNameOfDepartments(data)">
+                  {{ showNameOfDepartments(data) }}
+                </span>
+              </td>
+              <td>
+                <div class="action">
+                  <ng-container
+                    [ngTemplateOutlet]="menu"
+                    [ngTemplateOutletContext]="{ data: data }"
+                  ></ng-container>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+        <ng-template #menu let-data="data">
+          <div>
+            <ng-container *ngIf="data.clientUser.applicationUser.lockoutEnd">
+              <span
+                nz-tooltip
+                [nzTooltipOverlayClassName]="'tooltip'"
+                nzTooltipTitle="This account is locked"
+                ><span
+                  nz-icon
+                  nzType="exclamation"
+                  class="locked-icon"
+                  nzTheme="outline"
+                ></span
+              ></span>
+            </ng-container>
+          </div>
+
+          <a
+            nz-dropdown
+            class="table-menu"
+            nzTrigger="click"
+            [nzClickHide]="true"
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <ng-container
+                *ngIf="data.clientUser.applicationUser.isActive; else reactivateTmpl"
+              >
+                <li
+                  nz-menu-item
+                  *ngxPermissionsOnly="patientUpdatePermission"
+                  (click)="navigateToEdit(data.id)"
+                >
+                  Edit
+                </li>
+                <ng-container *ngxPermissionsExcept="patientUpdatePermission">
+                  <li
+                    nz-menu-item
+                    (click)="navigateToEdit(data.id)"
+                    *ngxPermissionsOnly="patientViewDetailsPermission"
+                  >
+                    View
+                  </li>
+                </ng-container>
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="Are you sure to Deactivate this patient?"
+                  *ngxPermissionsOnly="patientDeactivatePermission"
+                  (nzOnConfirm)="handleDeactivate(data.id)"
+                >
+                  <li nz-menu-item nzDanger>Deactivate</li>
+                </a>
+                <li
+                  nz-menu-item
+                  *ngxPermissionsOnly="patientMergePermission"
+                  (click)="handleMerge(data)"
+                >
+                  Merge
+                </li>
+              </ng-container>
+
+              <ng-template #reactivateTmpl>
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="Are you sure to Reactivate this patient?"
+                  *ngxPermissionsOnly="patientActivatePermission"
+                  (nzOnConfirm)="handleReactivate(data.id)"
+                >
+                  <li nz-menu-item>Reactivate</li>
+                </a>
+              </ng-template>
+              <ng-container *ngIf="!!data.clientUser.applicationUser.lockoutEnd">
+                <a
+                  nz-popconfirm
+                  *ngxPermissionsOnly="patientUnlockPermission"
+                  nzPopconfirmTitle="Are you sure to Unlock this patient?"
+                  (nzOnConfirm)="handleUnlock(data.clientUser.applicationUserId)"
+                >
+                  <li nz-menu-item>Unlock</li>
+                </a>
+              </ng-container>
+            </ul>
+          </nz-dropdown-menu>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="getIsPreDeleteFilter">
+        <app-patient-pre-delete-stage-list />
+      </ng-container>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>
+
+<!-- <app-create-patient-modal
+  *ngIf="addNewPatientModalState"
+  [(isVisible)]="addNewPatientModalState"
+  width="704px"
+/> -->

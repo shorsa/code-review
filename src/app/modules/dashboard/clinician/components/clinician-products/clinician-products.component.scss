@@ -1,0 +1,9 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.clinician-products-wrapper {
+  .header-actions {
+    @include flex-container;
+    gap: 16px;
+  }
+}

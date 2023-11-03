@@ -1,0 +1,17 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.custom-date-picker-wrapper {
+  @include flex-container(column, center, center);
+  width: 100%;
+
+  .ant-form-item {
+    width: 100%;
+  }
+
+  &.icon-only {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+  }
+}

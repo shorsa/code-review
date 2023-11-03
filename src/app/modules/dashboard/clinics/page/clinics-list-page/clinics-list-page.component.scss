@@ -1,0 +1,14 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.clinics-wrapper-page {
+  .header-actions {
+    @include flex-container;
+    gap: 12px;
+  }
+
+  .ant-page-header {
+    max-height: calc(100vh - #{$layout-header-height});
+    overflow-y: auto;
+  }
+}

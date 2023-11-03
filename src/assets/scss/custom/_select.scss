@@ -1,0 +1,55 @@
+@import "../utils/mixins";
+@import "../utils/variables";
+
+.select-item-wrapper {
+  @include flex-container(column);
+
+  & > span {
+    color: $gray-color;
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
+.ant-select {
+  &-lg {
+    height: 44px;
+
+    .ant-select-selector {
+      height: 100% !important;
+    }
+
+    .ant-select-selection-item {
+      line-height: 42px !important;
+    }
+
+    &.ant-select-multiple {
+      height: fit-content;
+      .ant-select-selection-item {
+        @include flex-container(row, center);
+      }
+    }
+  }
+  &-disabled {
+    background-color: #fff;
+    .ant-select-selection-item {
+      color: $text-color !important;
+    }
+  }
+
+  &-arrow {
+    color: $text-color;
+  }
+
+  .ant-select-selector {
+    box-shadow: none !important;
+    border-radius: $input-border-radius !important;
+    height: 100% !important;
+  }
+
+  &.ant-select-focused {
+    .ant-select-selector {
+      border-color: $blue-color !important;
+    }
+  }
+}

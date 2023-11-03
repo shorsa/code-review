@@ -1,0 +1,81 @@
+<form [formGroup]="formGroup" (ngSubmit)="handleTransfer()">
+  <nz-table
+    nzShowSizeChanger
+    [nzLoading]="isLoading$ | async"
+    [nzData]="getPatientsFormArray.value ?? []"
+    [nzShowPagination]="false"
+    zTableLayout="fixed"
+    [nzScroll]="{ x: '700px' }"
+  >
+    <thead>
+      <tr>
+        <th nzWidth="50px" nzColumnKey="num">№</th>
+        <th nzColumnKey="name">Name</th>
+        <th nzColumnKey="clientName">Client Name</th>
+        <th nzColumnKey="department">Current Department</th>
+        <th nzWidth="395px" nzColumnKey="newDepartment">
+          <div class="department-table-head">New Department</div>
+        </th>
+      </tr>
+    </thead>
+    <tbody formArrayName="patients">
+      <ng-container *ngFor="let patient of getPatientsFormArray?.controls; let i = index">
+        <tr [formGroupName]="i">
+          <td>
+            {{ i + 1 }}
+          </td>
+          <td>{{ patient?.value?.name }}</td>
+          <td>{{ patient?.value?.clientName }}</td>
+          <td>
+            {{ patient.value.departmentName }}
+          </td>
+          <td>
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzMode="multiple"
+              nzPlaceHolder="Select Department"
+              formControlName="departmentIds"
+              nzMode="multiple"
+              (nzOpenChange)="handleResetNewDepartment()"
+            >
+              <ng-container *ngIf="!(isLoading$ | async)">
+                <nz-option
+                  *ngFor="
+                    let item of (departmentListOptions$ | async)![patient.value.clientId]
+                  "
+                  [nzLabel]="item.name"
+                  [nzValue]="item.id"
+                ></nz-option>
+              </ng-container>
+              <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+                <span nz-icon nzType="loading" class="loading-icon"></span>
+                Loading Data...
+              </nz-option>
+            </nz-select>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</form>
+<div class="btn-wrapper">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handleCancel()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleTransfer()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Transfer
+  </button>
+</div>

@@ -1,0 +1,456 @@
+<div class="general-details-wrapper">
+  <form nz-form [formGroup]="formGroup" nzLayout="vertical" (ngSubmit)="submitForm()">
+    <div class="column" *ngIf="getIsOHRDAdminOrSuperuser">
+      <nz-card class="general-details" [nzBordered]="false" nzTitle="General details">
+        <!-- form-item -->
+        <ng-container *ngIf="!(isLoading$ | async); else skeletonGeneral">
+          <ng-container *ngIf="clientDetails">
+            <nz-form-item>
+              <nz-form-label>Client Id</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="clientIdTpl">
+                <input
+                  nzSize="large"
+                  type="text"
+                  [disabled]="true"
+                  nz-input
+                  [value]="clientDetails.customClientId"
+                  placeholder="Input Client Id"
+                />
+                <ng-template #clientIdTpl let-control>
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                    >Please input Client Id</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label>Client Code</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="clientCodeTpl">
+                <input
+                  nzSize="large"
+                  type="text"
+                  nz-input
+                  [disabled]="true"
+                  [value]="clientDetails.code"
+                  placeholder="Input Client Code"
+                />
+                <ng-template #clientCodeTpl let-control>
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                    >Please input your Client Code</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </ng-container>
+
+          <!-- form-item -->
+          <nz-form-item>
+            <nz-form-label>Client Legal Name in Full*</nz-form-label>
+            <nz-form-control nzHasFeedback [nzErrorTip]="fullNameTpl">
+              <input
+                nzSize="large"
+                type="text"
+                formControlName="fullName"
+                nz-input
+                placeholder="Input Client Legal Name in Full"
+              />
+              <ng-template #fullNameTpl let-control>
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                  >Please input your Client Legal Name in Full</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- form-item -->
+          <div class="checkboxes-wrapper">
+            <!-- form-item -->
+            <nz-form-item nz-row class="checkbox">
+              <nz-form-control>
+                <label nz-checkbox formControlName="kpiRequired">
+                  <span>KPIs Required</span>
+                </label>
+              </nz-form-control>
+            </nz-form-item>
+
+            <!-- form-item -->
+            <nz-form-item nz-row class="checkbox">
+              <nz-form-control>
+                <label nz-checkbox formControlName="includePatientNameOnClinicalReports">
+                  <span> Include patient name on clinical reports </span>
+                </label>
+              </nz-form-control>
+            </nz-form-item>
+
+            <!-- form-item -->
+            <nz-form-item nz-row class="checkbox">
+              <nz-form-control>
+                <label nz-checkbox formControlName="statsRequired">
+                  <span>Stats Required </span>
+                </label>
+              </nz-form-control>
+            </nz-form-item>
+
+            <!-- form-item -->
+            <nz-form-item nz-row class="checkbox">
+              <nz-form-control>
+                <label nz-checkbox formControlName="documentPasswordRequired">
+                  <span>Document password</span>
+                </label>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!-- form-item -->
+          <nz-form-item
+            @fadeDownInput
+            class="mt-16 animated"
+            *ngIf="formGroup.get('documentPasswordRequired')?.value"
+          >
+            <nz-form-label>Document Password</nz-form-label>
+            <nz-form-control nzHasFeedback [nzErrorTip]="documentPasswordErrorTpl">
+              <nz-input-group [nzSuffix]="suffixTemplate" nzSize="large">
+                <input
+                  nzSize="large"
+                  autocomplete="off"
+                  nz-input
+                  [type]="documentPasswordIsVisible ? 'text' : 'password'"
+                  formControlName="documentPassword"
+                  placeholder="Input Document Password"
+                />
+                <ng-template #documentPasswordErrorTpl let-control>
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('minlength')"
+                    >The Document Password must be at least 5 characters</ng-container
+                  >
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('maxlength')"
+                    >The Document Password must be less than 12 characters</ng-container
+                  >
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                    >Please input Document Password</ng-container
+                  >
+                </ng-template>
+              </nz-input-group>
+              <ng-template #suffixTemplate>
+                <span
+                  nz-icon
+                  [nzType]="documentPasswordIsVisible ? 'eye-invisible' : 'eye'"
+                  (click)="documentPasswordIsVisible = !documentPasswordIsVisible"
+                ></span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </ng-container>
+
+        <ng-template #skeletonGeneral>
+          <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 4 }"></nz-skeleton>
+        </ng-template>
+      </nz-card>
+
+      <nz-card class="invoice-details" [nzBordered]="false" nzTitle="Invoice details">
+        <ng-container *ngIf="!(isLoading$ | async); else skeletonInvoice">
+          <div class="row space-bottom">
+            <div nz-col nzSpan="12">
+              <!-- form-item -->
+              <nz-form-item nz-row class="checkbox">
+                <nz-form-control>
+                  <label nz-checkbox formControlName="includeOnSageReport">
+                    <span>Exclude from Sage export</span>
+                  </label>
+                </nz-form-control>
+              </nz-form-item>
+
+              <!-- form-item -->
+              <nz-form-item nz-row class="checkbox">
+                <nz-form-control>
+                  <label nz-checkbox formControlName="purchaseOrderRequired">
+                    <span>Purchase Order Required</span>
+                  </label>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzSpan="12">
+              <!-- form-item -->
+              <nz-form-item class="checkbox">
+                <nz-form-control>
+                  <nz-radio-group formControlName="invoiceType">
+                    <label
+                      *ngFor="let item of invoiceTypes"
+                      nz-radio
+                      [nzValue]="item.value"
+                      >{{ item.label }}</label
+                    >
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- form-item -->
+          <nz-form-item>
+            <nz-form-label>Email Address for Invoices*</nz-form-label>
+            <nz-form-control nzHasFeedback [nzErrorTip]="invoiceEmailAddressTpl">
+              <input
+                nzSize="large"
+                type="email"
+                nz-input
+                formControlName="invoiceEmailAddress"
+                placeholder="Input Email Address for Invoices"
+              />
+              <ng-template #invoiceEmailAddressTpl let-control>
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                  >Please input your Email Address for Invoices</ng-container
+                >
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('pattern')"
+                  >The Email is not valid
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </ng-container>
+
+        <ng-template #skeletonInvoice>
+          <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 2 }"></nz-skeleton>
+        </ng-template>
+      </nz-card>
+    </div>
+    <div class="column">
+      <nz-card class="general-details" [nzBordered]="false" nzTitle="Contact Person">
+        <ng-container *ngIf="!(isLoading$ | async); else skeletonContact">
+          <!-- form-item -->
+          <nz-form-item>
+            <nz-form-label> Contact Person Name*</nz-form-label>
+            <nz-form-control nzHasFeedback [nzErrorTip]="contactPersonNameTpl">
+              <input
+                nzSize="large"
+                type="text"
+                nz-input
+                formControlName="contactPersonName"
+                placeholder="Input  Contact Person Name"
+              />
+              <ng-template #contactPersonNameTpl let-control>
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                  >Please input your Contact Person Name</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- form-item -->
+          <nz-form-item>
+            <nz-form-label>Email Address*</nz-form-label>
+            <nz-form-control nzHasFeedback [nzErrorTip]="contactPersonEmailTpl">
+              <input
+                nzSize="large"
+                type="email"
+                nz-input
+                formControlName="contactPersonEmail"
+                placeholder="Input Email Address"
+              />
+              <ng-template #contactPersonEmailTpl let-control>
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                  >Please input your Email Address</ng-container
+                >
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('pattern')"
+                  >The Email is not valid
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- form-item -->
+          <nz-form-item>
+            <nz-form-label nzFor="phoneNumber">Phone Number*</nz-form-label>
+            <nz-form-control
+              nzErrorTip="Please input your phone number!"
+              [nzErrorTip]="PhoneNumberTpl"
+            >
+              <nz-input-group
+                class="phone-number"
+                nzSize="large"
+                [nzAddOnBefore]="addOnBeforeTemplate"
+              >
+                <ng-template #addOnBeforeTemplate>
+                  <nz-select formControlName="phoneCode" class="phone-select">
+                    <nz-option
+                      *ngFor="let item of phoneCodes"
+                      [nzLabel]="item.label"
+                      [nzValue]="item.value"
+                    ></nz-option>
+                  </nz-select>
+                </ng-template>
+                <nz-input-number
+                  nzSize="large"
+                  id="phoneNumber"
+                  formControlName="contactPersonPhone"
+                  placeholder="Input phone"
+                />
+                <ng-template #PhoneNumberTpl let-control>
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                    >Please input phone number</ng-container
+                  >
+                  <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('min')"
+                    >The minimum length must be at least 9 numbers</ng-container
+                  >
+                  <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('max')"
+                    >The maximum length must be no more than 10 numbers</ng-container
+                  >
+                </ng-template>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </ng-container>
+
+        <ng-template #skeletonContact>
+          <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 3 }"></nz-skeleton>
+        </ng-template>
+      </nz-card>
+
+      <nz-card
+        class="terms-details"
+        *ngIf="getIsOHRDAdminOrSuperuser"
+        nzTitle="Terms & Conditions"
+        [nzBordered]="false"
+      >
+        <label
+          nz-checkbox
+          aria-readonly="true"
+          [nzChecked]="clientDetails?.termsAndConditionsAccepted"
+          [nzDisabled]="true"
+        >
+          <span>Terms & Conditions accepted</span>
+        </label>
+
+        <ul class="list">
+          <li>
+            <span>Terms & Conditions Accepted Date & Time</span>
+            <span>{{
+              clientDetails?.termsAndConditionsAcceptedDateTime | customDate
+            }}</span>
+          </li>
+          <li>
+            <span>Terms & Conditions Accepted By </span>
+            <span>{{ clientDetails?.termsAndConditionsAcceptedBy }}</span>
+          </li>
+        </ul>
+      </nz-card>
+
+      <nz-card
+        class="cancellation-details"
+        *ngIf="getIsOHRDAdminOrSuperuser"
+        [nzBordered]="false"
+      >
+        <!-- form-item -->
+        <ng-container *ngIf="!(isLoading$ | async); else skeletonCancellation">
+          <nz-form-item>
+            <nz-form-label>Cancellation fee*</nz-form-label>
+            <nz-form-control nzHasFeedback>
+              <label nz-checkbox class="checkbox" formControlName="isCancellationFee">
+                <span>Cancellation fee</span>
+              </label>
+            </nz-form-control>
+          </nz-form-item>
+
+          <div
+            class="row animated"
+            @fadeDownInput
+            *ngIf="formGroup.get('isCancellationFee')?.value"
+          >
+            <nz-form-item>
+              <nz-form-control nzHasFeedback [nzErrorTip]="cancellationFeeTpl">
+                <nz-input-number
+                  [nzMin]="0"
+                  nzSize="large"
+                  formControlName="cancellationFee"
+                  placeholder="Input Cancellation fee"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control nzHasFeedback [nzErrorTip]="cancellationFeeTpl">
+                <nz-segmented
+                  class="cancellation-fee-type"
+                  nzSize="large"
+                  [(ngModel)]="cancellationFeeType"
+                  (nzValueChange)="changeCancellationType($event)"
+                  [nzOptions]="cancellationFeeOptions"
+                  [ngModelOptions]="{ standalone: true }"
+                ></nz-segmented>
+              </nz-form-control>
+              <ng-template #cancellationFeeTpl let-control>
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                  >Please input your Cancelation fee</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('min')"
+                  >The minimum value must be greater than 0</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('max')"
+                  >The minimum value must be less than or equal to 100</ng-container
+                >
+              </ng-template>
+            </nz-form-item>
+          </div>
+        </ng-container>
+
+        <ng-template #skeletonCancellation>
+          <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+        </ng-template>
+      </nz-card>
+    </div>
+
+  </form>
+</div>
+<ng-container *ngIf="clientDetails; else createAction">
+  <ng-container
+    [ngTemplateOutlet]="actions"
+    *ngxPermissionsOnly="clientUpdatePermission"
+  >
+  </ng-container>
+</ng-container>
+
+<ng-template #createAction>
+  <ng-container
+    [ngTemplateOutlet]="actions"
+    *ngxPermissionsOnly="clientCreatePermission"
+  >
+  </ng-container>
+</ng-template>
+<ng-template #actions>
+  <div class="page-bottom-buttons">
+    <button
+      *ngIf="getCanViewClientsList"
+      nz-button
+      nzType="default"
+      (click)="cancel()"
+      class="default"
+      nzSize="large"
+    >
+      Cancel
+    </button>
+    <nz-form-item>
+      <nz-form-control>
+        <button
+          nz-button
+          [nzLoading]="isLoading$ | async"
+          nzType="primary"
+          nzSize="large"
+        >
+          Save
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</ng-template>

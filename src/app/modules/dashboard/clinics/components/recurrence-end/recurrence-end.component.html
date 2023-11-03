@@ -1,0 +1,60 @@
+<form nz-form [formGroup]="formGroup" class="ends-wrapper">
+  <span>Ends</span>
+  <nz-radio-group class="custom-content" formControlName="endType">
+    <label nz-radio [nzValue]="endTypeNever">Never</label>
+    <label nz-radio [nzValue]="endTypeOn"
+      ><span>On</span>
+      <nz-form-item>
+        <nz-form-control nzHasFeedback [nzErrorTip]="dateTmpl">
+          <nz-date-picker
+            [nzDisabledDate]="disabledDate.bind(this)"
+            formControlName="endsOnDate"
+            nzFormat="d MMM YYYY"
+          ></nz-date-picker>
+          <ng-template #dateTmpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input Date</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </label>
+    <label nz-radio [nzValue]="endTypeAfter" class="counter-label"
+      ><span>After</span>
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="afterCountErrorTmpl">
+          <!-- formControlName="defaultPrice" -->
+          <nz-input-number
+            formControlName="endsAfterCount"
+            [nzMin]="1"
+            [nzFormatter]="formatterPercent"
+            [nzParser]="parserPercent"
+          ></nz-input-number>
+
+          <ng-template #afterCountErrorTmpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input the number of recurrences
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <div class="counter-wrapper">
+        <div class="counter-btn">
+          <span
+            nz-icon
+            nzType="up"
+            (click)="!getIsDisabledEndsAfterCount ? afterDateUp() : null"
+            nzTheme="outline"
+          ></span>
+        </div>
+        <div class="counter-btn">
+          <span
+            nz-icon
+            nzType="down"
+            (click)="!getIsDisabledEndsAfterCount ? afterDateDown() : null"
+            nzTheme="outline"
+          ></span>
+        </div></div
+    ></label>
+  </nz-radio-group>
+</form>

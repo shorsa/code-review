@@ -1,0 +1,564 @@
+<form
+  nz-form
+  [formGroup]="formGroup"
+  class="personal-details-wrapper"
+  nzLayout="vertical"
+  (ngSubmit)="handleSubmitForm()"
+>
+  <nz-card class="personal-details" [nzBordered]="false" nzTitle="General details">
+    <!-- form-item -->
+    <div class="row" *ngIf="patientDetails">
+      <nz-form-item class="with-view-mode">
+        <nz-form-label>Patient Id</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="patientIdTpl">
+          <input
+            readonly
+            nz-input
+            formControlName="customPatientId"
+            nzSize="large"
+            type="text"
+            placeholder="Input Patient Id"
+          />
+          <ng-template #patientIdTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input Patient Id</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Unique Identifier*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="uniqueIdentifierTpl">
+          <input
+            nz-input
+            readonly
+            nzSize="large"
+            type="text"
+            formControlName="identifier"
+            placeholder="Input Unique Identifier"
+          />
+          <ng-template #uniqueIdentifierTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input your Unique Identifier</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <!-- form-item -->
+    </div>
+    <div class="row">
+      <nz-form-item>
+        <nz-form-label>First name*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="firstNameTpl">
+          <input
+            formControlName="firstName"
+            nzSize="large"
+            type="text"
+            nz-input
+            placeholder="Input First name"
+          />
+          <ng-template #firstNameTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input your First name</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Last name*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="lastNameTpl">
+          <input
+            formControlName="lastName"
+            nzSize="large"
+            type="text"
+            nz-input
+            placeholder="Input Last name"
+          />
+          <ng-template #lastNameTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input your Last name</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div class="row">
+      <!-- form-item -->
+
+      <nz-form-item>
+        <nz-form-label>DOB*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="dobTpl">
+          <nz-date-picker
+            formControlName="dateOfBirth"
+            nzFormat="d MMM YYYY"
+            nzSize="large"
+          ></nz-date-picker>
+          <ng-template #dobTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input your DOB</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Home Address*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="homeAddressTpl">
+          <input
+            formControlName="homeAddress"
+            nzSize="large"
+            type="text"
+            nz-input
+            placeholder="Input Home Address"
+          />
+          <ng-template #homeAddressTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input your Home Address</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div class="row">
+      <!-- form-item -->
+      <nz-form-item *ngIf="!getCannotViewEmail">
+        <nz-form-label>Contact Email Address</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="contactEmailAddressTpl">
+          <input
+            formControlName="email"
+            nzSize="large"
+            type="text"
+            nz-input
+            placeholder="Input Contact Email Address"
+          />
+          <ng-template #contactEmailAddressTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input your Contact Email Address</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label nzFor="phoneNumber">Phone Number*</nz-form-label>
+        <nz-form-control
+          nzErrorTip="Please input your phone number!"
+          [nzErrorTip]="PhoneNumberTpl"
+        >
+          <nz-input-group
+            class="phone-number"
+            nzSize="large"
+            [nzAddOnBefore]="addOnBeforeTemplate"
+          >
+            <ng-template #addOnBeforeTemplate>
+              <nz-select formControlName="phoneCode" class="phone-select">
+                <nz-option
+                  *ngFor="let item of phoneCodes"
+                  [nzLabel]="item.label"
+                  [nzValue]="item.value"
+                ></nz-option>
+              </nz-select>
+            </ng-template>
+            <nz-input-number
+              nzSize="large"
+              id="phoneNumber"
+              formControlName="phoneNumber"
+              placeholder="Input phone"
+            />
+            <ng-template #PhoneNumberTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input phone number</ng-container
+              >
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('min')"
+                >The minimum length must be at least 9 numbers</ng-container
+              >
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('max')"
+                >The maximum length must be no more than 10 numbers</ng-container
+              >
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="row">
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Client*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="clientErrorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            formControlName="clientId"
+            nzPlaceHolder="Select Client"
+            (nzOnSearch)="onSearchClient($event)"
+          >
+            <ng-container *ngIf="!(isLoading$ | async)">
+              <nz-option
+                *ngFor="let item of clientListOptions"
+                [nzLabel]="item.label"
+                [nzValue]="item.value"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+          </nz-select>
+          <ng-template #clientErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please select clientId</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Gender</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="genderTpl">
+          <nz-select
+            nzSize="large"
+            formControlName="gender"
+            nzPlaceHolder="Please select Gender"
+          >
+            <nz-option
+              *ngFor="let item of genderList"
+              [nzLabel]="item.label"
+              [nzValue]="item.value"
+            ></nz-option>
+          </nz-select>
+          <ng-template #genderTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input your Gender</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div class="row">
+      <!-- form-item -->
+      <nz-form-item>
+        <nz-form-label>Department</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="departmentErrorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzSize="large"
+            nzMode="multiple"
+            formControlName="departmentIds"
+            nzPlaceHolder="Select Department"
+          >
+            <ng-container *ngIf="!(isLoading$ | async)">
+              <nz-option
+                *ngFor="let item of departmentListOptions"
+                [nzLabel]="item.label"
+                [nzValue]="item.value"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+          </nz-select>
+          <ng-template #departmentErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input Department</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item -->
+      <nz-form-item *ngIf="patientDetails">
+        <nz-form-label>PIN*</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="pinTpl">
+          <input
+            nz-input
+            readonly
+            nzSize="large"
+            type="text"
+            formControlName="pin"
+            placeholder="Input PIN"
+          />
+          <ng-template #pinTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input your PIN</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div class="row">
+      <!-- form-item -->
+      <nz-form-item nz-row class="checkbox">
+        <nz-form-control>
+          <label nz-checkbox formControlName="purchaseOrderRequired">
+            <span>Purchase Order Required</span>
+          </label>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div class="row">
+      <!-- form-item -->
+      <nz-form-item
+        @fadeDownInput
+        class="mt-16 animated"
+        *ngIf="formGroup.get('purchaseOrderRequired')?.value"
+      >
+        <nz-form-control nzHasFeedback [nzErrorTip]="purchaseOrderNumberErrorTpl">
+          <nz-input-number
+            nzSize="large"
+            formControlName="purchaseOrderNumber"
+            nzPlaceHolder="Input value"
+          />
+          <ng-template #purchaseOrderNumberErrorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please input value</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </nz-card>
+  <nz-card
+    class="occupational-history"
+    [nzBordered]="false"
+    nzTitle="Occupational history"
+  >
+    <div formArrayName="occupationalHistories">
+      <ng-container *ngFor="let item of getOccupationalHistories.controls; let i = index">
+        <nz-form-item
+          class="occupational-history-item"
+          [formGroup]="getOccupationalHistoryFormGroup(i)"
+        >
+          <nz-form-label class="history-label"
+            >Occupational History {{ i + 1 }}
+          </nz-form-label>
+          <div
+            (click)="handleAddHistory(i)"
+            *ngIf="!i && !getIsClinician"
+            class="add-btn"
+          >
+            +Add
+          </div>
+          <span
+            nz-icon
+            nzType="delete"
+            *ngIf="getOccupationalHistories.length > 1 && i && !getIsClinician"
+            (click)="handleDeleteHistory(i)"
+            nzTheme="outline"
+          ></span>
+          <nz-form-control nzHasFeedback [nzErrorTip]="historyTmpl">
+            <input
+              nzSize="large"
+              type="text"
+              nz-input
+              formControlName="occupationalHistory"
+              [placeholder]="'Input Occupational History ' + (i + 1)"
+            />
+            <ng-template #historyTmpl let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input Occupational History {{ i + 1 }}</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+    </div>
+  </nz-card>
+
+  <nz-card class="job-title-card" [nzBordered]="false" nzTitle="Job title">
+    <div class="jobs-wrapper" formArrayName="patientJobs">
+      <div
+        class="job-content-item"
+        [formGroup]="getJobFormGroup(groupIndex)"
+        *ngFor="let item of getJobsFormArray.controls; let groupIndex = index"
+      >
+        <div
+          class="row"
+          nz-tooltip
+          [nzTooltipTitle]="
+            getJobFormGroup(groupIndex).get('title')?.disabled
+              ? 'The &#34;N/A&#34; option indicates that you either do not have a specific job title or prefer not to disclose it at this time. The system has temporarily disabled the job title-related fields. If you wish to provide your job title, pull the toggle button above'
+              : null
+          "
+        >
+          <div class="job-wrapper">
+            <div class="row-job-content">
+              <!-- form-item -->
+              <nz-form-item class="job-title">
+                <nz-form-label class="job-title-label"
+                  ><nz-switch
+                    (ngModelChange)="
+                      changeSwitchPatientJob($event, getJobFormGroup(groupIndex))
+                    "
+                    class="not-available-switch"
+                    formControlName="notAvailable"
+                    nzCheckedChildren="N/A"
+                    nzUnCheckedChildren="N/A"
+                  ></nz-switch
+                  >Job title {{ groupIndex + 1 }}*
+                </nz-form-label>
+                <div
+                  (click)="handleAddJob(groupIndex)"
+                  *ngIf="!getIsClinician"
+                  class="add-btn"
+                >
+                  +Add
+                </div>
+                <nz-form-control [nzErrorTip]="jobTitleTmpl">
+                  <input
+                    class="disable-mode"
+                    nzSize="large"
+                    type="text"
+                    formControlName="title"
+                    nz-input
+                    placeholder="Input Job Title {{ groupIndex + 1 }}"
+                  />
+
+                  <ng-template #jobTitleTmpl let-control>
+                    <ng-container *ngIf="control.hasError('required')"
+                      >Please input Job Title {{ groupIndex + 1 }}</ng-container
+                    >
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+
+              <!-- form-item -->
+              <nz-form-item class="start-date">
+                <nz-form-label>Start date*</nz-form-label>
+                <nz-form-control [nzErrorTip]="dobTpl">
+                  <nz-date-picker
+                    formControlName="startDate"
+                    nzFormat="d MMM YYYY"
+                    nzSize="large"
+                  ></nz-date-picker>
+                  <ng-template #dobTpl let-control>
+                    <ng-container
+                      *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                      >Please input Start date</ng-container
+                    >
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- files-list -->
+            <ul class="files-list" *ngIf="getJobFiles(groupIndex)?.length">
+              <ng-container
+                *ngFor="let file of getJobFiles(groupIndex); let fileIndex = index"
+              >
+                <li *ngIf="file.name">
+                  <span>{{ file.name }}</span>
+                  <span>
+                    <ng-container *ngIf="file?.id; else localDeleteTmpl">
+                      <ng-container
+                        [ngTemplateOutlet]="menu"
+                        [ngTemplateOutletContext]="{ file: file }"
+                      ></ng-container>
+                    </ng-container>
+
+                    <ng-template #localDeleteTmpl>
+                      <span
+                        nz-icon
+                        nzType="delete"
+                        (click)="handleDeleteLocalFile(groupIndex, fileIndex)"
+                        nzTheme="outline"
+                      ></span>
+                    </ng-template>
+                  </span>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+          <ng-template #menu let-file="file">
+            <a nz-dropdown class="table-menu" nzTrigger="click" [nzDropdownMenu]="menu">
+              <span nz-icon nzType="more" nzTheme="outline"></span>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable *ngIf="!getIsClinician">
+                <!-- <li nz-menu-item (click)="downloadDocument(file)">Download</li> -->
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="Are you sure to delete this document?"
+                  (nzOnConfirm)="handleDeleteJobDocument(file.id)"
+                >
+                  <li nz-menu-item nzDanger>Delete</li>
+                </a>
+              </ul>
+            </nz-dropdown-menu>
+          </ng-template>
+        </div>
+        <!-- form-item -->
+        <nz-form-item class="job-description">
+          <nz-form-label>Job Description {{ groupIndex + 1 }} </nz-form-label>
+          <span
+            *ngIf="!getJobFormGroup(groupIndex).get('title')?.disabled && !getIsClinician"
+            nz-icon
+            nzType="paper-clip"
+            class="paper-clip"
+            nzTheme="outline"
+            nz-tooltip
+            nzTooltipPlacement="topRight"
+            [nzTooltipArrowPointAtCenter]="true"
+            nzTooltipTitle="Add a file for this work"
+          >
+            <label for="file-label{{ groupIndex }}">
+              <input
+                #fileInput
+                type="file"
+                [accept]="getFilesTypesForInputAccept"
+                id="file-label{{ groupIndex }}"
+                (change)="handleUpload($event, groupIndex)"
+              />
+            </label>
+          </span>
+          <span
+            nz-icon
+            nzType="delete"
+            *ngIf="getJobsFormArray.length > 1 && groupIndex && !getIsClinician"
+            (click)="handleDeleteJob(groupIndex)"
+            nzTheme="outline"
+          ></span>
+          <nz-form-control nzHasFeedback [nzErrorTip]="jobDescriptionTpl">
+            <textarea
+              class="disable-mode"
+              nzSize="large"
+              nz-input
+              [nzAutosize]="{ maxRows: 4, minRows: 2 }"
+              formControlName="description"
+              [placeholder]="'Input Job Description ' + (groupIndex + 1)"
+            ></textarea>
+            <ng-template #jobDescriptionTpl let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Job Description {{ groupIndex + 1 }}</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </nz-card>
+</form>
+
+<div class="page-bottom-buttons">
+  <button nz-button nzType="default" (click)="cancel()" class="default" nzSize="large">
+    Cancel
+  </button>
+  <nz-form-item>
+    <nz-form-control *ngxPermissionsOnly="patientUpdatePermission">
+      <button nz-button [nzLoading]="isLoading$ | async" nzType="primary" nzSize="large">
+        Save
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</div>

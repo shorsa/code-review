@@ -1,0 +1,57 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.ant-layout-header {
+  @include flex-container(row, center, space-between);
+
+  background-color: #ffffff;
+  padding: 0px 50px 0 27px;
+
+  @include media-sm {
+    padding: 0 16px;
+  }
+
+  .ant-dropdown-trigger {
+    margin-left: 18px;
+    color: $gray-color;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    .anticon-down {
+      font-size: 10px;
+    }
+  }
+
+  .ant-avatar {
+    margin-left: 28px;
+
+    @include media-sm {
+      display: none;
+    }
+  }
+
+  .anticon-bell {
+    font-size: 20px;
+  }
+
+  .header-right-content {
+    @include media-sm {
+      padding-top: 10px;
+    }
+  }
+
+  .logo {
+    letter-spacing: 0.04em;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 60px;
+    cursor: pointer;
+
+    @include media-sm {
+      font-size: 35px;
+    }
+  }
+}

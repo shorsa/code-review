@@ -1,0 +1,52 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.user-info-page {
+  .ant-page-header {
+    height: 90vh;
+
+    form {
+      @include flex-container(row, flex-start);
+      gap: 16px;
+
+      @include media-md {
+        flex-direction: column;
+      }
+
+      & > * {
+        width: 50%;
+
+        @include media-md {
+          width: 100%;
+        }
+      }
+    }
+
+    .btn-wrapper {
+      position: absolute;
+      bottom: 0;
+      right: 32px;
+      @include flex-container(row, CENTER, FLEX-END);
+      gap: 8px;
+    }
+  }
+}
+.permission-wrapper {
+  padding: 16px 0;
+  overflow: auto;
+  max-height: 50vh;
+}
+
+.permission-list {
+  & > li {
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    padding: 16px;
+    font-size: 12px;
+    border-bottom: 1px solid $input-border-color;
+  }
+  & > :first-child {
+    font-size: 16px;
+    background-color: $light-blue-color;
+  }
+}

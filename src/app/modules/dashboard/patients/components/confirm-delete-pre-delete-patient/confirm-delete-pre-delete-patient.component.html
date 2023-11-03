@@ -1,0 +1,24 @@
+<h3>Are you sure to delete these records assosiated with the patient?</h3>
+
+<p>This action is irreversible, and there will be no way to recover the deleted data.</p>
+
+<div class="btn-wrapper">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handleCancel()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="deletePatient()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Delete
+  </button>
+</div>

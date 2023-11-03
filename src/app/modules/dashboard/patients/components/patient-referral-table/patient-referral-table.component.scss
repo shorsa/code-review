@@ -1,0 +1,15 @@
+@import "src/assets/scss/utils/mixins.scss";
+
+.patient-referral-table {
+  .ant-page-header-heading-extra {
+    @include media-md {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+  }
+  .state {
+    @include media-md {
+      margin-left: 0;
+    }
+  }
+}

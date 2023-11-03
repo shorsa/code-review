@@ -1,0 +1,38 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.invoicing-management {
+  padding: 16px;
+
+  .ant-form {
+    margin-bottom: 16px;
+    @include flex-container(row, flex-start);
+    gap: 16px;
+
+    & > * {
+      width: calc(50% - 8px);
+    }
+
+    .card-footer-wrapper {
+      margin-top: 24px;
+      @include flex-container(row, center, flex-end);
+    }
+
+    .ant-input-number {
+      background-color: transparent;
+      color: $text-color !important;
+      font-weight: 600;
+    }
+  }
+
+  .page-bottom-buttons {
+    width: 100%;
+    margin-top: 16px;
+    @include flex-container(row, center, flex-end);
+    gap: 16px;
+
+    button {
+      width: 120px;
+    }
+  }
+}

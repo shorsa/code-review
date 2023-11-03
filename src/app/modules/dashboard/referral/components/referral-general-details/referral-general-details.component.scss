@@ -1,0 +1,35 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+:host {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10fr 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.referral-general-details-wrapper {
+  @include flex-container(row, flex-start);
+  gap: 16px;
+  flex-wrap: wrap;
+  height: fit-content;
+
+  & > .client-details,
+  & > .patient-details,
+  & > .referral-details,
+  & > .product-details {
+    // max-width: 368px;
+    width: calc(100% / 3 - 16px);
+  }
+
+  .list {
+    & li > :first-child {
+      font-weight: 500;
+    }
+    & li > :last-child {
+      text-align: right;
+    }
+  }
+}

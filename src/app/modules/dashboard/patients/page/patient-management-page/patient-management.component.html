@@ -1,0 +1,62 @@
+<div class="page-header white">
+  <h1>
+    <span
+      nz-icon
+      nzType="arrow-left"
+      nzTheme="outline"
+      class="back"
+      (click)="navigateToBack()"
+    ></span
+    >Patient info
+  </h1>
+  <nz-tabset class="white-tabs">
+    <nz-tab nzTitle="Personal Details">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-patient-personal-details [patientId]="patientId" />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab
+      nzTitle="Referrals Details"
+      [nzForceRender]="true"
+      [nzDisabled]="!patientId"
+    >
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-patient-referral-table
+            [patientId]="patientId!"
+            *ngIf="patientId"
+            [departmentIds]="departmentsIds"
+            [clientId]="clientId"
+          />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Documents" [nzDisabled]="!patientId">
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-patient-documents [patientId]="patientId!" *ngIf="patientId" />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <ng-container *ngIf="!getClientAdminOrSuperUser">
+      <nz-tab nzTitle="Notes" [nzDisabled]="!patientId">
+        <ng-template nz-tab>
+          <div class="tab-content">
+            <app-patient-notes [patientId]="patientId!" *ngIf="patientId" />
+          </div>
+        </ng-template>
+      </nz-tab>
+    </ng-container>
+    <ng-container *ngIf="!getClientAdminOrSuperUser">
+      <nz-tab nzTitle="Audit Log" [nzDisabled]="!patientId" *ngIf="!getIsClinician">
+        <ng-template nz-tab>
+          <div class="tab-content">
+            <app-patient-audit-logs [patientId]="patientId!" *ngIf="patientId" />
+          </div>
+        </ng-template>
+      </nz-tab>
+    </ng-container>
+  </nz-tabset>
+</div>

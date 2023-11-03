@@ -1,0 +1,39 @@
+<!-- form-item -->
+<nz-form-item>
+  <nz-form-label>Room name*</nz-form-label>
+  <nz-form-control nzHasFeedback [nzErrorTip]="productNameTmpl">
+    <input
+      [formControl]="nameControl"
+      nzSize="large"
+      type="text"
+      nz-input
+      placeholder="Input Text"
+    />
+    <ng-template #productNameTmpl let-control>
+      <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+        >Please input Room name</ng-container
+      >
+    </ng-template>
+  </nz-form-control>
+</nz-form-item>
+
+<div class="btn-wrapper">
+  <button
+    (click)="handleCancel()"
+    nz-button
+    nzType="default"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    (click)="submitForm()"
+    [nzLoading]="isLoading$ | async"
+    nz-button
+    nzType="primary"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

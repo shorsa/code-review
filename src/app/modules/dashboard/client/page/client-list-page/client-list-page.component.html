@@ -1,0 +1,36 @@
+<div class="clients-page">
+  <nz-page-header class="with-actions">
+    <nz-page-header-title>Client</nz-page-header-title>
+    <nz-page-header-extra>
+      <nz-space>
+        <app-search-input (searchTextChange)="handleSearchByText($event)" />
+      </nz-space>
+      <nz-space *ngIf="getIsCanDeactivateOrReactivate">
+        <nz-segmented
+          (nzValueChange)="changeUsersStateFilter($event)"
+          class="state deactivate"
+          [nzOptions]="activeFilterOptions"
+        ></nz-segmented>
+      </nz-space>
+
+      <nz-space>
+        <ng-container *ngxPermissionsOnly="permissionToCreate">
+          <button
+            (click)="navigateAddNewClient()"
+            class="add"
+            nzSize="large"
+            *nzSpaceItem
+            nzType="primary"
+            nz-button
+          >
+            <span nz-icon nzType="plus" nzTheme="outline"></span>
+            Add new
+          </button>
+        </ng-container>
+      </nz-space>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <app-clients-table />
+    </nz-page-header-content>
+  </nz-page-header>
+</div>

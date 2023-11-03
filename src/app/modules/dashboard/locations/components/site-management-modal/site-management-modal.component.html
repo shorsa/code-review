@@ -1,0 +1,111 @@
+<div class="site-management-wrapper">
+  <div class="row">
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Site name*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="productNameTmpl">
+        <input
+          [formControl]="nameControl"
+          nzSize="large"
+          type="text"
+          nz-input
+          placeholder="Input Text"
+        />
+        <ng-template #productNameTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input Site name</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <button nz-button nzSize="large" nzType="primary" class="upload-btn">
+      <label for="file-label">
+        <input
+          #fileInput
+          type="file"
+          [accept]="getFilesTypesForInputAccept"
+          id="file-label"
+          (change)="handleUpload($event)"
+        />
+        <span nz-icon nzType="upload" class="upload-btn-icon"></span>
+        <span class="upload-btn-text">Upload</span>
+      </label>
+    </button>
+  </div>
+
+  <!-- <nz-empty *ngIf="!fileList?.length || !filesToUpload.length"></nz-empty> -->
+
+  <div class="upload-files-wrapper">
+    <ul class="upload-files-list">
+      <li *ngFor="let item of filesToUpload">
+        <span>
+          {{ item.fileName }}
+        </span>
+        <span
+          nz-icon
+          nzType="delete"
+          (click)="deleteUploadFile(item)"
+          nzTheme="outline"
+        ></span>
+      </li>
+    </ul>
+  </div>
+
+  <ul class="files-list" *ngIf="fileList?.length">
+    <nz-spin nzSimple class="global-loader" *ngIf="isLoading$ | async"></nz-spin>
+    <li *ngFor="let file of fileList">
+      <span>{{ file.name }}</span>
+      <ng-container *ngIf="!file.id">
+        <ng-template #indicatorTemplate
+          ><span nz-icon nzType="loading"></span
+        ></ng-template>
+        <nz-spin nzSimple [nzIndicator]="indicatorTemplate"></nz-spin>
+      </ng-container>
+      <span>
+        <ng-container
+          [ngTemplateOutlet]="menu"
+          [ngTemplateOutletContext]="{ file: file }"
+        ></ng-container>
+      </span>
+    </li>
+  </ul>
+
+  <ng-template #menu let-file="file">
+    <a nz-dropdown class="table-menu" nzTrigger="click" [nzDropdownMenu]="menu">
+      <span nz-icon nzType="more" nzTheme="outline"></span>
+    </a>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li nz-menu-item (click)="downloadDocument(file)">Download</li>
+        <a
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure to delete this document?"
+          (nzOnConfirm)="deleteDocument(file.id)"
+        >
+          <li nz-menu-item nzDanger>Delete</li>
+        </a>
+      </ul>
+    </nz-dropdown-menu>
+  </ng-template>
+</div>
+<div class="btn-wrapper">
+  <button
+    (click)="handleCancel()"
+    nz-button
+    nzType="default"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    (click)="submitForm()"
+    [nzLoading]="isLoading$ | async"
+    nz-button
+    nzType="primary"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>

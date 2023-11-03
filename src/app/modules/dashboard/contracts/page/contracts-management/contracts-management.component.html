@@ -1,0 +1,37 @@
+<div class="page-header white">
+  <h1>Contract - {{ contractId ? 'Details' : 'Add new' }}</h1>
+  <nz-tabset
+    class="white-tabs"
+    [nzSelectedIndex]="currentTabIndex"
+    (nzSelectedIndexChange)="currentTabIndex = $event"
+  >
+    <nz-tab nzTitle="General info" [nzDisabled]="currentTabIndex !== 0">
+      <div class="tab-content">
+        <app-contracts-general-info
+          (handleNextTab)="nexTab()"
+          [contractId]="contractId"
+        />
+      </div>
+    </nz-tab>
+    <nz-tab nzTitle="Product types" [nzDisabled]="currentTabIndex !== 1">
+      <div class="tab-content">
+        <app-contract-product-types
+          *ngIf="contractDetails"
+          (handleNextTab)="nexTab()"
+          (handlePrevTab)="prevTab()"
+          [contractId]="contractId"
+        />
+      </div>
+    </nz-tab>
+    <nz-tab nzTitle="Clinicians" [nzDisabled]="currentTabIndex !== 2">
+      <div class="tab-content">
+        <app-contract-clinicians
+          *ngIf="contractDetails"
+          (handleNextTab)="nexTab()"
+          (handlePrevTab)="prevTab()"
+          [contractId]="contractId"
+        />
+      </div>
+    </nz-tab>
+  </nz-tabset>
+</div>

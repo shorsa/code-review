@@ -1,0 +1,18 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+:host {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10fr 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.contract-clinicians-wrapper {
+  .header-actions {
+    @include flex-container;
+    gap: 16px;
+  }
+}

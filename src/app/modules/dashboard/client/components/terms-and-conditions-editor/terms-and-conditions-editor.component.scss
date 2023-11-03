@@ -1,0 +1,17 @@
+@import "src/assets/scss/utils/mixins.scss";
+
+.terms-and-conditions {
+  margin-bottom: 16px;
+}
+.page-buttons {
+  // position: absolute;
+  // bottom: 0;
+  // right: 32px !important;
+
+  @include flex-container(row, center, flex-end);
+  gap: 8px;
+}
+
+.error-message {
+  text-align: center;
+}

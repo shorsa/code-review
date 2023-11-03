@@ -1,0 +1,45 @@
+<nz-header>
+  <div class="logo" (click)="navigateToHome()">Horizon</div>
+
+  <div class="header-right-content">
+    <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="notifications">
+      <nz-badge [nzCount]="15" [nzOverflowCount]="10">
+        <span nz-icon nzType="bell" nzTheme="fill"></span>
+      </nz-badge>
+    </a>
+
+    <nz-dropdown-menu #notifications="nzDropdownMenu">
+      <ul nz-menu nzSelectable class="notification-list">
+        <li class="header-list">
+          <span class="link">Clear all</span>
+        </li>
+        <li
+          nz-menu-item
+          *ngFor="let item of (notificationData$ | async)?.notifications"
+          (click)="redirect(item)"
+        >
+          <div class="content">
+            <div class="title">{{ item.message }}</div>
+            <span>{{ item.date | customDate }}</span>
+          </div>
+          <span nz-icon nzType="close" nzTheme="outline"></span>
+        </li>
+      </ul>
+    </nz-dropdown-menu>
+
+    <nz-avatar [nzSize]="48" nzIcon="user"></nz-avatar>
+
+    <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+      {{ userName }}
+      <span nz-icon nzType="down"></span>
+    </a>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li nz-menu-item>1st menu item</li>
+        <li nz-menu-item>2nd menu item</li>
+        <li nz-menu-item>3rd menu item</li>
+        <li nz-menu-item nzDanger (click)="logOut()">Log out</li>
+      </ul>
+    </nz-dropdown-menu>
+  </div>
+</nz-header>

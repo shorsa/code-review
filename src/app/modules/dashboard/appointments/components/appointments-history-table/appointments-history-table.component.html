@@ -1,0 +1,38 @@
+<div class="audit-logs-wrapper">
+  <app-search-input (searchTextChange)="handleSearchByText($event)" />
+
+  <nz-table
+    nzShowSizeChanger
+    [nzPageSizeOptions]="[10, 20, 50]"
+    [nzLoading]="isLoading$ | async"
+    [nzData]="auditLogsData"
+    [nzFrontPagination]="false"
+    [nzTotal]="totalCount"
+    zTableLayout="fixed"
+    [nzScroll]="{ x: '700px' }"
+    (nzQueryParams)="onQueryParamsChange($event)"
+  >
+    <thead>
+      <tr>
+        <th nzColumnKey="Date" [nzSortFn]="true">Appointment time</th>
+        <th nzColumnKey="User" [nzSortFn]="true">Clinician</th>
+        <th nzColumnKey="AddedBy" [nzSortFn]="true">Status</th>
+        <th nzColumnKey="AddedBy" [nzSortFn]="true">Billing option</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of auditLogsData">
+        <td>{{ data?.date | customDate : 'dateTime' }}</td>
+        <td>{{ data.userName }}</td>
+        <td appAppointmentStatus [status]="data.status"></td>
+        <td>{{ data.billingAction | billingOption }}</td>
+
+        <td class="ellipsis">
+          <span nz-tooltip [nzTooltipTitle]="data.message">
+            {{ data.message }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

@@ -1,0 +1,28 @@
+<nz-result
+  [nzStatus]="confirmationState!"
+  [nzTitle]="
+    confirmationState === 'success'
+      ? 'Email Address Updated Successfully'
+      : confirmationState === 'info'
+      ? 'Expect Email Address Change in Progress'
+      : confirmationState === 'error'
+      ? 'Email Address Change Error'
+      : 'Waiting'
+  "
+  [nzSubTitle]="
+    confirmationState === 'success'
+      ? 'The email address associated with your account has been successfully updated.'
+      : ''
+  "
+>
+  <div nz-result-extra>
+    <button
+      *ngIf="confirmationState === 'success'"
+      nz-button
+      nzType="primary"
+      (click)="navigateToSignIn()"
+    >
+      Go to Sign In
+    </button>
+  </div>
+</nz-result>

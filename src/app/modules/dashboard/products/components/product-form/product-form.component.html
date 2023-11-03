@@ -1,0 +1,130 @@
+<form nz-form class="personal-details p0" [formGroup]="formGroup" nzLayout="vertical">
+  <div class="row">
+    <!-- form-item -->
+    <nz-form-item *ngIf="productId">
+      <nz-form-label>Product Id</nz-form-label>
+      <nz-form-control nzHasFeedback>
+        <input formControlName="customProductId" nzSize="large" type="text" nz-input />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Product Name*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="productNameTmpl">
+        <input
+          formControlName="name"
+          nzSize="large"
+          type="text"
+          nz-input
+          placeholder="Input Product Name"
+        />
+        <ng-template #productNameTmpl let-control>
+          <ng-container *ngIf="_wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input your Product Name</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <div class="row">
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label nzFor="defaultPrice">Default Price (£)*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="priceTmpl">
+        <nz-input-number
+          [nzMin]="0"
+          nzSize="large"
+          id="defaultPrice"
+          formControlName="defaultPrice"
+          [nzFormatter]="parserPoundSterling"
+          nzPlaceHolder="Input Default Price"
+        />
+        <ng-template #priceTmpl let-control>
+          <ng-container *ngIf="_wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input your Default Price</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Referral form*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="referralFormErrorTmpl">
+        <nz-select
+          nzAllowClear
+          nzShowSearch
+          nzSize="large"
+          formControlName="referralType"
+          nzPlaceHolder="Select Referral form"
+        >
+          <ng-container>
+            <nz-option
+              *ngFor="let item of productReferralOptions"
+              [nzLabel]="item.label"
+              [nzValue]="item.value"
+            ></nz-option>
+          </ng-container>
+        </nz-select>
+        <ng-template #referralFormErrorTmpl let-control>
+          <ng-container *ngIf="_wasAttemptToSubmitForm && control.hasError('required')"
+            >Please select client</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <!-- form-item-->
+  <nz-form-item>
+    <nz-form-label>Description</nz-form-label>
+    <nz-form-control nzHasFeedback [nzErrorTip]="descriptionTmpl">
+      <nz-textarea-count [nzMaxCharacterCount]="2000">
+        <textarea
+          formControlName="description"
+          nz-input
+          rows="3"
+          placeholder="Input Description"
+        ></textarea>
+      </nz-textarea-count>
+      <ng-template #descriptionTmpl let-control>
+        <ng-container *ngIf="_wasAttemptToSubmitForm && control.hasError('required')"
+          >Please input Description</ng-container
+        >
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="editor border-outside">
+    <label>Template Heading</label>
+    <ngx-editor-menu class="editor-menu" [editor]="editor!" [toolbar]="toolbar">
+    </ngx-editor-menu>
+    <ngx-editor
+      outputFormat="html"
+      [ariaRowCount]="4"
+      placeholder="Input text"
+      [editor]="editor!"
+      formControlName="templateHeading"
+    >
+    </ngx-editor>
+  </div>
+
+  <nz-form-item nz-row class="checkbox">
+    <nz-form-control>
+      <label nz-checkbox formControlName="isAttendanceRequired">
+        <span>Attendance is not required</span>
+      </label>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item nz-row class="checkbox">
+    <nz-form-control>
+      <label nz-checkbox formControlName="isHealthSurveillance">
+        <span>Health Surveillance</span>
+      </label>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="error-message">
+    {{ errorMessage }}
+  </div>
+</form>

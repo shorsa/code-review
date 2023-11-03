@@ -1,0 +1,58 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+.permission-setting {
+  padding-top: 16px;
+  max-height: 73.3vh;
+
+  .permission-search {
+    max-width: 341px;
+    margin-bottom: 24px;
+    border-radius: 8px;
+  }
+
+  .permission-wrapper {
+    padding-bottom: 26px;
+
+    .permission-list {
+      background: #fff;
+      .title {
+        .checkbox-wrapper {
+          width: 170px;
+          border-left: 1px solid $input-border-color;
+          flex-shrink: 0;
+          @include flex-container(row, center, center);
+
+          @include media-md {
+            width: 100px;
+          }
+
+          @include media-sm {
+            width: 50px;
+          }
+        }
+      }
+      .checkbox-wrapper {
+        width: 170px;
+        flex-shrink: 0;
+        @include flex-container(row, center, center);
+
+        @include media-md {
+          width: 100px;
+        }
+
+        @include media-sm {
+          width: 50px;
+        }
+      }
+    }
+  }
+}
+
+.page-buttons {
+  @include flex-container(row, center, flex-end);
+  gap: 8px;
+  padding: 32px 0;
+  button {
+    width: 106px;
+  }
+}

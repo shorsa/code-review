@@ -1,0 +1,35 @@
+<form nz-form [formGroup]="formGroup" (ngSubmit)="handleSubmit()" nzLayout="vertical">
+  <nz-form-item>
+    <nz-form-label>Note*</nz-form-label>
+    <nz-form-control nzHasFeedback [nzErrorTip]="noteTmpl">
+      <textarea
+        formControlName="note"
+        nz-input
+        rows="4"
+        placeholder="Input note"
+      ></textarea>
+      <ng-template #noteTmpl let-control>
+        <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+          >Please input note</ng-container
+        >
+        <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('minlength')"
+          >Please input more</ng-container
+        >
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <div class="btn-wrapper">
+    <button
+      nz-button
+      (click)="handleCancel()"
+      class="default"
+      type="button"
+      nzSize="large"
+    >
+      Cancel
+    </button>
+    <button nz-button [nzLoading]="isLoading$ | async" nzType="primary" nzSize="large">
+      Save
+    </button>
+  </div>
+</form>

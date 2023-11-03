@@ -1,0 +1,166 @@
+<div class="page-header">
+  <div class="rooms-page">
+    <nz-page-header class="with-actions">
+      <nz-page-header-title>Contracts</nz-page-header-title>
+      <nz-page-header-extra>
+        <!-- <div class="header-actions"> -->
+        <nz-space>
+          <app-search-input (searchTextChange)="handleSearchByText($event)" />
+        </nz-space>
+        <nz-space *ngIf="selectedContractsIds.length">
+          <button (click)="handleDownloadAll()" nz-button nzType="primary" nzSize="large">
+            <span nz-icon nzType="download"></span>
+          </button>
+        </nz-space>
+        <nz-space *ngIf="getIsCanDeactivateOrReactivate">
+          <nz-segmented
+            (nzValueChange)="changeActiveFilter($event)"
+            class="state deactivate"
+            [nzOptions]="activeFilterOptions"
+          ></nz-segmented>
+        </nz-space>
+        <nz-space>
+          <button
+            class="add"
+            nzSize="large"
+            (click)="navigateToAddContract()"
+            *nzSpaceItem
+            nzType="primary"
+            nz-button
+          >
+            Create new
+          </button>
+        </nz-space>
+        <!-- </div> -->
+      </nz-page-header-extra>
+      <nz-page-header-content>
+        <nz-table
+          nzShowSizeChanger
+          [nzPageSizeOptions]="[10, 20, 50]"
+          [nzLoading]="isLoading$ | async"
+          [nzData]="contractsData"
+          [nzFrontPagination]="false"
+          [nzTotal]="totalCount"
+          zTableLayout="fixed"
+          [nzScroll]="{ x: '700px' }"
+          (nzQueryParams)="onQueryParamsChange($event)"
+        >
+          <thead>
+            <tr>
+              <th
+                [width]="50"
+                [nzChecked]="checked && !!contractsData.length"
+                [nzIndeterminate]="indeterminateCheckbox"
+                (nzCheckedChange)="onAllChecked($event)"
+              ></th>
+              <th nzColumnKey="ContractId" [nzSortFn]="true">Contract Id</th>
+              <th nzColumnKey="ContractDate" [nzSortFn]="true">Contract Date</th>
+              <th nzColumnKey="ClientId" [nzSortFn]="true">Client Code</th>
+              <th nzColumnKey="ClientName" [nzSortFn]="true">Client</th>
+              <th
+                nzColumnKey="InvoiceType"
+                [nzSortFn]="true"
+                [nzFilterMultiple]="true"
+                [nzFilterFn]="true"
+                [nzFilters]="invoiceListOptions"
+              >
+                Invoice type
+              </th>
+              <th
+                nzColumnKey="Status"
+                nzWidth="90px"
+                [nzSortFn]="true"
+                [nzFilterMultiple]="true"
+                [nzFilterFn]="true"
+                [nzFilters]="statusFilterList"
+              >
+                Status
+              </th>
+              <th nzColumnKey="actions" nzWidth="76px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of contractsData">
+              <td
+                [nzChecked]="hasInvoice(data)"
+                (nzCheckedChange)="onItemCheckedChange(data, $event)"
+              ></td>
+              <td>
+                {{ data?.customId }}
+              </td>
+              <td>
+                {{ data?.contractDate }}
+              </td>
+              <td>
+                {{ data?.clientCode }}
+              </td>
+              <td>
+                {{ data?.clientName }}
+              </td>
+              <td>
+                {{ data?.invoiceType | invoiceType }}
+              </td>
+              <td>
+                <nz-tag [nzColor]="data.isClosed | openCloseStatusColor">{{
+                  data.isClosed ? 'Closed' : 'Active'
+                }}</nz-tag>
+              </td>
+              <td>
+                <div class="action">
+                  <ng-container
+                    [ngTemplateOutlet]="menu"
+                    [ngTemplateOutletContext]="{ data: data }"
+                  ></ng-container>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+        <ng-template #menu let-data="data">
+          <a
+            nz-dropdown
+            class="table-menu"
+            nzTrigger="click"
+            [nzClickHide]="true"
+            [nzDropdownMenu]="menu"
+          >
+            <span nz-icon nzType="more" nzTheme="outline"></span>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <ng-container *ngIf="data.isActive; else reactivateTmpl">
+                <li nz-menu-item (click)="downloadContract(data)">Download</li>
+                <li nz-menu-item (click)="navigateToEditContract(data.id)">Edit</li>
+                <a *ngIf="!data.isClosed" (click)="onMarkAsClosed(data.id)">
+                  <li nz-menu-item>Mark As Closed</li>
+                </a>
+                <a *ngIf="data.isClosed" (click)="onMarkAsOpen(data.id)">
+                  <li nz-menu-item>Mark As Opened</li>
+                </a>
+                <a
+                  *ngIf="data.isClosed"
+                  nz-popconfirm
+                  nzPopconfirmTitle="Are you sure to Deactivate this contract?"
+                  (nzOnConfirm)="onDeactivate(data.id)"
+                >
+                  <li nz-menu-item nzDanger>Deactivate</li>
+                </a>
+              </ng-container>
+
+              <ng-template #reactivateTmpl>
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="Are you sure to Reactivate this contract?"
+                  (nzOnConfirm)="onReactivate(data.id)"
+                >
+                  <li nz-menu-item>Reactivate</li>
+                </a>
+              </ng-template>
+            </ul>
+          </nz-dropdown-menu>
+        </ng-template>
+      </nz-page-header-content>
+    </nz-page-header>
+  </div>
+</div>

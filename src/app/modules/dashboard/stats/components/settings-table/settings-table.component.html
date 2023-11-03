@@ -1,0 +1,118 @@
+<div class="settings-page">
+  <nz-page-header class="with-actions p0">
+    <nz-page-header-title>Settings</nz-page-header-title>
+    <nz-page-header-extra>
+      <!-- <div class="header-actions"> -->
+      <nz-space>
+        <app-search-input (searchTextChange)="handleSearchByText($event)" />
+      </nz-space>
+      <nz-space>
+        <nz-segmented
+          (nzValueChange)="changeActiveFilter($event)"
+          class="state deactivate"
+          [nzOptions]="activeFilterOptions"
+        ></nz-segmented>
+      </nz-space>
+      <nz-space>
+        <button
+          class="add"
+          nzSize="large"
+          (click)="handleAddNew()"
+          *nzSpaceItem
+          nzType="primary"
+          nz-button
+        >
+          Create new
+        </button>
+      </nz-space>
+      <!-- </div> -->
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <nz-table
+        nzShowSizeChanger
+        [nzPageSizeOptions]="pageSizeOptions"
+        [nzLoading]="isLoading$ | async"
+        [nzData]="settingsData"
+        [nzFrontPagination]="false"
+        [nzTotal]="totalCount"
+        zTableLayout="fixed"
+        [nzScroll]="{ x: '700px' }"
+        (nzQueryParams)="onQueryParamsChange($event)"
+      >
+        <thead>
+          <tr>
+            <th nzColumnKey="Name" [nzSortFn]="true">Name</th>
+            <th nzColumnKey="actions" nzWidth="76px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of settingsData">
+            <td>
+              {{ data?.name }}
+            </td>
+            <td>
+              <div class="action">
+                <ng-container
+                  [ngTemplateOutlet]="menu"
+                  [ngTemplateOutletContext]="{ data: data }"
+                ></ng-container>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+      <ng-template #menu let-data="data">
+        <a
+          nz-dropdown
+          class="table-menu"
+          nzTrigger="click"
+          [nzClickHide]="true"
+          [nzDropdownMenu]="menu"
+        >
+          <span nz-icon nzType="more" nzTheme="outline"></span>
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <ng-container *ngIf="data.isActive; else reactivateTmpl">
+              <li nz-menu-item (click)="handleEdit(data.id)">Edit</li>
+              <a
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure to Deactivate this location?"
+                (nzOnConfirm)="handleDeactivate(data.id)"
+              >
+                <li nz-menu-item nzDanger>Deactivate</li>
+              </a>
+            </ng-container>
+
+            <ng-template #reactivateTmpl>
+              <a
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure to Reactivate this location?"
+                (nzOnConfirm)="handleReactivate(data.id)"
+              >
+                <li nz-menu-item>Reactivate</li>
+              </a>
+            </ng-template>
+          </ul>
+        </nz-dropdown-menu>
+      </ng-template>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>
+
+<!-- <app-add-new-client-user-modal
+  *ngIf="addNewModalState"
+  title="Add Client User"
+  width="484px"
+  [(isVisible)]="addNewModalState"
+/>
+
+<app-add-new-client-user-modal
+  *ngIf="updateModalState"
+  title="Edit Client User"
+  width="484px"
+  (handleClose)="handleCloseEditModal()"
+  [editClientUserId]="editClientUserId"
+  [(isVisible)]="updateModalState"
+/> -->

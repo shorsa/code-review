@@ -1,0 +1,14 @@
+@import "../utils/variables";
+@import "../utils/mixins";
+
+.ant-dropdown-trigger {
+  &.table-menu {
+    width: 24px;
+    height: 24px;
+    @include flex-container(row, center, center);
+    .anticon {
+      color: $text-color;
+      font-size: 20px;
+    }
+  }
+}

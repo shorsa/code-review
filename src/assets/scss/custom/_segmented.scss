@@ -1,0 +1,58 @@
+.ant-segmented {
+  padding: 0;
+  height: 42px;
+  margin-left: 8px;
+  border-radius: $input-border-radius;
+  background-color: transparent;
+
+  &:focus {
+    background-color: transparent !important;
+  }
+  .ant-segmented-group {
+    border-radius: $input-border-radius;
+    border: 1px solid $input-border-color;
+    width: fit-content;
+
+    & > :first-child.ant-segmented-item-selected {
+      border-top-left-radius: $input-border-radius;
+      border-bottom-left-radius: $input-border-radius;
+    }
+    & > :last-child.ant-segmented-item-selected {
+      border-top-right-radius: $input-border-radius;
+      border-bottom-right-radius: $input-border-radius;
+    }
+
+    .ant-segmented-item-selected {
+      background-color: $blue-color;
+      color: #fff;
+    }
+
+    .ant-segmented-item-label {
+      height: 42px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.1px;
+      @include flex-container(row, center, center);
+      min-width: 78px;
+    }
+  }
+
+  &.state {
+    &.deactivate {
+      .ant-segmented-group {
+        & > :last-child.ant-segmented-item-selected {
+          color: $error-color;
+          background-color: #ffd8d8;
+        }
+      }
+    }
+  }
+
+  &.cancellation-fee-type {
+    max-width: 156px;
+    .ant-segmented-item-label {
+      height: 42px;
+    }
+  }
+}

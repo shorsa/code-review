@@ -1,0 +1,27 @@
+@import "src/assets/scss/utils/mixins.scss";
+
+.clinic-details-wrapper {
+  min-height: 75vh;
+  @include flex-container(row, flex-start);
+  flex-wrap: wrap;
+  gap: 16px;
+
+  & > * {
+    width: 100%;
+    max-width: 368px;
+    min-width: 200px;
+  }
+
+  .checkbox-form-item {
+    margin-bottom: 0;
+  }
+
+  & > form {
+    height: 77vh;
+  }
+}
+.page-bottom-buttons {
+  margin-top: 16px;
+  @include flex-container(row, center, flex-end);
+  gap: 8px;
+}

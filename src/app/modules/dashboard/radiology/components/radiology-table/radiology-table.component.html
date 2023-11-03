@@ -1,0 +1,50 @@
+<nz-table
+  nzShowSizeChanger
+  [nzPageSizeOptions]="[10, 20, 50]"
+  [nzLoading]="isLoading$ | async"
+  [nzData]="radiologyData"
+  [nzFrontPagination]="false"
+  [nzTotal]="totalCount ?? 0"
+  zTableLayout="fixed"
+  [nzScroll]="{ x: '800px' }"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="CustomId" [nzSortFn]="true">Id</th>
+      <th nzColumnKey="RequestDate" [nzSortFn]="true">Requested Date</th>
+      <th nzColumnKey="Patient" [nzSortFn]="true">Name (Patient Id)</th>
+      <th nzColumnKey="Consultant" [nzSortFn]="true">Consultant Name</th>
+      <th nzColumnKey="Type" [nzSortFn]="true">Type</th>
+      <th nzColumnKey="actions" nzWidth="76px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of radiologyData">
+      <td>{{ data.customId }}</td>
+      <td>{{ data.requestDate | customDate }}</td>
+      <td>
+        {{ data.patientName }}
+      </td>
+      <td>{{ data.consultantName }}</td>
+      <td class="ellipsis">
+        <span nz-tooltip [nzTooltipTitle]="data?.type"> {{ data?.type }} </span>
+      </td>
+      <td>
+        <div class="action">
+          <ng-container
+            [ngTemplateOutlet]="menu"
+            [ngTemplateOutletContext]="{ data: data }"
+          ></ng-container>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #menu let-data="data">
+  <div class="action" (click)="handleView(data)">
+    <span nz-icon nzType="audit" nzTheme="outline"></span>
+    View
+  </div>
+</ng-template>

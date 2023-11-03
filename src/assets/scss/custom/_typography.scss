@@ -1,0 +1,88 @@
+@import "../utils/variables";
+@import "../utils/mixins";
+
+h1 {
+  font-size: $heading-1-size;
+}
+
+ul.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    @include flex-container(row, center, space-between);
+    & > :last-child {
+      color: $gray-color;
+    }
+
+    &:not(:first-child) {
+      padding: 14px 0 0;
+    }
+  }
+
+  &.permission-list {
+    & > li {
+      line-height: 24px;
+      letter-spacing: 0.15px;
+      padding: 16px;
+      font-size: 12px;
+      border-bottom: 1px solid $input-border-color;
+    }
+    & > :first-child {
+      font-size: 16px;
+      background-color: $light-blue-color;
+    }
+  }
+}
+
+p.sub-title {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+div.error-message {
+  color: $error-color;
+  letter-spacing: 0.1px;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.m0 {
+  margin: 0;
+}
+
+.p0 {
+  padding: 0 !important;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+
+.ant-spin-nested-loading.horizon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 9999;
+  background-color: #ffffff9e;
+
+  & > .ant-spin {
+    max-height: fit-content;
+  }
+}
+
+.page-loader {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999999;
+  background: #daeeff82;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

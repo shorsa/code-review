@@ -1,0 +1,465 @@
+<div class="preview-wrapper">
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleDownloadPreview()"
+    *ngIf="getIsShowPreviewBtn"
+    nzType="primary"
+    nzSize="large"
+    class="preview"
+  >
+    Preview
+  </button>
+</div>
+<form
+  nz-form
+  [formGroup]="formGroup"
+  (ngSubmit)="handleSubmitForm()"
+  nzLayout="horizontal"
+>
+  <div class="referral-details-wrapper">
+    <ul class="referral-details-list list">
+      <li class="title">Reference Details</li>
+      <li>
+        <span> Reference </span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="reference" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span> Date </span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <nz-date-picker
+              nzFormat="d MMM YYYY"
+              class="transparent"
+              formControlName="date"
+              nzBorderless
+            ></nz-date-picker>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="title">Employer Details</li>
+      <li>
+        <span>Jurisdiction </span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="jurisdiction" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Employer </span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="employer" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Contact Telephone </span>
+        <span>
+          <nz-input-group
+            class="phone-number transparent"
+            [class.validating]="wasAttemptToSubmitForm"
+            nzSize="large"
+            [nzAddOnBefore]="addOnBeforeTemplate"
+          >
+            <ng-template #addOnBeforeTemplate>
+              <nz-select formControlName="employerPhoneCode" class="phone-select">
+                <nz-option
+                  *ngFor="let item of phoneCodes"
+                  [nzLabel]="item.label"
+                  [nzValue]="item.value"
+                ></nz-option>
+              </nz-select>
+            </ng-template>
+            <nz-input-number
+              nzSize="large"
+              id="phoneNumber"
+              formControlName="employerPhone"
+              placeholder="Input phone"
+            />
+            <ng-template #PhoneNumberTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input phone number</ng-container
+              >
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('min')"
+                >The minimum length must be at least 9 numbers</ng-container
+              >
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('max')"
+                >The maximum length must be no more than 10 numbers</ng-container
+              >
+            </ng-template>
+          </nz-input-group>
+          <!-- <nz-form-control [ngClass]="{validating: wasAttemptToSubmitForm}" class="transparent">
+            <input nz-input placeholder="Input text" formControlName="employerPhone" />
+          </nz-form-control> -->
+        </span>
+      </li>
+      <li>
+        <span>HR Manager First Name </span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="managerFirstName" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>HR Manager Surname </span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="managerLastName" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>HR Manager Email </span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="managerEmail" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="title">Employee Details</li>
+      <li>
+        <span>First Name*</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input
+              nz-input
+              placeholder="Input text"
+              formControlName="employeeFirstName"
+            />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Surname*</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="employeeLastName" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Date of birth*</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <nz-date-picker
+              nzFormat="d MMM YYYY"
+              class="transparent"
+              formControlName="dateOfBirth"
+              nzBorderless
+            ></nz-date-picker>
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Staff ID</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="staffId" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Address*</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="address" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Contact Telephone*</span>
+        <span>
+          <nz-input-group
+            class="phone-number transparent"
+            [class.validating]="wasAttemptToSubmitForm"
+            nzSize="large"
+            [nzAddOnBefore]="addOnBeforeEmployeeTmpl"
+          >
+            <ng-template #addOnBeforeEmployeeTmpl>
+              <nz-select formControlName="employeePhoneCode" class="phone-select">
+                <nz-option
+                  *ngFor="let item of phoneCodes"
+                  [nzLabel]="item.label"
+                  [nzValue]="item.value"
+                ></nz-option>
+              </nz-select>
+            </ng-template>
+            <nz-input-number
+              nzSize="large"
+              id="phoneNumber"
+              formControlName="employeePhone"
+              placeholder="Input phone"
+            />
+            <ng-template #PhoneNumberTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input phone number</ng-container
+              >
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('min')"
+                >The minimum length must be at least 9 numbers</ng-container
+              >
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('max')"
+                >The maximum length must be no more than 10 numbers</ng-container
+              >
+            </ng-template>
+          </nz-input-group>
+        </span>
+      </li>
+      <li *ngIf="!getIsClientRoles">
+        <span>Email</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="employeeEmail" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Employment Start Date</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <nz-date-picker
+              nzFormat="d MMM YYYY"
+              class="transparent"
+              formControlName="employmentStartDate"
+              nzBorderless
+            ></nz-date-picker>
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Occupation*</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="occupation" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Work Location*</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="workLocation" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="title">Referral Details</li>
+      <li>
+        <span>Insurer</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="insurer" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Job Description</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="jobDescription" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Previous Referrals to OH (if known)</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input
+              nz-input
+              placeholder="Input text"
+              formControlName="previousReferrals"
+            />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Start Date of Absence</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <nz-date-picker
+              nzFormat="d MMM YYYY"
+              class="transparent"
+              formControlName="absenceStartDate"
+              nzBorderless
+            ></nz-date-picker>
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>End Date of Absence</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <nz-date-picker
+              nzFormat="d MMM YYYY"
+              class="transparent"
+              formControlName="absenceEndDate"
+              nzBorderless
+            ></nz-date-picker>
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Is there an expected RTW date?</span>
+        <span class="switch">
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <nz-radio-group nzSize="large" class="horizontal" formControlName="isRtwDate">
+              <label nz-radio [nzValue]="true">Yes</label>
+              <label nz-radio [nzValue]="false">No</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Type of Review Requested</span>
+        <span class="switch">
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="reviewType" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Reason for Absence</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="absenceReason" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Reason for Assessment</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="assessmentReason" />
+          </nz-form-control>
+        </span>
+      </li>
+      <li>
+        <span>Issues to be Addressed</span>
+        <span>
+          <nz-form-control
+            [class.validating]="wasAttemptToSubmitForm"
+            class="transparent"
+          >
+            <input nz-input placeholder="Input text" formControlName="issues" />
+          </nz-form-control>
+        </span>
+      </li>
+    </ul>
+  </div>
+</form>
+
+<div class="page-bottom-buttons" *ngIf="canEditForm">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handleCancel()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <nz-form-item>
+    <nz-form-control>
+      <button
+        nz-button
+        *ngIf="!getIsShowPreviewBtn"
+        [nzLoading]="isLoading$ | async"
+        (click)="handleSubmitForm()"
+        nzType="primary"
+        nzSize="large"
+      >
+        Save
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+  <button
+    nz-button
+    *ngIf="!getIsClinicianRole"
+    [nzLoading]="isLoading$ | async"
+    (click)="handleSubmitForm(true)"
+    nzType="primary"
+    nzSize="large"
+  >
+    Submit
+  </button>
+</div>

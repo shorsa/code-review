@@ -1,0 +1,14 @@
+<div class="page-header white">
+  <h1>Permissions</h1>
+  <nz-tabset
+    [nzSelectedIndex]="selectedIndex"
+    (nzSelectedIndexChange)="selectedIndexChange($event)"
+    class="white-tabs"
+  >
+    <ng-container *ngFor="let item of rolesList; let i = index">
+      <nz-tab [nzTitle]="item.label">
+        <app-permissions-setting *ngIf="selectedIndex === i" [setRole]="item.value" />
+      </nz-tab>
+    </ng-container>
+  </nz-tabset>
+</div>

@@ -1,0 +1,97 @@
+<nz-page-header class="with-actions">
+  <nz-page-header-title>Appointments</nz-page-header-title>
+  <nz-page-header-extra>
+    <nz-space>
+      <app-search-input (searchTextChange)="handleSearchByText($event)" />
+    </nz-space>
+
+    <ng-container *ngIf="!getIsClinicianRole">
+      <nz-space>
+        <button
+          (click)="navigateToAddNewAppointment()"
+          class="add"
+          nzSize="large"
+          *nzSpaceItem
+          nzType="primary"
+          nz-button
+        >
+          <span nz-icon nzType="plus" nzTheme="outline"></span>
+          Add new
+        </button>
+      </nz-space>
+    </ng-container>
+  </nz-page-header-extra>
+  <nz-page-header-content>
+    <nz-table
+      nzShowSizeChanger
+      [nzPageSizeOptions]="pageSizeOptions"
+      [nzLoading]="isLoading$ | async"
+      [nzData]="appointmentsData"
+      [nzFrontPagination]="false"
+      [nzTotal]="totalCount"
+      zTableLayout="fixed"
+      [nzScroll]="{ x: '700px' }"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <tr>
+          <th nzColumnKey="Identifier" nzWidth="160px" [nzSortFn]="true">
+            Appointment Id
+          </th>
+          <th nzColumnKey="ProductType" [nzFilterFn]="true">Product Type</th>
+          <th nzColumnKey="AppointmentTime" nzWidth="160px" [nzSortFn]="true">
+            Appointment Time
+          </th>
+          <th nzColumnKey="Clinician" [nzSortFn]="true">Clinician</th>
+          <th nzColumnKey="Status" [nzSortFn]="true">Status</th>
+          <!-- <th nzColumnKey="BillingOption" [nzSortFn]="true">Billing option</th> -->
+          <th nzColumnKey="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of appointmentsData">
+          <td>{{ data.customAppointmentId }}</td>
+          <td>
+            {{ data.patientName }}
+          </td>
+          <td>Add from back</td>
+          <td>{{ data.clinicianName }}</td>
+          <td>{{ data.status }}</td>
+          <!-- <td>{{ data.billingOption }}</td> -->
+          <td class="actions">
+            <ng-container
+              [ngTemplateOutlet]="itemMenu"
+              [ngTemplateOutletContext]="{ data: data }"
+            ></ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+    <ng-template #itemMenu let-data>
+      <a nz-dropdown class="table-menu" nzTrigger="click" [nzDropdownMenu]="menu">
+        <span nz-icon nzType="more" nzTheme="outline"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item (click)="navigateToEdit(data.id)">View</li>
+          <li nz-menu-item (click)="navigateToEdit(data.id)">Edit</li>
+          <a
+            nzDan
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure to Deactivate this client?"
+            (nzOnConfirm)="handleDeactivate(data.id)"
+          >
+            <li nz-menu-item nzDanger>Deactivate</li>
+          </a>
+        </ul>
+      </nz-dropdown-menu>
+    </ng-template>
+  </nz-page-header-content>
+</nz-page-header>
+<!-- 
+<app-appointment-start-modal
+  width="382px"
+  title="Appointment"
+  [(isVisible)]="isVisibleStartModal"
+/> -->

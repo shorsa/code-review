@@ -1,0 +1,23 @@
+<div class="page-header white">
+  <h1>Product type info</h1>
+  <nz-tabset class="white-tabs">
+    <nz-tab nzTitle="Product Type Details" >
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-product-type-details [productId]="productId" />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Contracts" 
+      >\
+      <ng-template nz-tab>
+        <div class="tab-content"></div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Assignments" >
+      <ng-template nz-tab>
+        <div class="tab-content"></div>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</div>

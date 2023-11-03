@@ -1,0 +1,436 @@
+<div class="permission-setting">
+  <nz-input-group
+    nzSize="large"
+    class="permission-search"
+    [nzPrefix]="prefixTemplateUser"
+  >
+    <input
+      type="text"
+      (keyup)="handleSearchByText($event)"
+      nzSize="large"
+      nz-input
+      placeholder="Search text"
+    />
+  </nz-input-group>
+  <ng-template #prefixTemplateUser><span nz-icon nzType="search"></span></ng-template>
+
+  <div class="permission-wrapper" *ngIf="permissionViewList">
+    <ul class="permission-list list">
+      <li class="title">
+        Clinics
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('clinicClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('clinicClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('clinicClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.clinicClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Locations
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('locationClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('locationClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('locationClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.locationClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Clients
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('clientClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('clientClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('clientClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.clientClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Departments
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('departmentClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('departmentClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('departmentClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.departmentClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Client User
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('clientUserClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('clientUserClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('clientUserClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.clientUserClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Client Document
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('clientDocumentClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('clientDocumentClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('clientDocumentClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container
+        *ngFor="let item of permissionViewList?.clientDocumentClaimsDictionary"
+      >
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Patients
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('patientClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('patientClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('patientClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.patientClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Patients Documents
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('patientDocumentClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('patientDocumentClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('patientDocumentClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container
+        *ngFor="let item of permissionViewList?.patientDocumentClaimsDictionary"
+      >
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Patients Confidential Notes
+
+        <!-- <span class="checkbox-wrapper">
+          <label
+            [nzDisabled]="!getIsAllShow('patientConfidentialNotesClaimsDictionary')"
+            nz-checkbox
+            [nzChecked]="getGroupIsChecked('patientConfidentialNotesClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('patientConfidentialNotesClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container
+        *ngFor="let item of permissionViewList?.patientConfidentialNotesClaimsDictionary"
+      >
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Patient Referral
+
+        <!-- <span class="checkbox-wrapper">
+          <label
+            [nzDisabled]="!getIsAllShow('patientReferralClaimsDictionary')"
+            nz-checkbox
+            [nzChecked]="getGroupIsChecked('patientReferralClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('patientReferralClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container
+        *ngFor="let item of permissionViewList?.patientReferralClaimsDictionary"
+      >
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Clinicians
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('clinicianClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('clinicianClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('clinicianClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.clinicianClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Referrals
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('referralClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('referralClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('referralClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.referralClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Appointments
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('appointmentClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('appointmentClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('appointmentClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.appointmentClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Contracts
+
+        <!-- <span class="checkbox-wrapper">
+          <label
+            [nzDisabled]="!getIsAllShow('contractClaimsDictionary')"
+            nz-checkbox
+            [nzChecked]="getGroupIsChecked('contractClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('contractClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.contractClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Invoices
+
+        <!-- <span class="checkbox-wrapper">
+          <label
+            [nzDisabled]="!getIsAllShow('invoiceClaimsDictionary')"
+            nz-checkbox
+            [nzChecked]="getGroupIsChecked('invoiceClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('invoiceClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.invoiceClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Products
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('productClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('productClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('productClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.productClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+    <ul class="permission-list list">
+      <li class="title">
+        Documents
+        <!-- <span class="checkbox-wrapper">
+          <label
+            nz-checkbox
+            [nzDisabled]="!getIsAllShow('documentClaimsDictionary')"
+            [nzChecked]="getGroupIsChecked('documentClaimsDictionary')"
+            (nzCheckedChange)="toggleAllGroup('documentClaimsDictionary')"
+          >
+          </label>
+        </span> -->
+      </li>
+      <ng-container *ngFor="let item of permissionViewList?.documentClaimsDictionary">
+        <li *ngIf="item?.show && item?.isChecked">
+          <span>{{ item.label }}</span>
+          <span class="checkbox-wrapper">
+            <label nz-checkbox [nzDisabled]="true" [(nzChecked)]="item.isChecked">
+            </label>
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <!-- <div class="page-buttons">
+    <button nz-button nzType="default" (click)="cancel()" class="default" nzSize="large">
+      Cancel
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      [nzLoading]="isLoading$ | async"
+      (click)="save()"
+      nzSize="large"
+    >
+      Save
+    </button>
+  </div> -->
+</div>

@@ -1,0 +1,46 @@
+.ant-card {
+  border-radius: 12px;
+  padding: 0 24px;
+
+  .ant-card-head {
+    padding: 0;
+  }
+
+  .ant-card-head-title {
+    padding: 25px 0 7px;
+    letter-spacing: -0.5px;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 400;
+  }
+  .ant-card-body {
+    padding: 24px 0;
+  }
+
+  .ant-card-extra {
+    padding: 16px 0 0;
+  }
+
+  &.custom-title {
+    .ant-card-head-title {
+      padding-top: 24px;
+      padding-bottom: 0;
+
+      h1 {
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 32px;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 24px;
+        color: $gray-color;
+        letter-spacing: 0.15px;
+        margin-bottom: 7px;
+      }
+    }
+  }
+}

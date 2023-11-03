@@ -1,0 +1,35 @@
+<ng-container *ngIf="control; else elseTemplate">
+  <nz-form-item>
+    <nz-form-label>{{ label }}</nz-form-label>
+    <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+      <input
+        nzSize="large"
+        [type]="type"
+        nz-input
+        [formControl]="control"
+        [placeholder]="placeholder"
+      />
+      <ng-template #emailErrorTpl let-controlF>
+        <ng-container *ngIf="submit && controlF.hasError('required')"
+          >Please input {{ label }}</ng-container
+        >
+        <ng-container *ngIf="submit && controlF.hasError('pattern')"
+          >The input is not valid {{ label }}</ng-container
+        >
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+</ng-container>
+
+<ng-template #elseTemplate>
+  <input
+    nz-input
+    [type]="type"
+    [name]="label"
+    [id]="label"
+    [placeholder]="!label ? placeholder : ''"
+    [class.invalid]="submit"
+    [disabled]="disabled"
+    autocomplete="on"
+  />
+</ng-template>

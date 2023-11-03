@@ -1,0 +1,460 @@
+<div class="user-info-page">
+  <nz-page-header class="with-actions">
+    <nz-page-header-title>User info</nz-page-header-title>
+
+    <nz-page-header-content>
+      <form nz-form [formGroup]="formGroup" nzLayout="vertical" (ngSubmit)="submitForm()">
+        <nz-card class="personal-details" [nzBordered]="false" nzTitle="Personal details">
+          <ng-container *ngIf="!(isLoading$ | async); else personalSkeletonTmpl">
+            <!-- form-item -->
+            <nz-form-item>
+              <nz-form-label>First Name*</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="firstNameErrorTpl">
+                <input
+                  nzSize="large"
+                  type="text"
+                  nz-input
+                  formControlName="firstName"
+                  placeholder="Input First Name"
+                />
+                <ng-template #firstNameErrorTpl let-control>
+                  <ng-container
+                    *ngIf="
+                      wasAttemptToSubmitForm &&
+                      (control.hasError('required') || control.hasError('minlength'))
+                    "
+                    >Please input First Name</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <!-- form-item -->
+            <nz-form-item>
+              <nz-form-label>Last Name*</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="lastNameErrorTpl">
+                <input
+                  nzSize="large"
+                  type="text"
+                  formControlName="lastName"
+                  nz-input
+                  placeholder="Input Last Name"
+                />
+                <ng-template #lastNameErrorTpl let-control>
+                  <ng-container
+                    *ngIf="
+                      wasAttemptToSubmitForm &&
+                      (control.hasError('required') || control.hasError('minlength'))
+                    "
+                    >Please input Last Name</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <!-- form-item -->
+            <nz-form-item>
+              <nz-form-label>Email Address*</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+                <input
+                  nzSize="large"
+                  type="text"
+                  nz-input
+                  formControlName="email"
+                  placeholder="Input Contact Email Address"
+                />
+                <ng-template #emailErrorTpl let-control>
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                    >Please input your Contact Email Address</ng-container
+                  >
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('pattern')"
+                    >The Email is not valid
+                  </ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <!-- form-item -->
+            <nz-form-item>
+              <nz-form-label nzFor="phoneNumber">Phone Number*</nz-form-label>
+              <nz-form-control nzErrorTip="Please input your phone number!">
+                <nz-input-group
+                  class="phone-number"
+                  nzSize="large"
+                  [nzAddOnBefore]="addOnBeforeTemplate"
+                >
+                  <ng-template #addOnBeforeTemplate>
+                    <nz-select formControlName="phoneCode" class="phone-select">
+                      <nz-option
+                        *ngFor="let item of phoneCodes"
+                        [nzLabel]="item.label"
+                        [nzValue]="item.value"
+                      ></nz-option>
+                    </nz-select>
+                  </ng-template>
+                  <nz-input-number
+                    [nzMin]="0"
+                    nzSize="large"
+                    id="phoneNumber"
+                    formControlName="phone"
+                    placeholder="Input phone number"
+                  />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </ng-container>
+          <ng-template #personalSkeletonTmpl>
+            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+          </ng-template>
+        </nz-card>
+
+        <nz-card class="role-details" [nzBordered]="false" nzTitle="Role">
+          <ng-container *ngIf="!(isLoading$ | async); else roleSkeletonTmpl">
+            <!-- form-item -->
+            <nz-form-item>
+              <nz-form-label>Role *</nz-form-label>
+              <nz-form-control nzHasFeedback [nzErrorTip]="roleErrorTpl">
+                <nz-select
+                  nzAllowClear
+                  nzShowSearch
+                  nzSize="large"
+                  formControlName="role"
+                  nzPlaceHolder="Select Role"
+                >
+                  <ng-container *ngIf="!(isLoading$ | async)">
+                    <nz-option
+                      *ngFor="let item of rolesOptions"
+                      [nzLabel]="item.label"
+                      [nzValue]="item.value"
+                    ></nz-option>
+                  </ng-container>
+                </nz-select>
+
+                <ng-template #roleErrorTpl let-control>
+                  <ng-container
+                    *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                    >Please select Role</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <!-- form-item -->
+            <nz-form-item nz-row class="checkbox" *ngIf="getIsSelectedOHRDAdmin">
+              <nz-form-control>
+                <label nz-checkbox formControlName="canTriage">
+                  <span>Can Triage</span>
+                </label>
+              </nz-form-control>
+            </nz-form-item>
+          </ng-container>
+          <ng-template #roleSkeletonTmpl>
+            <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 2 }"></nz-skeleton>
+          </ng-template>
+          <div
+            class="permission-wrapper"
+            *ngIf="permissionViewList && formGroup.get('role')?.value"
+          >
+            <ul
+              class="permission-list list"
+              *ngIf="!permissionGroupIsEmpty(permissionViewList?.clinicClaimsDictionary)"
+            >
+              <li class="title">Clinics</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.clinicClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(permissionViewList?.locationClaimsDictionary)
+              "
+            >
+              <li class="title">Locations</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.locationClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="!permissionGroupIsEmpty(permissionViewList?.clientClaimsDictionary)"
+            >
+              <li class="title">Clients</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.clientClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(permissionViewList?.departmentClaimsDictionary)
+              "
+            >
+              <li class="title">Departments</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.departmentClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(permissionViewList?.clientUserClaimsDictionary)
+              "
+            >
+              <li class="title">Client User</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.clientUserClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(
+                  permissionViewList?.clientDocumentClaimsDictionary
+                )
+              "
+            >
+              <li class="title">Client Document</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.clientDocumentClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="!permissionGroupIsEmpty(permissionViewList?.patientClaimsDictionary)"
+            >
+              <li class="title">Patients</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.patientClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(
+                  permissionViewList?.patientDocumentClaimsDictionary
+                )
+              "
+            >
+              <li class="title">Patients Documents</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.patientDocumentClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(
+                  permissionViewList?.patientConfidentialNotesClaimsDictionary
+                )
+              "
+            >
+              <li class="title">Patients Confidential Notes</li>
+              <ng-container
+                *ngFor="
+                  let item of permissionViewList?.patientConfidentialNotesClaimsDictionary
+                "
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(
+                  permissionViewList?.patientReferralClaimsDictionary
+                )
+              "
+            >
+              <li class="title">Patient Referral</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.patientReferralClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(permissionViewList?.clinicianClaimsDictionary)
+              "
+            >
+              <li class="title">Clinicians</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.clinicianClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(permissionViewList?.referralClaimsDictionary)
+              "
+            >
+              <li class="title">Referrals</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.referralClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(permissionViewList?.appointmentClaimsDictionary)
+              "
+            >
+              <li class="title">Appointments</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.appointmentClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(permissionViewList?.contractClaimsDictionary)
+              "
+            >
+              <li class="title">Contracts</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.contractClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="!permissionGroupIsEmpty(permissionViewList?.invoiceClaimsDictionary)"
+            >
+              <li class="title">Invoices</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.invoiceClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="!permissionGroupIsEmpty(permissionViewList?.productClaimsDictionary)"
+            >
+              <li class="title">Products</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.productClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+            <ul
+              class="permission-list list"
+              *ngIf="
+                !permissionGroupIsEmpty(permissionViewList?.documentClaimsDictionary)
+              "
+            >
+              <li class="title">Documents</li>
+              <ng-container
+                *ngFor="let item of permissionViewList?.documentClaimsDictionary"
+              >
+                <li *ngIf="item.isChecked">
+                  <span>{{ item.label }}</span>
+                  <label nz-checkbox nzDisabled [nzChecked]="item.isChecked"> </label>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+        </nz-card>
+
+        <div class="btn-wrapper">
+          <button
+            nz-button
+            nzSize="large"
+            (click)="handleCancel(); $event.preventDefault()"
+            class="secondary"
+          >
+            Cancel
+          </button>
+          <button
+            [nzLoading]="isLoading$ | async"
+            nz-button
+            nzSize="large"
+            nzType="primary"
+            type="submit"
+          >
+            {{ staffUserData ? 'Save' : 'Add new' }}
+          </button>
+        </div>
+      </form>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>

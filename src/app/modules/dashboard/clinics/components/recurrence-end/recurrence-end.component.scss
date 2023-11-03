@@ -1,0 +1,37 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.ends-wrapper {
+  @include flex-container(column);
+  & > span {
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .ant-form-item {
+    height: 15px;
+  }
+
+  .counter-wrapper {
+    gap: 3px;
+    @include flex-container(column, center, center);
+    padding-left: 6px;
+    padding-top: 2px;
+
+    & > .counter-btn {
+      user-select: none;
+      cursor: pointer;
+      font-size: 12px;
+      width: 16px;
+      height: 16px;
+      @include flex-container(row, center, center);
+      transition-duration: 0.2s;
+
+      &:hover {
+        transition-duration: 0.2s;
+        font-size: 14px;
+        color: $blue-color;
+      }
+    }
+  }
+}

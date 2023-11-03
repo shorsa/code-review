@@ -1,0 +1,19 @@
+:host {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10fr 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+
+.appointments-yes-details {
+  width: 100%;
+  max-width: 560px;
+
+  p.description {
+    max-width: 348px;
+    font-size: 14px;
+  }
+}

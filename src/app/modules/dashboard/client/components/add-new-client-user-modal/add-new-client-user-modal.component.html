@@ -1,0 +1,169 @@
+<form nz-form [formGroup]="formGroup" nzLayout="vertical">
+  <!-- form-item -->
+  <nz-form-item>
+    <nz-form-label>First Name*</nz-form-label>
+    <nz-form-control nzHasFeedback [nzErrorTip]="firstNameErrorTpl">
+      <input
+        nzSize="large"
+        type="text"
+        nz-input
+        formControlName="firstName"
+        placeholder="Input First Name"
+      />
+      <ng-template #firstNameErrorTpl let-control>
+        <ng-container
+          *ngIf="
+            wasAttemptToSubmitForm &&
+            (control.hasError('required') || control.hasError('minlength'))
+          "
+          >Please input First Name</ng-container
+        >
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- form-item -->
+  <nz-form-item>
+    <nz-form-label>Last Name*</nz-form-label>
+    <nz-form-control nzHasFeedback [nzErrorTip]="lastNameErrorTpl">
+      <input
+        nzSize="large"
+        type="text"
+        formControlName="lastName"
+        nz-input
+        placeholder="Input Last Name"
+      />
+      <ng-template #lastNameErrorTpl let-control>
+        <ng-container
+          *ngIf="
+            wasAttemptToSubmitForm &&
+            (control.hasError('required') || control.hasError('minlength'))
+          "
+          >Please input Last Name</ng-container
+        >
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- form-item -->
+  <nz-form-item>
+    <nz-form-label>Contact Email Address*</nz-form-label>
+    <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+      <input
+        nzSize="large"
+        type="text"
+        nz-input
+        formControlName="email"
+        placeholder="Input Contact Email Address"
+      />
+      <ng-template #emailErrorTpl let-control>
+        <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+          >Please input your Email Address for Invoices</ng-container
+        >
+        <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('pattern')"
+          >The Email is not valid
+        </ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- form-item -->
+  <nz-form-item>
+    <nz-form-label nzFor="phoneNumber">Phone Number*</nz-form-label>
+    <nz-form-control nzErrorTip="Please input your phone number!">
+      <nz-input-group
+        class="phone-number"
+        nzSize="large"
+        [nzAddOnBefore]="addOnBeforeTemplate"
+      >
+        <ng-template #addOnBeforeTemplate>
+          <nz-select formControlName="phoneCode" class="phone-select">
+            <nz-option
+              *ngFor="let item of phoneCodes"
+              [nzLabel]="item.label"
+              [nzValue]="item.value"
+            ></nz-option>
+          </nz-select>
+        </ng-template>
+        <nz-input-number
+          [nzMin]="0"
+          nzSize="large"
+          id="phoneNumber"
+          formControlName="phone"
+          placeholder="Input phone number"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- form-item -->
+  <nz-form-item>
+    <nz-form-label>Associated Departments</nz-form-label>
+    <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+      <nz-select
+        nzAllowClear
+        nzShowSearch
+        nzMode="multiple"
+        nzSize="large"
+        formControlName="departmentIds"
+        nzPlaceHolder="Select Departments"
+      >
+        <ng-container *ngIf="!(isLoading$ | async)">
+          <nz-option
+            *ngFor="let item of departmentListOptions"
+            [nzLabel]="item.label"
+            [nzValue]="item.value"
+          ></nz-option>
+        </ng-container>
+      </nz-select>
+      <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+        <span nz-icon nzType="loading" class="loading-icon"></span>
+        Loading Data...
+      </nz-option>
+      <ng-template #emailErrorTpl let-control>
+        <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+          >Please input Associated Departments</ng-container
+        >
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- form-item -->
+  <nz-form-item nz-row class="checkbox">
+    <nz-form-control>
+      <label nz-checkbox formControlName="isSuperuser">
+        <span>Is Superuser</span>
+      </label>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-row class="checkbox">
+    <nz-form-control>
+      <label nz-checkbox formControlName="canBookOnline">
+        <span>Can book online </span>
+      </label>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="btn-wrapper">
+    <button
+      nz-button
+      nzSize="large"
+      (click)="handleCancel()"
+      class="secondary"
+      nzType="default"
+    >
+      Cancel
+    </button>
+    <button
+      [nzLoading]="isLoading$ | async"
+      nz-button
+      nzSize="large"
+      nzType="primary"
+      type="submit"
+      (click)="submitForm()"
+    >
+      {{ nzModalData.editClientUserId ? 'Save' : 'Add new' }}
+    </button>
+  </div>
+</form>

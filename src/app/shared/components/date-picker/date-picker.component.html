@@ -1,0 +1,63 @@
+<div
+  class="custom-date-picker-wrapper"
+  [class.icon-only]="iconOnly"
+  (click)="iconOnly ? datePickerRef.open() : null"
+>
+  <ng-container *ngIf="!iconOnly">
+    <ng-container *ngIf="control; else elseTemplate">
+      <nz-form-item>
+        <nz-form-label>Date</nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzSize="large" nzAddOnAfterIcon="calendar">
+            <input
+              [disabled]="disabled"
+              readonly
+              [ngClass]="{ 'ant-input-disabled': disabled }"
+              type="text"
+              nzSize="large"
+              (click)="datePickerRef.open()"
+              nz-input
+              [value]="(date | customDate) ?? null"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </ng-container>
+
+    <ng-template #elseTemplate>
+      <nz-input-group nzAddOnAfterIcon="calendar">
+        <input
+          readonly
+          type="text"
+          [value]="(date | customDate) ?? null"
+          (focus)="datePickerRef.open()"
+          nz-input
+        />
+      </nz-input-group>
+    </ng-template>
+  </ng-container>
+  <ng-container *ngIf="iconOnly">
+    <span
+      nz-icon
+      nzType="calendar"
+      (click)="datePickerRef.open()"
+      nzTheme="outline"
+    ></span>
+  </ng-container>
+
+  <!-- [nzOpen]="true" -->
+  <nz-date-picker
+    #datePickerRef
+    nzSize="large"
+    [ngModel]="date"
+    (ngModelChange)="handleChangeDate($event)"
+    nzDropdownClassName="{{
+      (isLoading$ | async) ? 'loading custom-date-picker' : 'custom-date-picker'
+    }}"
+    class="custom-date-picker-input"
+    [nzDisabledDate]="getDisabledDate.bind(this)"
+    nzFormat="d MMM YYYY"
+    [nzShowToday]="false"
+    (nzOnOpenChange)="handleDateOpenChange($event)"
+  ></nz-date-picker>
+</div>

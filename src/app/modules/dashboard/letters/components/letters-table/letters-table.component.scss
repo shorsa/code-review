@@ -1,0 +1,38 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.start-btn {
+  @include flex-container(row, center, center);
+
+  padding: 4px 8px;
+  width: 42px;
+  height: 24px;
+  background: $blue-color;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actions {
+  & > div {
+    @include flex-container(row, center);
+  }
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: $input-border-color;
+  width: fit-content;
+
+  &.AwaitingApproval {
+    background-color: #f4f59d;
+  }
+
+  &.Approved {
+    background-color: #a6e0c4;
+  }
+
+  &.SentBack {
+    background-color: #f1a2cd;
+  }
+}

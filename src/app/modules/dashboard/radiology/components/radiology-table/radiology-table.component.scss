@@ -1,0 +1,7 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.action {
+  color: $blue-color;
+  cursor: pointer;
+}

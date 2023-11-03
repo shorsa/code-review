@@ -1,0 +1,89 @@
+<div class="auth-form-wrapper">
+  <h1>Log In</h1>
+  <p>Please enter your contact details to connect</p>
+  <span nz-typography *ngIf="accountIsLocked && hasApiError" nzType="danger"
+    >Your account locked</span
+  >
+  <span
+    nz-typography
+    *ngIf="hasApiError && remainingAttempts && !accountIsLocked"
+    nzType="secondary"
+    >Account will be locked after {{ remainingAttempts }} consecutive failed attempts
+  </span>
+  <form
+    nz-form
+    [formGroup]="formGroup"
+    (ngSubmit)="handleSubmitForm()"
+    nzLayout="vertical"
+  >
+    <!-- form-item email-->
+    <nz-form-item>
+      <nz-form-label>E-mail</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+        <input
+          autocomplete="off"
+          nzSize="large"
+          type="email"
+          nz-input
+          formControlName="email"
+          placeholder="example@gmail.com"
+        />
+        <ng-template #emailErrorTpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('pattern')"
+            >The password must contain at least 8 symbols and one uppercase letter, one
+            lowercase letter, one digit, and one special character.</ng-container
+          >
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input your E-mail</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- form-item password-->
+    <nz-form-item>
+      <nz-form-label>Password</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="passwordErrorTpl">
+        <input
+          autocomplete="off"
+          nzSize="large"
+          type="password"
+          nz-input
+          placeholder="Password"
+          formControlName="password"
+        />
+        <ng-template #passwordErrorTpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('pattern')"
+            >The password is not valid</ng-container
+          >
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input Password</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <div class="form-actions">
+      <a nz-button nzType="link" (click)="navigateToForgotPassword()">
+        Forgot password ?</a
+      >
+
+      <label nz-checkbox formControlName="remember">
+        <span>Remember me</span>
+      </label>
+    </div>
+
+    <!-- form-item button -->
+    <nz-form-item>
+      <nz-form-control>
+        <button
+          nz-button
+          [nzLoading]="isLoading$ | async"
+          nzType="primary"
+          nzSize="large"
+        >
+          Log in
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>

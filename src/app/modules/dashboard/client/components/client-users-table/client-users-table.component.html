@@ -1,0 +1,215 @@
+<div class="client-users-table">
+  <nz-page-header class="with-actions p0">
+    <nz-page-header-title>Client User</nz-page-header-title>
+    <nz-page-header-extra>
+      <!-- <div class="header-actions"> -->
+      <nz-space>
+        <app-search-input (searchTextChange)="handleSearchByText($event)" />
+      </nz-space>
+      <nz-space  *ngIf="getIsCanDeactivateOrReactivate">
+        <nz-segmented
+          (nzValueChange)="changeUsersStateFilter($event)"
+          class="state deactivate"
+          [nzOptions]="activeFilterOptions"
+        ></nz-segmented>
+      </nz-space>
+      <nz-space *ngxPermissionsOnly="createUserPermission">
+        <button
+          class="add"
+          nzSize="large"
+          (click)="handleAddNew()"
+          *nzSpaceItem
+          nzType="primary"
+          nz-button
+        >
+          Create new
+        </button>
+      </nz-space>
+      <!-- </div> -->
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <nz-table
+        nzShowSizeChanger
+        [nzPageSizeOptions]="pageSizeOptions"
+        [nzLoading]="isLoading$ | async"
+        [nzData]="clientUsersData"
+        [nzFrontPagination]="false"
+        [nzTotal]="totalCount ?? 0"
+        zTableLayout="fixed"
+        [nzScroll]="{ x: '1100px' }"
+        (nzQueryParams)="onQueryParamsChange($event)"
+      >
+        <!-- [nzPageIndex]="searchParams.pageIndex + 1" -->
+        <thead>
+          <tr>
+            <th nzColumnKey="Id" [nzSortFn]="true">User Id</th>
+            <th nzColumnKey="FirstName" [nzSortFn]="true">First Name</th>
+            <th nzColumnKey="LastName" [nzSortFn]="true">Last Name</th>
+            <th nzColumnKey="Email" [nzSortFn]="true">Email address</th>
+            <th nzColumnKey="Phone" [nzSortFn]="true">Telephone Number</th>
+            <th
+              nzColumnKey="Department"
+              [nzFilterMultiple]="true"
+              [nzFilterFn]="true"
+              [nzFilters]="departmentListOptions ?? []"
+            >
+              Department
+            </th>
+            <th
+              nzColumnKey="CanBookOnline"
+              [nzSortFn]="true"
+              [nzFilterMultiple]="true"
+              [nzFilters]="canBookFilterList"
+              [nzFilterFn]="true"
+            >
+              Can book online
+            </th>
+            <th nzColumnKey="IsSuperuser" [nzFilterMultiple]="true" [nzSortFn]="true">
+              Is Superuser
+            </th>
+            <th nzColumnKey="actions" nzWidth="76px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let data of clientUsersData"
+            [class.locked]="!!data.applicationUser.lockoutEnd"
+          >
+            <td>{{ data?.customClientUserId }}</td>
+            <td>{{ data?.applicationUser?.firstName }}</td>
+            <td>{{ data?.applicationUser?.lastName }}</td>
+            <td class="ellipsis">
+              <span nz-tooltip [nzTooltipTitle]="data?.applicationUser?.email">
+                {{ data?.applicationUser?.email }}
+              </span>
+            </td>
+            <td class="ellipsis">
+              <span
+                nz-tooltip
+                [nzTooltipTitle]="
+                  data.applicationUser.phoneCode
+                    | phoneNumber : data.applicationUser.phoneNumber
+                "
+              >
+                {{
+                  data.applicationUser.phoneCode
+                    | phoneNumber : data.applicationUser.phoneNumber
+                }}
+              </span>
+            </td>
+            <td>{{ showNameOfDepartments(data) }}</td>
+            <td>
+              <label nz-checkbox nzDisabled [nzChecked]="data.canBookOnline"> </label>
+            </td>
+            <td>
+              <label nz-checkbox nzDisabled [nzChecked]="data.isSuperuser"> </label>
+            </td>
+            <td>
+              <div class="action">
+                <ng-container
+                  [ngTemplateOutlet]="menu"
+                  [ngTemplateOutletContext]="{ data: data }"
+                ></ng-container>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+      <ng-template #menu let-data="data">
+        <div>
+          <ng-container *ngIf="data.applicationUser.lockoutEnd">
+            <span
+              nz-tooltip
+              [nzTooltipOverlayClassName]="'tooltip'"
+              nzTooltipTitle="This account is locked"
+              ><span
+                nz-icon
+                nzType="exclamation"
+                class="locked-icon"
+                nzTheme="outline"
+              ></span
+            ></span>
+          </ng-container>
+        </div>
+
+        <a
+          nz-dropdown
+          class="table-menu"
+          nzTrigger="click"
+          [nzClickHide]="true"
+          [nzDropdownMenu]="menu"
+        >
+          <span nz-icon nzType="more" nzTheme="outline"></span>
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <ng-container *ngIf="data.applicationUser.isActive; else reactivateTmpl">
+              <li
+                nz-menu-item
+                (click)="edit(data.id)"
+                *ngxPermissionsOnly="updateUserPermission"
+              >
+                Edit
+              </li>
+              <ng-container *ngxPermissionsExcept="updateUserPermission">
+                <li
+                  nz-menu-item
+                  (click)="edit(data.id)"
+                  *ngxPermissionsOnly="clientViewDetailsPermission"
+                >
+                  View
+                </li>
+              </ng-container>
+              <a
+                *ngxPermissionsOnly="deactivateUserPermission"
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure to Deactivate this user?"
+                (nzOnConfirm)="deactivate(data.id)"
+              >
+                <li nz-menu-item nzDanger>Deactivate</li>
+              </a>
+            </ng-container>
+
+            <ng-template #reactivateTmpl>
+              <a
+                *ngxPermissionsOnly="activateUserPermission"
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure to Reactivate this user?"
+                (nzOnConfirm)="reactivate(data.id)"
+              >
+                <li nz-menu-item>Reactivate</li>
+              </a>
+            </ng-template>
+            <ng-container *ngxPermissionsOnly="unlockUserPermission">
+              <a
+                *ngIf="!!data.applicationUser.lockoutEnd"
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure to Unlock this user?"
+                (nzOnConfirm)="unlock(data.applicationUserId)"
+              >
+                <li nz-menu-item>Unlock</li>
+              </a>
+            </ng-container>
+          </ul>
+        </nz-dropdown-menu>
+      </ng-template>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>
+
+<!-- <app-add-new-client-user-modal
+  *ngIf="addNewModalState"
+  title="Add Client User"
+  width="484px"
+  [(isVisible)]="addNewModalState"
+/>
+
+<app-add-new-client-user-modal
+  *ngIf="updateModalState"
+  title="Edit Client User"
+  width="484px"
+  (handleClose)="handleCloseEditModal()"
+  [editClientUserId]="editClientUserId"
+  [(isVisible)]="updateModalState"
+/> -->

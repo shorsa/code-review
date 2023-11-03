@@ -1,0 +1,28 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+.ant-form {
+  .editor {
+    label {
+      color: $gray-color;
+    }
+
+    .editor-menu {
+      .NgxEditor__MenuBar {
+        border-radius: $input-border-radius 0 0 $input-border-radius;
+        border-top: 1px solid $input-border-color;
+      }
+    }
+  }
+  .row {
+    @include flex-container;
+    gap: 16px;
+
+    & > * {
+      width: 100%;
+    }
+  }
+
+  & > :last-child {
+    margin-bottom: 16px;
+  }
+}

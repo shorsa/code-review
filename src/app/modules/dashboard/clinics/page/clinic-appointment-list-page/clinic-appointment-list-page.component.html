@@ -1,0 +1,17 @@
+<div class="clinics-wrapper-page">
+  <nz-page-header class="with-actions">
+    <nz-page-header-title>
+      <span
+        nz-icon
+        nzType="arrow-left"
+        nzTheme="outline"
+        class="back"
+        (click)="navigateToBack()"
+      ></span>
+      Appointments</nz-page-header-title
+    >
+    <nz-page-header-content>
+      <app-appointments-table [date]="date" [clinicId]="clinicId" />
+    </nz-page-header-content>
+  </nz-page-header>
+</div>

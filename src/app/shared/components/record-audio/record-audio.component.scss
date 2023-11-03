@@ -1,0 +1,73 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.recorder-wrapper {
+  .wavesurfer {
+    width: 100%;
+
+    min-height: 102px;
+    background-color: $input-border-color;
+    margin-bottom: 16px;
+  }
+
+  .buttons-wrapper {
+    @include flex-container(row, center, center);
+    gap: 12px;
+
+    & > button {
+      min-width: 106px;
+    }
+
+    & > .record {
+      .anticon-audio {
+        position: relative;
+
+        &::after {
+          content: "";
+          position: absolute;
+          width: 0;
+          height: 0;
+          box-shadow: 0 0 7px 5px $error-color;
+          top: 5px;
+          left: 7px;
+          z-index: 1;
+          animation: shadow-animation 2s ease-in-out infinite;
+        }
+
+        & > svg {
+          position: relative;
+          z-index: 2;
+        }
+      }
+    }
+  }
+
+  @keyframes shadow-animation {
+    0% {
+      box-shadow: 0 0 0 0 $error-color;
+    }
+    50% {
+      box-shadow: 0 0 7px 5px $error-color;
+    }
+    100% {
+      box-shadow: 0 0 0 0 $error-color;
+    }
+  }
+}
+.audio-wrapper {
+  // max-height: 102px;\
+  .audio-file {
+    @include flex-container(row, center);
+    gap: 12px;
+
+    .anticon-play-circle {
+      color: $blue-color;
+      font-size: 20px;
+    }
+
+    .audio {
+      min-width: 86px;
+      min-height: 32px;
+    }
+  }
+}

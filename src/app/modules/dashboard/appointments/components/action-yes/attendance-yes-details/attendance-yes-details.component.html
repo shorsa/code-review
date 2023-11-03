@@ -1,0 +1,135 @@
+<form nz-form nzLayout="vertical" [formGroup]="formGroup">
+  <nz-card class="appointments-yes-details" [nzBordered]="false" nzTitle="Details">
+    <!-- form-item-->
+    <nz-form-item>
+      <nz-form-label>Select Consent Type*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="consentTypeErrorTmpl">
+        <nz-select
+          nzAllowClear
+          nzShowSearch
+          nzSize="large"
+          [nzOptions]="consentTypeListOptions"
+          formControlName="consentType"
+          nzPlaceHolder="Select Consent Type"
+        >
+        </nz-select>
+        <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+          <span nz-icon nzType="loading" class="loading-icon"></span>
+          Loading Data...
+        </nz-option>
+        <ng-template #consentTypeErrorTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please select Consent Type</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <p class="description">
+      How would you like to send the link for report and PIN of authentication for patient
+      ?
+    </p>
+
+    <nz-form-item>
+      <nz-form-control>
+        <nz-radio-group
+          nzSize="large"
+          class="horizontal"
+          formControlName="reportNotificationType"
+        >
+          <ng-container *ngFor="let item of notificationTypeListOptions">
+            <label nz-radio [nzValue]="item.value">{{ item.label }}</label>
+          </ng-container>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+    <ng-container *ngIf="getIsShowPhoneNumberField || getIsShowPhoneEmailField">
+      <ng-container *ngIf="getIsShowPhoneNumberField; else emailTmpl">
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label nzFor="phoneNumber">Contact Phone number*</nz-form-label>
+          <nz-form-control
+            nzErrorTip="Please input your phone number!"
+            [nzErrorTip]="phoneNumberTpl"
+          >
+            <nz-input-group
+              class="phone-number"
+              nzSize="large"
+              [nzAddOnBefore]="addOnBeforeTemplate"
+            >
+              <ng-template #addOnBeforeTemplate>
+                <nz-select formControlName="phoneCode" class="phone-select">
+                  <nz-option
+                    *ngFor="let item of phoneCodes"
+                    [nzLabel]="item.label"
+                    [nzValue]="item.value"
+                  ></nz-option>
+                </nz-select>
+              </ng-template>
+              <nz-input-number
+                nzSize="large"
+                id="phoneNumber"
+                formControlName="patientPhoneNumber"
+                placeholder="Input phone"
+              />
+              <ng-template #phoneNumberTpl let-control>
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                  >Please input phone number</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('min')"
+                  >The minimum length must be at least 9 numbers</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('max')"
+                  >The maximum length must be no more than 10 numbers</ng-container
+                >
+              </ng-template>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+
+      <ng-template #emailTmpl>
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Email*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="contactEmailAddressTpl">
+            <input
+              nzSize="large"
+              type="text"
+              formControlName="patientEmail"
+              nz-input
+              placeholder="Input Email"
+            />
+            <ng-template #contactEmailAddressTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input your Email</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-template>
+    </ng-container>
+  </nz-card>
+</form>
+
+<div class="page-bottom-buttons">
+  <button
+    nz-button
+    nzType="default"
+    (click)="navigateToAppointmentsTable()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleSubmitForm()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Next
+  </button>
+</div>

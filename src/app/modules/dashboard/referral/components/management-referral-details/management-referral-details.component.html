@@ -1,0 +1,857 @@
+<div class="preview-wrapper">
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleDownloadPreview()"
+    *ngIf="getIsShowPreviewBtn"
+    nzType="primary"
+    nzSize="large"
+    class="preview"
+  >
+    Preview
+  </button>
+</div>
+
+<form nz-form [formGroup]="formGroup" (ngSubmit)="handleSubmitForm()" nzLayout="vertical">
+  <div class="referral-management-wrapper">
+    <ul class="referral-management-list list">
+      <li class="title">Employee details:</li>
+      <li>
+        <div class="row">
+          <span>Name of employee*:</span>
+          <span>
+            <nz-form-control class="transparent">
+              <input
+                nz-input
+                placeholder="Input text"
+                formControlName="employeeName"
+              /> </nz-form-control
+          ></span>
+        </div>
+        <div class="row">
+          <span>Date of birth*:</span>
+          <span>
+            <nz-form-control
+              [class.validating]="wasAttemptToSubmitForm"
+              class="transparent"
+            >
+              <nz-date-picker
+                nzFormat="d MMM YYYY"
+                class="transparent"
+                formControlName="dateOfBirth"
+                nzBorderless
+              ></nz-date-picker>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="row">
+          <span>Department:</span>
+          <span>
+            <nz-form-control class="transparent">
+              <input
+                nz-input
+                placeholder="Input text"
+                formControlName="department"
+              /> </nz-form-control
+          ></span>
+        </div>
+        <div class="row">
+          <span>Employee number:</span>
+          <span>
+            <nz-form-control class="transparent">
+              <input
+                nz-input
+                placeholder="Input text"
+                formControlName="employeeNumber"
+              /> </nz-form-control
+          ></span>
+        </div>
+      </li>
+      <li>
+        <div class="row">
+          <span>Job title*:</span>
+          <span>
+            <nz-form-control class="transparent">
+              <input
+                nz-input
+                placeholder="Input text"
+                formControlName="jobTitle"
+              /> </nz-form-control
+          ></span>
+        </div>
+        <div class="row">
+          <span>Work location*:</span>
+          <span>
+            <nz-form-control class="transparent">
+              <input
+                nz-input
+                placeholder="Input text"
+                formControlName="workLocation"
+              /> </nz-form-control
+          ></span>
+        </div>
+      </li>
+      <li>
+        <div class="row">
+          <span>Length of service*:</span>
+          <span>
+            <nz-form-control class="transparent">
+              <input
+                nz-input
+                placeholder="Input text"
+                formControlName="serviceLength"
+              /> </nz-form-control
+          ></span>
+        </div>
+        <div class="row" *ngIf="!getIsClientRoles">
+          <span>Contact email*:</span>
+          <span>
+            <nz-form-control class="transparent">
+              <input
+                nz-input
+                placeholder="Input text"
+                formControlName="contactEmail"
+              /> </nz-form-control
+          ></span>
+        </div>
+      </li>
+      <li>
+        <div class="row">
+          <span>Home address (in full)*:</span>
+          <span>
+            <nz-form-control class="transparent">
+              <input
+                nz-input
+                placeholder="Input text"
+                formControlName="homeAddress"
+              /> </nz-form-control
+          ></span>
+        </div>
+        <div class="row">
+          <span>Contact telephone number*:</span>
+          <span>
+            <nz-input-group
+              class="phone-number transparent"
+              nzSize="large"
+              [nzAddOnBefore]="addOnBeforeTemplate"
+            >
+              <ng-template #addOnBeforeTemplate>
+                <nz-select
+                  formControlName="contactTelephoneNumberCode"
+                  class="phone-select"
+                >
+                  <nz-option
+                    *ngFor="let item of phoneCodes"
+                    [nzLabel]="item.label"
+                    [nzValue]="item.value"
+                  ></nz-option>
+                </nz-select>
+              </ng-template>
+              <nz-input-number
+                nzSize="large"
+                id="phoneNumber"
+                formControlName="contactTelephoneNumber"
+                nzPlaceHolder="Input phone"
+              />
+              <ng-template #PhoneNumberTpl let-control>
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                  >Please input phone number</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('min')"
+                  >The minimum length must be at least 9 numbers</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('max')"
+                  >The maximum length must be no more than 10 numbers</ng-container
+                >
+              </ng-template>
+            </nz-input-group>
+          </span>
+        </div>
+      </li>
+      <li class="title">
+        Reason for referral: <span class="sub-title">(tick only one)</span>
+      </li>
+
+      <nz-radio-group formControlName="reason">
+        <li>
+          <div class="row checkbox">
+            <span
+              >Long Term Sickness Absence
+              <span>(>4 weeks) Employee not presently at work</span></span
+            >
+            <span>
+              <label
+                nz-radio
+                nzSize="large"
+                [nzValue]="reasonReferral.longTermAbsence"
+              ></label>
+            </span>
+          </div>
+          <div class="row checkbox">
+            <span>Suitability for alternative work ir redeployment</span>
+            <span>
+              <label
+                nz-radio
+                nzSize="large"
+                [nzValue]="reasonReferral.suitableForWork"
+              ></label>
+            </span>
+          </div>
+        </li>
+        <li>
+          <div class="row checkbox">
+            <span
+              >Poor Attendance Record -
+              <span
+                >employee at work but <br />
+                attendance difficulties attributed to health issues
+              </span></span
+            >
+            <span>
+              <label
+                nz-radio
+                nzSize="large"
+                [nzValue]="reasonReferral.poorAttendanceRecord"
+              ></label>
+            </span>
+          </div>
+          <div class="row checkbox">
+            <span>Counselling - <span> assess if counselling is warranted</span></span>
+            <span>
+              <label
+                nz-radio
+                nzSize="large"
+                [nzValue]="reasonReferral.counselling"
+              ></label>
+            </span>
+          </div>
+        </li>
+        <li>
+          <div class="row checkbox">
+            <span
+              >Performance Concern -
+              <span>sub optimal performance for an individual still at work</span></span
+            >
+            <span>
+              <label
+                nz-radio
+                nzSize="large"
+                [nzValue]="reasonReferral.performanceConcern"
+              ></label>
+            </span>
+          </div>
+          <div class="row checkbox">
+            <span>Physiotherapy - <span>assess if physiotherapy is warranted</span></span>
+            <span>
+              <label
+                nz-radio
+                nzSize="large"
+                [nzValue]="reasonReferral.physiotherapy"
+              ></label>
+            </span>
+          </div>
+        </li>
+        <li>
+          <div class="row checkbox">
+            <span
+              >Resumption after Sickness Absence -
+              <span>specific concerns regarding capability or safety issues</span></span
+            >
+            <span>
+              <label
+                nz-radio
+                nzSize="large"
+                [nzValue]="reasonReferral.resumptions"
+              ></label>
+            </span>
+          </div>
+          <div class="row checkbox">
+            <span>Accident at work <span>(or reportable disease)</span></span>
+            <span>
+              <label nz-radio nzSize="large" [nzValue]="reasonReferral.accident"></label>
+            </span>
+          </div>
+        </li>
+        <li>
+          <div class="row checkbox">
+            <span
+              >Periodic or statutory health check -
+              <span>driver, work at heights, confined space</span></span
+            >
+            <span>
+              <label
+                nz-radio
+                nzSize="large"
+                [nzValue]="reasonReferral.periodicHealthCheck"
+              ></label>
+            </span>
+          </div>
+          <div class="row checkbox">
+            <span
+              >Ill Health Retirement -
+              <span
+                >does the employee meet medical criteria for ill health retirement</span
+              ></span
+            >
+            <span>
+              <label
+                nz-radio
+                nzSize="large"
+                [nzValue]="reasonReferral.illHealthRetirement"
+              ></label>
+            </span>
+          </div>
+        </li>
+      </nz-radio-group>
+      <li class="title">Current situation:</li>
+      <li class="without-border">
+        <span>Is the employee currently absent from work?</span>
+        <nz-radio-group
+          nzSize="large"
+          class="horizontal"
+          formControlName="isCurrentlyAbsent"
+        >
+          <label nz-radio [nzValue]="true">Yes</label>
+          <label nz-radio [nzValue]="false">No</label>
+        </nz-radio-group>
+      </li>
+      <li class="alone" *ngIf="formGroup.get('isCurrentlyAbsent')?.value">
+        <div class="row situation">
+          <span>
+            <div class="list-tem before">what was the start of their absence</div>
+          </span>
+          <span
+            >Date:
+            <nz-form-control
+              [class.validating]="wasAttemptToSubmitForm"
+              class="transparent"
+            >
+              <nz-date-picker
+                nzFormat="d MMM YYYY"
+                class="transparent"
+                formControlName="absenceStartDate"
+                nzBorderless
+              ></nz-date-picker>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+      <li class="alone" *ngIf="formGroup.get('isCurrentlyAbsent')?.value">
+        <div class="row situation">
+          <span>
+            <div class="list-tem">what is the reason given for their absence?</div>
+          </span>
+          <span
+            >Reason:
+            <nz-form-control class="transparent">
+              <input
+                nz-input
+                placeholder="Input text"
+                formControlName="absenceReason"
+              /> </nz-form-control
+          ></span>
+        </div>
+      </li>
+      <li class="text" *ngIf="formGroup.get('isCurrentlyAbsent')?.value">
+        <div class="text">
+          Give a ‘pen picture’ regarding the referral e.g.
+          <span class="gray">
+            contact with the employee to date such as meetings or by phone, outline of
+            support offered, recent job changes/adjustments, ongoing work or domestic
+            issues or performance concerns etc.
+          </span>
+        </div>
+      </li>
+      <li class="title">
+        What would you like us to tell you?
+        <span class="sub-title"> (only tick those that apply)</span>
+      </li>
+      <li class="checkbox">
+        <span>Is he/she currently fit at work?</span>
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="isCurrentlyFitForWork"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span>Are there underlying medical reasons for the attendance record?</span>
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="areThereAttendaceRecordReasons"
+            ></label> </nz-form-control
+        ></span>
+      </li>
+      <li class="checkbox">
+        <span>Are there underlying medical reasons for the performance concerns? </span>
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="areTherePerformanceConsernsReasons"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span>Have work tasks contributed to the problem?</span>
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="haveWorkTasksContributed"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span
+          >What are the timescales for recovery and, if presently off sick, for return to
+          work?</span
+        >
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="whatAreRecoveryTimescales"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span>Are work restrictions, adjustments or redeployment required?</span>
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="areWorkRestrictionsRequired"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span
+          >Will restrictions/adjustments be temporary and if so for now long, or
+          permanent?</span
+        >
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="willRestrictionsBeTemporary"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span
+          >Is the individual taking necessary steps to address health or other
+          issues?</span
+        >
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="isIndividualTakingSteps"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span>What factor might be delaying return to work?</span>
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="whatFactorsMightDelay"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span>Does the individual meet criteria for ill Health Retirement?</span>
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="doesIndividualMeetCriteria"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span
+          >Is the medical condition likely to be covered be the Disability Discrimination
+          Act?
+        </span>
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="isMedConditionWillBeCovered"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="checkbox">
+        <span
+          >What is the long-term outlook to provide regular and effective service?</span
+        >
+        <span>
+          <nz-form-control class="transparent">
+            <label
+              nz-checkbox
+              nzSize="large"
+              formControlName="whatIsLongtermOutlook"
+            ></label>
+          </nz-form-control>
+        </span>
+      </li>
+      <li class="textarea">
+        <div class="text">
+          <span
+            >Outline any additional points to be addressed by the OH team:
+            <span class="gray"> (avoid repeating questions ticked above)</span></span
+          >
+        </div>
+        <nz-form-item>
+          <nz-form-control class="transparent textarea" nzHasFeedback>
+            <textarea
+              nz-input
+              rows="3"
+              formControlName="extraPoints"
+              placeholder="Input text"
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </li>
+      <li class="title">
+        What are the basic job requirements?
+        <span class="sub-title">(only tick those that apply) </span>
+      </li>
+      <li>
+        <div class="row checkbox">
+          <span>Using Display Screen Equipment / VDU Work</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label
+                nz-checkbox
+                nzSize="large"
+                formControlName="usingDisplayScreen"
+              ></label>
+            </nz-form-control>
+          </span>
+        </div>
+        <div class="row checkbox">
+          <span>Safety Critical Work</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label
+                nz-checkbox
+                nzSize="large"
+                formControlName="safetyCriticalJob"
+              ></label>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="row checkbox">
+          <span>Office based work</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label nz-checkbox nzSize="large" formControlName="officeBased"></label>
+            </nz-form-control>
+          </span>
+        </div>
+        <div class="row checkbox">
+          <span>Working at Heights</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label
+                nz-checkbox
+                nzSize="large"
+                formControlName="workingAtHeights"
+              ></label>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="row checkbox">
+          <span>Regular contact with clients or public</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label
+                nz-checkbox
+                nzSize="large"
+                formControlName="regularPublicContact"
+              ></label>
+            </nz-form-control>
+          </span>
+        </div>
+        <div class="row checkbox">
+          <span>Working in confident spaces</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label nz-checkbox nzSize="large" formControlName="confinedSpaces"></label>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="row checkbox">
+          <span>Night Worker / Shift Work</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label nz-checkbox nzSize="large" formControlName="nightWorker"></label>
+            </nz-form-control>
+          </span>
+        </div>
+        <div class="row checkbox">
+          <span>Lone Worker</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label nz-checkbox nzSize="large" formControlName="loneWorker"></label>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="row checkbox">
+          <span>Working with vibrating tools</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label nz-checkbox nzSize="large" formControlName="vibrationTools"></label>
+            </nz-form-control>
+          </span>
+        </div>
+        <div class="row checkbox">
+          <span>Driving on Company Business</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label nz-checkbox nzSize="large" formControlName="driving"></label>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="row checkbox">
+          <span>Working in noisy environments</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label
+                nz-checkbox
+                nzSize="large"
+                formControlName="noisyEnvironments"
+              ></label>
+            </nz-form-control>
+          </span>
+        </div>
+        <div class="row checkbox">
+          <span>Driving/operating machinery</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label
+                nz-checkbox
+                nzSize="large"
+                formControlName="operatingMachinery"
+              ></label>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="row checkbox">
+          <span>Work with dusts, chemicals, gases or microorganisms</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label nz-checkbox nzSize="large" formControlName="dustChems"></label>
+            </nz-form-control>
+          </span>
+        </div>
+        <div class="row checkbox">
+          <span>Manual Handling e.g. lift, carry, pull/push, digging, other</span>
+          <span>
+            <nz-form-control class="transparent">
+              <label nz-checkbox nzSize="large" formControlName="manualHandling"></label>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+      <li class="textarea">
+        <div class="text">
+          Give a ‘pen picture’ of the employee’s typical work duties -
+          <span class="gray">
+            are there any difficulties he/she has undertaking these, recent job
+            changes/adjustments etc:</span
+          >
+        </div>
+        <nz-form-item>
+          <nz-form-control class="transparent textarea" nzHasFeedback>
+            <textarea
+              nz-input
+              rows="3"
+              formControlName="workDuties"
+              placeholder="Input text"
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </li>
+      <li class="textarea">
+        <div class="text">
+          Please indicate any documents included with referral (sickness absence record,
+          job description, additional reports, etc):
+        </div>
+        <nz-form-item>
+          <nz-form-control class="transparent textarea" nzHasFeedback>
+            <textarea
+              nz-input
+              rows="2"
+              formControlName="documentsWithReferral"
+              placeholder="Input text"
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </li>
+      <li class="title">Final check and your contact details</li>
+      <li class="without-border">
+        <span>Please confirm reason for referral has been discussed with employee:</span>
+        <nz-radio-group
+          nzSize="large"
+          class="horizontal"
+          formControlName="isReferralReasonWasDiscussed"
+        >
+          <label nz-radio [nzValue]="true">Yes</label>
+          <label nz-radio [nzValue]="false">No</label>
+        </nz-radio-group>
+      </li>
+      <li
+        *ngIf="formGroup.get('isReferralReasonWasDiscussed')?.value"
+        class="without-border input"
+      >
+        <span>Referring Manager / HR contact name:</span>
+        <span>
+          <nz-form-control class="transparent">
+            <input
+              nz-input
+              formControlName="referringManagerName"
+              placeholder="Input text"
+            />
+          </nz-form-control>
+        </span>
+      </li>
+      <li *ngIf="formGroup.get('isReferralReasonWasDiscussed')?.value">
+        <div class="row">
+          <span>Contact Telephone №:</span>
+          <span>
+            <nz-input-group
+              class="phone-number transparent"
+              nzSize="large"
+              [nzAddOnBefore]="addOnBeforeTemplate"
+            >
+              <ng-template #addOnBeforeTemplate>
+                <nz-select formControlName="contactTelephoneCode" class="phone-select">
+                  <nz-option
+                    *ngFor="let item of phoneCodes"
+                    [nzLabel]="item.label"
+                    [nzValue]="item.value"
+                  ></nz-option>
+                </nz-select>
+              </ng-template>
+              <nz-input-number
+                nzSize="large"
+                id="phoneNumber"
+                formControlName="contactTelephone"
+                nzPlaceHolder="Input phone"
+              />
+              <ng-template #PhoneNumberTpl let-control>
+                <ng-container
+                  *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                  >Please input phone number</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('min')"
+                  >The minimum length must be at least 9 numbers</ng-container
+                >
+                <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('max')"
+                  >The maximum length must be no more than 10 numbers</ng-container
+                >
+              </ng-template>
+            </nz-input-group>
+          </span>
+        </div>
+        <div class="row">
+          <span>Date of Referral:</span>
+          <span>
+            <nz-form-control
+              [class.validating]="wasAttemptToSubmitForm"
+              class="transparent"
+            >
+              <nz-date-picker
+                nzFormat="d MMM YYYY"
+                class="transparent"
+                formControlName="date"
+                nzBorderless
+              ></nz-date-picker>
+            </nz-form-control>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</form>
+
+<div class="page-bottom-buttons " *ngIf="canEditForm">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handleCancel()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+  <nz-form-item>
+    <nz-form-control>
+      <button
+        *ngIf="getIsShowSaveBtn"
+        nz-button
+        [nzLoading]="isLoading$ | async"
+        (click)="handleSubmitForm()"
+        nzType="primary"
+        nzSize="large"
+      >
+        Save
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+  <button
+    nz-button
+    *ngIf="!getIsClinicianRole"
+    [nzLoading]="isLoading$ | async"
+    (click)="handleSubmitForm(true)"
+    nzType="primary"
+    nzSize="large"
+  >
+    Submit
+  </button>
+</div>

@@ -1,0 +1,20 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+:host {
+  height: 100%;
+}
+
+.page-header {
+  h1 {
+    background-color: #ffff;
+    padding: 26px 32px 0 48px;
+    margin: 0;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .tabs-content {
+  }
+}

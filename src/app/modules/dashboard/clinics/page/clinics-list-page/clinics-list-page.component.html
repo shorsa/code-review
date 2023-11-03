@@ -1,0 +1,40 @@
+<div class="clinics-wrapper-page">
+  <nz-page-header class="with-actions">
+    <nz-page-header-title>Upcoming Clinics </nz-page-header-title>
+    <nz-page-header-extra>
+      <div class="header-actions">
+        <nz-space>
+          <app-search-input (searchTextChange)="handleSearchByText($event)" />
+        </nz-space>
+        <nz-space *ngIf="getIsCanDeactivateOrReactivate">
+          <nz-segmented
+            (nzValueChange)="changeClinicsStateFilter($event)"
+            class="state deactivate"
+            [nzOptions]="activeFilterOptions"
+          ></nz-segmented>
+        </nz-space>
+        <nz-space>
+          <button nz-button nzType="primary" nzSize="large">
+            <span nz-icon nzType="calendar" nzTheme="outline"></span>
+          </button>
+        </nz-space>
+        <nz-space *ngxPermissionsOnly="clinicCreatePermission">
+          <button
+            (click)="navigateAddNewClinic()"
+            class="add"
+            nzSize="large"
+            *nzSpaceItem
+            nzType="primary"
+            nz-button
+          >
+            <span nz-icon nzType="plus" nzTheme="outline"></span>
+            Add new
+          </button>
+        </nz-space>
+      </div>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <app-clinics-table />
+    </nz-page-header-content>
+  </nz-page-header>
+</div>

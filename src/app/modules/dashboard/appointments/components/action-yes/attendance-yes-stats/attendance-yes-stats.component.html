@@ -1,0 +1,163 @@
+<form nz-form nzLayout="vertical" [formGroup]="formGroup">
+  <nz-card class="appointments-yes-stats" [nzBordered]="false" nzTitle="Stats">
+    <div class="card-content">
+      <!-- form-item-->
+      <nz-form-item>
+        <nz-form-label
+          >Primary Medical Condition {{ statsRequired ? '*' : null }}</nz-form-label
+        >
+        <nz-form-control nzHasFeedback [nzErrorTip]="doctorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            [nzOptions]="primaryMedicalConditionListOptions"
+            formControlName="primaryMedicalCondition"
+            nzPlaceHolder="Select Primary Medical Condition"
+            (nzOnSearch)="searchPrimaryMedicalCondition($event)"
+          >
+          </nz-select>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+          <ng-template #doctorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please select Primary Medical Condition</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item-->
+      <nz-form-item>
+        <nz-form-label>Disability Related {{ statsRequired ? '*' : null }}</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="doctorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            [nzOptions]="disabilityRelatedListOptions"
+            formControlName="disabilityRelated"
+            nzPlaceHolder="Select Disability Related"
+            (nzOnSearch)="searchDisabilityRelated($event)"
+          >
+          </nz-select>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+          <ng-template #doctorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please select Disability Related</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item-->
+      <nz-form-item>
+        <nz-form-label>Fitness for work {{ statsRequired ? '*' : null }}</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="doctorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            [nzOptions]="fitnessForWorkListOptions"
+            formControlName="fitnessForWork"
+            nzPlaceHolder="Select Fitness for work"
+            (nzOnSearch)="searchFitnessForWork($event)"
+          >
+          </nz-select>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+          <ng-template #doctorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please select Fitness for work</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item-->
+      <nz-form-item>
+        <nz-form-label>Work Related {{ statsRequired ? '*' : null }}</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="doctorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            [nzOptions]="workRelatedListOptions"
+            formControlName="workRelated"
+            nzPlaceHolder="Select Work Related"
+            (nzOnSearch)="searchWorkRelated($event)"
+          >
+          </nz-select>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+          <ng-template #doctorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please select Work Related</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- form-item-->
+      <nz-form-item>
+        <nz-form-label>Return to work {{ statsRequired ? '*' : null }}</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="doctorTpl">
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            nzSize="large"
+            [nzOptions]="returnToWorkListOptions"
+            formControlName="returnWork"
+            nzPlaceHolder="Select Return to work"
+            (nzOnSearch)="searchReturnToWork($event)"
+          >
+          </nz-select>
+          <nz-option *ngIf="isLoading$ | async" nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+          <ng-template #doctorTpl let-control>
+            <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+              >Please select Return to work</ng-container
+            >
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </nz-card>
+</form>
+
+<div class="page-bottom-buttons">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handlePrev()"
+    class="default"
+    nzSize="large"
+  >
+  Previous
+  </button>
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleSubmitForm()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Next
+  </button>
+</div>

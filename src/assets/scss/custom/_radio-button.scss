@@ -1,0 +1,51 @@
+@import "../utils/mixins";
+
+.ant-radio-group {
+  & > label {
+    display: flex !important;
+    @include flex-container(row, center);
+    height: 30px !important;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+
+    .ant-radio {
+      top: 0;
+    }
+  }
+
+  &.custom-content {
+    .ant-radio-wrapper {
+      height: 44px !important;
+
+      & > :last-child {
+        @include flex-container(row, center);
+
+        .ant-picker {
+          margin-left: 38px;
+          width: 106px;
+
+          .ant-picker-suffix {
+            display: none;
+          }
+        }
+
+        .ant-input-number-handler-wrap {
+          margin-left: 24px;
+          width: 132px;
+        }
+      }
+    }
+
+    .counter-label {
+      .ant-form-item {
+        position: relative;
+        margin-left: 27px;
+
+        input {
+          padding-right: 50px;
+        }
+      }
+    }
+  }
+}

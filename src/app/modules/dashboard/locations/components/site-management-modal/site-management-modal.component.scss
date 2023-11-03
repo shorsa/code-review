@@ -1,0 +1,174 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.site-management-wrapper {
+  .row {
+    @include flex-container(row, center);
+    gap: 12px;
+  }
+
+  .ant-form-item {
+    @include flex-container(column);
+    width: 318px;
+
+    .ant-form-item-label {
+      text-align: left;
+    }
+  }
+
+  .upload-btn {
+    position: relative;
+    width: 106px;
+    height: 40px;
+    margin-top: 18px;
+
+    & > label {
+      @include flex-container(row, center, center);
+    }
+
+    @include media("max-width: 440px") {
+      width: 40px;
+      padding: 6px;
+    }
+
+    .anticon {
+      margin-right: 10px;
+    }
+
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    label {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    .upload-btn-icon {
+      @include media("max-width: 440px") {
+        margin-right: 0;
+      }
+    }
+
+    .upload-btn-text {
+      @include media("max-width: 440px") {
+        display: none;
+      }
+    }
+  }
+
+  .files-list,
+  .upload-files-list {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    & > .global-loader {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: #daeeff82;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    & > li {
+      padding: 8px;
+      position: relative;
+      @include flex-container(row, center, space-between);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      nz-spin {
+        position: absolute;
+        left: -13px;
+      }
+    }
+  }
+
+  .upload-files-list {
+    & > li {
+      background-color: #f8fdff;
+      height: 40px;
+      @include flex-container(row, center, space-between);
+
+      & > :first-child {
+        max-width: 85%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      & > .anticon {
+        cursor: pointer;
+        color: $error-color;
+        &:hover {
+          transform: scale(1.01);
+        }
+      }
+    }
+  }
+
+  .row-title {
+    @include flex-container(row, center);
+    column-gap: 18px;
+    row-gap: 8px;
+
+    @include media-md {
+      flex-wrap: wrap;
+    }
+
+    .row-title-controls {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      @include media-sm {
+        gap: 8px;
+      }
+
+      & > input {
+        max-width: 317px;
+        margin-right: auto;
+
+        @include media-md {
+          flex-grow: 1;
+        }
+      }
+    }
+
+    h3 {
+      @include media-md {
+        width: 100%;
+      }
+    }
+
+    .filter {
+      margin-left: 16px;
+      font-size: 14px;
+      color: $gray-color;
+      cursor: pointer;
+
+      .anticon {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .paginator {
+    @include flex-container(row, flex-end);
+    justify-content: flex-end !important;
+    margin-top: 16px;
+  }
+}

@@ -1,0 +1,52 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+:host {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10fr 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.report-wrapper {
+  @include flex-container(row, flex-start);
+  gap: 16px;
+  flex-wrap: wrap;
+
+  & > * {
+    width: calc(50% - 8px);
+  }
+
+  ul {
+    margin: 0 auto 16px;
+    max-width: 500px;
+  }
+
+  h3 {
+    border-top: 1px solid $input-border-color;
+    padding-top: 16px;
+  }
+  .appointment-report-card {
+    .record-btn-wrapper {
+      margin-bottom: 16px;
+      button {
+        @include flex-container(row, center, center);
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
+}
+.records-message {
+  text-align: center;
+  max-width: 80%;
+  font-weight: 500;
+  color: $blue-color;
+  margin: 12px auto 0;
+}
+
+.draft {
+  background-color: #f6edd5;
+}

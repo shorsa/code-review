@@ -1,0 +1,97 @@
+<nz-table
+  nzShowSizeChanger
+  [nzPageSizeOptions]="pageSizeOptions"
+  [nzLoading]="isLoading$ | async"
+  [nzData]="clinicianUsersData"
+  [nzFrontPagination]="false"
+  [nzTotal]="totalCount"
+  zTableLayout="fixed"
+  [nzScroll]="{ x: '700px' }"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th nzColumnKey="Identifier" [nzSortFn]="true">Clinician Id</th>
+      <th nzColumnKey="Identifier" [nzSortFn]="true">Clinician</th>
+      <th nzColumnKey="PhoneNumber" [nzSortFn]="true">Email</th>
+      <th nzColumnKey="actions" nzWidth="76px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let data of clinicianUsersData"
+      [class.locked]="!!data.applicationUser.lockoutEnd"
+    >
+      <td>{{ data?.customClinicianId }}</td>
+
+      <td>
+        {{ data?.applicationUser?.firstName }} {{ data?.applicationUser?.lastName }}
+      </td>
+      <td>{{ data?.applicationUser?.email }}</td>
+      <td>
+        <div class="action">
+          <ng-container
+            [ngTemplateOutlet]="menu"
+            [ngTemplateOutletContext]="{ data: data }"
+          ></ng-container>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<ng-template #menu let-data="data">
+  <div>
+    <ng-container *ngIf="data.applicationUser.lockoutEnd">
+      <span
+        nz-tooltip
+        [nzTooltipOverlayClassName]="'tooltip'"
+        nzTooltipTitle="This account is locked"
+        ><span nz-icon nzType="exclamation" class="locked-icon" nzTheme="outline"></span
+      ></span>
+    </ng-container>
+  </div>
+
+  <a
+    nz-dropdown
+    class="table-menu"
+    nzTrigger="click"
+    [nzClickHide]="true"
+    [nzDropdownMenu]="menu"
+  >
+    <span nz-icon nzType="more" nzTheme="outline"></span>
+  </a>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <ng-container *ngIf="data.applicationUser.isActive; else reactivateTmpl">
+        <li nz-menu-item (click)="edit(data.id)">Edit</li>
+        <a
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure to Deactivate this clinician?"
+          (nzOnConfirm)="deactivate(data.id)"
+        >
+          <li nz-menu-item nzDanger>Deactivate</li>
+        </a>
+
+        <a
+          *ngIf="!!data.applicationUser.lockoutEnd"
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure to Unlock this clinician?"
+          (nzOnConfirm)="unlock(data.applicationUserId)"
+        >
+          <li nz-menu-item>Unlock</li>
+        </a>
+      </ng-container>
+
+      <ng-template #reactivateTmpl>
+        <a
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure to Reactivate this clinician?"
+          (nzOnConfirm)="reactivate(data.id)"
+        >
+          <li nz-menu-item>Reactivate</li>
+        </a>
+      </ng-template>
+    </ul>
+  </nz-dropdown-menu>
+</ng-template>

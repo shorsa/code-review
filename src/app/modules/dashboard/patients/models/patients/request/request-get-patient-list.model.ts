@@ -1,0 +1,11 @@
+import { IsActiveFilterEnum } from 'src/app/shared/enums';
+import { PatientOrderByOptionsEnum } from '../../../enums';
+import { RequestBasePaginationModel } from 'src/app/shared/models';
+
+export interface RequestGetPatientListModel extends RequestBasePaginationModel {
+  searchText?: string;
+  patientOrderByOptions?: PatientOrderByOptionsEnum;
+  isOrderByAsc?: boolean;
+  departments?: string[];
+  isActiveFilter: IsActiveFilterEnum;
+}

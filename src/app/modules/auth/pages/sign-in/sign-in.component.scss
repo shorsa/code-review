@@ -1,0 +1,61 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.auth-form-wrapper {
+  padding: 32px;
+  position: relative;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  h1 + p {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    text-align: center;
+    max-width: 319px;
+    margin: 0 auto;
+    color: $gray-color;
+
+    @include media-md {
+      margin-bottom: 0;
+    }
+  }
+
+  .ant-typography-danger,
+  .ant-typography-secondary {
+    width: 107%;
+    text-align: center;
+    margin-top: 12px;
+    display: block;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.15px;
+    left: calc(-7% / 2);
+    position: relative;
+
+    @include media-md {
+      display: block;
+      max-width: 500px;
+      margin: 0 auto;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  .ant-form {
+    margin-top: 40px;
+  }
+
+  .form-actions {
+    @include flex-container(row, center, space-between);
+    margin-bottom: 22px;
+  }
+
+  button {
+    width: 100%;
+  }
+}

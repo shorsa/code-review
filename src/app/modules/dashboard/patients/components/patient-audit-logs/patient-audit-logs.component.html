@@ -1,0 +1,36 @@
+<div class="audit-logs-wrapper">
+
+  <app-search-input (searchTextChange)="handleSearchByText($event)" />
+  
+  <nz-table
+  nzShowSizeChanger
+  [nzPageSizeOptions]="[10, 20, 50]"
+  [nzLoading]="isLoading$ | async"
+  [nzData]="auditLogsData"
+  [nzFrontPagination]="false"
+  [nzTotal]="totalCount"
+  zTableLayout="fixed"
+  [nzScroll]="{ x: '700px' }"
+  (nzQueryParams)="onQueryParamsChange($event)"
+  >
+  <thead>
+    <tr>
+      <th nzColumnKey="DateTime" [nzSortFn]="true">Date & time</th>
+      <th nzColumnKey="AddedBy" [nzSortFn]="true">Added By</th>
+      <th nzColumnKey="Details" [nzSortFn]="true">Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of auditLogsData">
+      <td>{{ data?.date | customDate : 'dateTime' }}</td>
+      <td>{{ data.userName }}</td>
+      
+      <td class="ellipsis">
+        <span nz-tooltip [nzTooltipTitle]="data.message">
+          {{ data.message }}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+</div>

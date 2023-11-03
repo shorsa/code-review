@@ -1,0 +1,20 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+h3 {
+  font-size: 20px;
+  text-align: center;
+}
+
+p {
+  font-size: 16px;
+  text-align: center;
+}
+
+.bottom-buttons {
+  @include flex-container(row, center, flex-end);
+  gap: 8px;
+  button {
+    width: 106px;
+  }
+}

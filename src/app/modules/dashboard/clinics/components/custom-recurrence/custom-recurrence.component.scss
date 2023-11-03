@@ -1,0 +1,26 @@
+@import "src/assets/scss/utils/mixins.scss";
+@import "src/assets/scss/utils/variables.scss";
+
+.selected {
+  background-color: $blue-color;
+  border-radius: 50%;
+  color: #fff;
+}
+
+h4 {
+  margin-top: 16px;
+}
+
+ul {
+  max-height: 500px;
+  padding: 0 16px;
+  overflow: auto;
+
+  li {
+    padding: 3px 0;
+  }
+}
+
+.error-message {
+  font-size: 12px;
+}

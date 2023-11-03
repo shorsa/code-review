@@ -1,0 +1,224 @@
+<!-- <nz-page-header class="with-actions"> -->
+<!-- <nz-page-header-title>New Radiology</nz-page-header-title> -->
+<!-- <nz-page-header-content> -->
+<form
+  nz-form
+  [formGroup]="formGroup"
+  class="radiology-details-wrapper"
+  (ngSubmit)="handleSubmitForm()"
+  nzLayout="vertical"
+>
+  <!-- <nz-card [nzBordered]="false" nzTitle="Radiology details"> -->
+  <!-- form-item -->
+  <nz-form-item>
+    <nz-form-label>Scan(s) requested*</nz-form-label>
+    <nz-form-control nzHasFeedback [nzErrorTip]="scanErrorTpl">
+      <nz-select
+        nzAllowClear
+        nzShowSearch
+        nzMode="multiple"
+        nzSize="large"
+        formControlName="mriTypes"
+        nzPlaceHolder="Select Scan"
+      >
+        <ng-container *ngIf="!(isLoading$ | async); else mriLoadingTmpl">
+          <nz-option
+            *ngFor="let item of scanTypeListOption"
+            [nzLabel]="item"
+            [nzValue]="item"
+          ></nz-option>
+        </ng-container>
+        <ng-template #mriLoadingTmpl>
+          <nz-option nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
+        </ng-template>
+      </nz-select>
+      <ng-template #scanErrorTpl let-control>
+        <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+          >Please select Scan</ng-container
+        >
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label>Clinical details*</nz-form-label>
+    <p>
+      Please include provisional diagnosis or indication and indicate results of previous
+      tests/imaging if applicable
+    </p>
+    <nz-form-control nzHasFeedback [nzErrorTip]="clinicianErrorTmpl">
+      <textarea
+        formControlName="details"
+        nz-input
+        rows="3"
+        placeholder="Input Details"
+      ></textarea>
+      <ng-template #clinicianErrorTmpl let-control>
+        <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+          >Please input Details</ng-container
+        >
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <div class="checkbox-wrapper">
+    <label>For Gadolinium based contracts studies please indicate if</label>
+    <label nz-checkbox formControlName="isPatientOlderThan65">
+      <span>The patient is > 65 years old</span>
+    </label>
+
+    <span>or there is a history of</span>
+
+    <div class="second-wrapper">
+      <label nz-checkbox formControlName="hypertension">
+        <span>Hypertension</span>
+      </label>
+      <label nz-checkbox formControlName="diabetes">
+        <span>Diabetes</span>
+      </label>
+      <label nz-checkbox formControlName="gout">
+        <span>Gout</span>
+      </label>
+      <label nz-checkbox formControlName="renalDiseaseOrSurgery">
+        <span>Renal Disease/Surgery</span>
+      </label>
+      <label nz-checkbox formControlName="liverDiseaseOrTransplant">
+        <span>Liver Disease/Transplant</span>
+      </label>
+    </div>
+  </div>
+
+  <div @fadeDownInput class="inputs-wrapper">
+    <!-- form-item -->
+    <nz-form-item *ngIf="getIsShowContractsStudies" @fadeDownInput class="mt-16 animated">
+      <nz-form-label>Serum Creatinine*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="serumCreatinineErrorTmpl">
+        <input
+          nz-input
+          formControlName="serumCreatinine"
+          nzSize="large"
+          placeholder="Input Serum Creatinine"
+          type="text"
+        />
+        <ng-template #serumCreatinineErrorTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input Serum Creatinine</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- form-item -->
+    <nz-form-item *ngIf="getIsShowContractsStudies" @fadeDownInput class="mt-16 animated">
+      <nz-form-label>eGFR*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="egfrErrorTmpl">
+        <input
+          nz-input
+          formControlName="eGFR"
+          nzSize="large"
+          placeholder="Input eGFR"
+          type="text"
+        />
+        <ng-template #egfrErrorTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input eGFR</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- form-item -->
+    <nz-form-item *ngIf="getIsShowContractsStudies" @fadeDownInput class="mt-16 animated">
+      <nz-form-label>Date Checked*</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="dateCheckedErrorTmpl">
+        <nz-date-picker
+          formControlName="dateChecked"
+          nzFormat="d MMM YYYY"
+          nzSize="large"
+        ></nz-date-picker>
+        <ng-template #dateCheckedErrorTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please select Date Checked</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div class="contra-indicators">
+    <h6>
+      <span nz-icon nzType="info-circle" nzTheme="outline"></span>Contra-indicators to
+      MRI:
+    </h6>
+    <p>
+      Due to the strong magnetic fields present, certain patients cannot undergo MR
+      scanning. Patients with cardiac pacemakers, defibrillators, neurosimulators,
+      intracranial aneurysm clips and intraorbital foreign bodies are contraindicated for
+      MRI. Certain heart valves, stents, shunts and other implantable ferromagnetic or
+      electrical devices may also not be suitable for scanning. Please contact the MRI
+      until if you have any queries about your patient's suitability for MR scanning.
+    </p>
+  </div>
+  <div class="bottom-inputs">
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Referrer Name</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="referrerNameErrorTmpl">
+        <input
+          nz-input
+          formControlName="referrerName"
+          nzSize="large"
+          placeholder="Input Referrer Name"
+          type="text"
+        />
+        <ng-template #referrerNameErrorTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please input Referrer Name</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- form-item -->
+    <nz-form-item>
+      <nz-form-label>Referral Date</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="referralDateErrorTmpl">
+        <nz-date-picker
+          formControlName="referralDate"
+          nzFormat="d MMM YYYY"
+          nzSize="large"
+        ></nz-date-picker>
+        <ng-template #referralDateErrorTmpl let-control>
+          <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+            >Please select Date Checked</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <!-- </nz-card> -->
+</form>
+<div class="page-bottom-buttons">
+  <button
+    nz-button
+    nzType="default"
+    (click)="handleCancel()"
+    class="default"
+    nzSize="large"
+  >
+    Cancel
+  </button>
+
+  <button
+    nz-button
+    [nzLoading]="isLoading$ | async"
+    (click)="handleSubmitForm()"
+    nzType="primary"
+    nzSize="large"
+  >
+    Save
+  </button>
+</div>
+<!-- </nz-page-header-content>
+</nz-page-header> -->

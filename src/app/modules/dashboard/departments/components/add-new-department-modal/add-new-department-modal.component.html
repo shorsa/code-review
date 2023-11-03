@@ -1,0 +1,100 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="title"
+  [nzCentered]="true"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleAddNew()"
+  [nzWidth]="width"
+  [nzFooter]="null"
+  [nzMaskClosable]="false"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="formGroup" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <ng-container *ngIf="!(isLoading$ | async); else skeleton">
+        <nz-form-item>
+          <nz-form-label>Department Name*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="departmentNameErrorTpl">
+            <input
+              nzSize="large"
+              type="text"
+              nz-input
+              formControlName="name"
+              placeholder="Input Department Name"
+            />
+            <ng-template #departmentNameErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input Department Name</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Email address for alerts*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+            <input
+              nzSize="large"
+              formControlName="alertsEmail"
+              type="text"
+              nz-input
+              placeholder="Input Email address for alerts"
+            />
+            <ng-template #emailErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please input Email address for alerts</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- form-item -->
+        <nz-form-item>
+          <nz-form-label>Patient Time Frame*</nz-form-label>
+          <nz-form-control nzHasFeedback [nzErrorTip]="departmentErrorTpl">
+            <nz-select
+              nzAllowClear
+              nzShowSearch
+              nzSize="large"
+              formControlName="patientTimeFrameInHours"
+              nzPlaceHolder="Select Patient Time Frame"
+              [nzOptions]="patientTimeFrameInHoursListOptions"
+            >
+            </nz-select>
+            <ng-template #departmentErrorTpl let-control>
+              <ng-container *ngIf="wasAttemptToSubmitForm && control.hasError('required')"
+                >Please Select Patient Time Frame</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+
+      <ng-template #skeleton>
+        <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+        <nz-skeleton [nzActive]="true" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+      </ng-template>
+
+      <div class="btn-wrapper">
+        <button
+          nz-button
+          nzSize="large"
+          (click)="handleCancel()"
+          class="secondary"
+          nzType="default"
+        >
+          Cancel
+        </button>
+        <button
+          [nzLoading]="isLoading$ | async"
+          nz-button
+          nzSize="large"
+          nzType="primary"
+          type="submit"
+        >
+          {{ editDepartmentId ? 'Save' : 'Add new' }}
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

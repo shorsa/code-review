@@ -1,0 +1,45 @@
+<div class="auth-form-wrapper">
+  <h1>Verification code</h1>
+  <p>Please enter the code:</p>
+
+  <code-input
+    [isCodeHidden]="true"
+    [codeLength]="6"
+    (codeChanged)="onCodeChanged($event)"
+  >
+  </code-input>
+  <div class="error-message">
+    <ng-container *ngIf="wasAttemptToSubmitForm && codeControl.hasError('minlength')"
+      >The code is not valid</ng-container
+    >
+    <ng-container *ngIf="wasAttemptToSubmitForm && codeControl.hasError('required')"
+      >Please input verification code</ng-container
+    >
+    <ng-container
+      *ngIf="
+        wasAttemptToSubmitForm &&
+        errorMessage &&
+        !codeControl.hasError('minlength') &&
+        !codeControl.hasError('required')
+      "
+      >{{ errorMessage }}</ng-container
+    >
+  </div>
+  <button
+    nz-button
+    nzType="primary"
+    nzSize="large"
+    [nzLoading]="isLoading$ | async"
+    [disabled]="!email"
+    (click)="handleSubmit()"
+  >
+    Send code
+  </button>
+  <div class="resend-code">
+    Didn't receive a message?
+    <span *ngIf="!isTimerShow" (click)="handleResendCode()">
+      Resend verification code.</span
+    >
+    <span *ngIf="isTimerShow">You can repeat in {{ counter | formatTime }}</span>
+  </div>
+</div>

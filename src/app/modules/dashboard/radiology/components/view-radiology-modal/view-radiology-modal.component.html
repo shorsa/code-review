@@ -1,0 +1,33 @@
+<div class="pdf-modal-content">
+  <iframe [src]="safeUrl ?? ''" style="display: none" #iframe> </iframe>
+  <pdf-viewer
+    [src]="pdfUrl!"
+    [render-text]="true"
+    [original-size]="false"
+    style="width: 60%; height: 70vh"
+  ></pdf-viewer>
+
+  <div class="bottom-buttons">
+    <button
+      nz-button
+      [nzLoading]="isLoading$ | async"
+      (click)="onPrint(iframe)"
+      nzType="primary"
+      nzSize="large"
+    >
+      Print
+    </button>
+
+    <button
+      nz-button
+      nzType="default"
+      [disabled]="!isPrinted"
+      [nzLoading]="isLoading$ | async"
+      (click)="onShowDismissModal()"
+      class="default"
+      nzSize="large"
+    >
+      Dismiss
+    </button>
+  </div>
+</div>

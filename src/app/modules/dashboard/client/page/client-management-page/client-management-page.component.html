@@ -1,0 +1,62 @@
+<div class="page-header white">
+  <h1>Client - {{ clientId ? 'Details' : 'Create new' }}</h1>
+  <nz-tabset class="white-tabs">
+    <ng-container *ngIf="!isClinicianRole">
+      <nz-tab *ngxPermissionsOnly="clientViewDetailsPermission" nzTitle="General Details">
+        <div class="tab-content">
+          <app-client-general-details [clientId]="clientId" />
+        </div>
+      </nz-tab>
+    </ng-container>
+
+    <nz-tab
+      nzTitle="Department"
+      [nzDisabled]="!clientId"
+      *ngxPermissionsOnly="departmentsViewPermission"
+    >
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-client-department-table [clientId]="clientId" />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab
+      nzTitle="Client User"
+      [nzDisabled]="!clientId"
+      [nzForceRender]=""
+      *ngxPermissionsOnly="clientUsersViewPermission"
+    >
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-client-users-table [clientId]="clientId" *ngIf="clientId" />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab
+      nzTitle="Documents"
+      [nzDisabled]="!clientId"
+      *ngxPermissionsOnly="clientDocumentViewPermission"
+    >
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-client-upload-documents
+            [clientId]="clientId"
+            title="Documents"
+            *ngIf="clientId"
+          />
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab
+      nzTitle="Terms & Conditions"
+      *ngxPermissionsOnly="clientDownloadTermsAndConditionsPermission"
+      [nzDisabled]="!clientId"
+    >
+      <ng-template nz-tab>
+        <div class="tab-content">
+          <app-terms-and-conditions-editor [clientId]="clientId" *ngIf="clientId" />
+        </div>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</div>
